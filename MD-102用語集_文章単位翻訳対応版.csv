@@ -1,0 +1,133 @@
+﻿英語原文,日本語版で使用する表記,分類,対象画面,翻訳するか,確認状況,備考
+Devices,デバイス,Web UI,Microsoft Intune 管理センター,はい,確認済み,現行のMicrosoft Learnナビゲーション
+Manage devices,デバイスの管理,Web UI,Microsoft Intune 管理センター,はい,確認済み,現行のMicrosoft Learnナビゲーション
+Configuration,構成,Web UI,Microsoft Intune 管理センター,はい,確認済み,現行のMicrosoft Learnナビゲーション
+Create,作成,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+New policy,新しいポリシー,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Create a profile,プロファイルの作成,Web UI,Microsoft Intune 管理センター,はい,確認済み,実機確認推奨
+Platform,プラットフォーム,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Windows 10 and later,Windows 10 以降,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Profile type,プロファイルの種類,Web UI,Microsoft Intune 管理センター,はい,確認済み,Microsoft Learn表記
+Templates,テンプレート,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Device restrictions,デバイスの制限,Web UI,Microsoft Intune 管理センター,はい,確認済み,Microsoft Learn表記
+Basics,基本,Web UI,Microsoft Intune 管理センター,はい,確認済み,Learnページに英日併記あり
+Configuration settings,構成設定,Web UI,Microsoft Intune 管理センター,はい,確認済み,Microsoft Learn表記
+Assignments,割り当て,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Included groups,包含されたグループ,Web UI,Microsoft Intune 管理センター,はい,確認済み,Microsoft Learn表記
+Add groups,グループの追加,Web UI,Microsoft Intune 管理センター,はい,確認済み,Microsoft Learn表記
+Select groups to include,含めるグループの選択,Web UI,Microsoft Intune 管理センター,はい,確認済み,実機確認推奨
+Review + create,確認と作成,Web UI,Microsoft Intune 管理センター,はい,確認済み,Microsoft Learn表記
+Review + save,確認と保存,Web UI,Microsoft Intune 管理センター,はい,確認済み,Microsoft Learn表記
+Not configured,構成されていません,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+All devices,すべてのデバイス,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Sync,同期,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Yes,はい,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Groups,グループ,Web UI,Microsoft Entra/Intune 管理画面,はい,確認済み,
+All groups,すべてのグループ,Web UI,Microsoft Entra/Intune 管理画面,はい,確認済み,
+New group,新しいグループ,Web UI,Microsoft Entra/Intune 管理画面,はい,確認済み,
+Dynamic Device,動的デバイス,Web UI,Microsoft Entra グループ画面,はい,確認済み,画面世代による表記差を確認
+Add dynamic query,動的クエリの追加,Web UI,Microsoft Entra グループ画面,はい,確認済み,
+Dynamic membership rules,動的メンバーシップ ルール,Web UI,Microsoft Entra グループ画面,はい,確認済み,
+Rule syntax,ルール構文,Web UI,Microsoft Entra グループ画面,はい,確認済み,
+Start,Start,Windows UI,英語版 Windows 11,いいえ,確認済み,英語のまま
+Settings,Settings,Windows UI,英語版 Windows 11,いいえ,確認済み,アプリ名およびUI名
+Gaming,Gaming,Windows UI,英語版 Windows 11 Settings,いいえ,確認済み,
+Personalization,Personalization,Windows UI,英語版 Windows 11 Settings,いいえ,確認済み,
+Privacy & security,Privacy & security,Windows UI,英語版 Windows 11 Settings,いいえ,確認済み,原文の大小文字も維持
+Accounts,Accounts,Windows UI,英語版 Windows 11 Settings,いいえ,確認済み,
+Access work or school,Access work or school,Windows UI,英語版 Windows 11 Settings,いいえ,確認済み,
+Windows Security,Windows Security,Windowsアプリ,英語版 Windows 11,いいえ,確認済み,
+Virus & threat protection,Virus & threat protection,Windowsアプリ,Windows Security,いいえ,確認済み,
+Manage settings,Manage settings,Windowsアプリ,Windows Security,いいえ,確認済み,
+Exclusions,Exclusions,Windowsアプリ,Windows Security,いいえ,確認済み,
+Add or remove exclusions,Add or remove exclusions,Windowsアプリ,Windows Security,いいえ,確認済み,
+Microsoft Intune admin center,Microsoft Intune 管理センター,製品名,説明文,はい,確認済み,日本語公式名称
+Microsoft Edge,Microsoft Edge,製品名,Windowsアプリ,いいえ,確認済み,
+Microsoft Defender Antivirus,Microsoft Defender ウイルス対策,サービス名,Intune Web UI,はい,確認済み,実UI確認推奨
+Configuration policy,構成ポリシー,一般用語,説明文,はい,確認済み,文脈がオブジェクトなら構成ポリシー
+Configuration profile,構成プロファイル,一般用語,説明文,はい,確認済み,profileを指す場合
+C:\DevProjects,C:\DevProjects,入力値,ラボ入力値,いいえ,確認済み,バックスラッシュを維持
+DevBuild.exe,DevBuild.exe,入力値,ラボ入力値,いいえ,確認済み,大文字小文字を維持
+Windows Devices,Windows Devices,入力値,グループ名,いいえ,確認済み,末尾sを落とさない
+"(device.deviceOSType -contains ""Windows"")","(device.deviceOSType -contains ""Windows"")",コマンド,動的メンバーシップ規則,いいえ,確認済み,コードブロックを維持
+Users | All users,ユーザー | すべてのユーザー,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Users  All users,ユーザー | すべてのユーザー,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Users,ユーザー,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+All users,すべてのユーザー,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+New user,新しいユーザー,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Create new user,新しいユーザーの作成,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+User Principal Name,ユーザー プリンシパル名,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Display Name,表示名,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Auto-generated password,パスワードの自動生成,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Password,パスワード,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Next: Properties,次へ: プロパティ,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+First name,名,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Last name,姓,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+User type,ユーザーの種類,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Member,メンバー,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Job title,役職,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Department,部署,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Usage location,利用場所,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Next: Assignments,次へ: 割り当て,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Next: Review + create,次へ: 確認と作成,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+On-premises sync enabled,オンプレミスの同期が有効,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+No,いいえ,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Roles & administrators | All roles,ロールと管理者 | すべてのロール,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Roles & administrators  All roles,ロールと管理者 | すべてのロール,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Roles & admins,ロールと管理者,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Global administrator,グローバル管理者,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+User administrator,ユーザー管理者,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Helpdesk administrator,ヘルプデスク管理者,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Add assignments,割り当ての追加,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Select members,メンバーの選択,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+No member selected,メンバーが選択されていません,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Select,選択,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Next,次へ,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Assign,割り当て,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Home,ホーム,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Role,ロール,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+New Group,新しいグループ,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Group type,グループの種類,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Membership type,メンバーシップの種類,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Security,セキュリティ,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Assigned,割り当て済み,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Members,メンバー,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+No members selected,メンバーが選択されていません,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Add members,メンバーの追加,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Billing,課金,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Licenses,ライセンス,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Manage,管理,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+All products,すべての製品,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Custom branding,会社のブランド,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Company Branding,会社のブランド,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Default sign-in experience,既定のサインイン エクスペリエンス,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Customize,カスタマイズ,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Customize default sign-in experience,既定のサインイン エクスペリエンスのカスタマイズ,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Sign-in form,サインイン フォーム,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Sign-in page text,サインイン ページのテキスト,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Review + Create,確認と作成,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Profile,プロファイル,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Active users,アクティブなユーザー,Web UI,Microsoft 365 管理センター,はい,確認済み,0101で暫定適用
+Licenses and apps,ライセンスとアプリ,Web UI,Microsoft 365 管理センター,はい,確認済み,0101で暫定適用
+Save changes,変更の保存,Web UI,Microsoft Entra 管理センター,はい,確認済み,0101で暫定適用
+Subscriptions,サブスクリプション,Web UI,Microsoft 365 管理センター,はい,確認済み,0101で暫定適用
+Assign licenses,ライセンスの割り当て,Web UI,Microsoft 365 管理センター,はい,確認済み,0101で暫定適用
+Assign Licenses,ライセンスの割り当て,Web UI,Microsoft 365 管理センター,はい,確認済み,0101で暫定適用
+Enter a group name,グループ名を入力,Web UI,Microsoft 365 管理センター,はい,確認済み,0101で暫定適用
+You assigned licenses to Contoso_Managers,Contoso_Managers にライセンスを割り当てました,Web UI,Microsoft 365 管理センター,はい,確認済み,0101で暫定適用
+Back to licenses,ライセンスに戻る,Web UI,Microsoft 365 管理センター,はい,確認済み,0101で暫定適用
+Managed by,管理者,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Ownership,所有権,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Corporate,企業,Web UI,Microsoft Intune 管理センター,はい,確認済み,
+Authentication Service,Authentication Service,WindowsアプリUI,Microsoft Entra Connect Sync,いいえ,確認済み,ドロップダウン名。UI文字列のみ維持し、前後の操作説明は日本語化
+Add,Add,WindowsアプリUI,Microsoft Entra Connect Sync,いいえ,確認済み,ボタン名。UI文字列のみ維持し、前後の操作説明は日本語化
+Enterprise Admin Credentials,Enterprise Admin Credentials,WindowsアプリUI,Microsoft Entra Connect Sync,いいえ,確認済み,ウィンドウ名。UI文字列のみ維持し、前後の操作説明は日本語化
+Ready to configure,Ready to configure,WindowsアプリUI,Microsoft Entra Connect Sync,いいえ,確認済み,ページ名。UI文字列のみ維持し、前後の操作説明は日本語化
+Configure,Configure,WindowsアプリUI,Microsoft Entra Connect Sync,いいえ,確認済み,ボタン名。UI文字列のみ維持し、前後の操作説明は日本語化
+Exit,Exit,WindowsアプリUI,Microsoft Entra Connect Sync,いいえ,確認済み,ボタン名。UI文字列のみ維持し、前後の操作説明は日本語化
+Synchronization Service,Synchronization Service,WindowsアプリUI,英語版 Windows Server,いいえ,確認済み,同期状態監視ツール。名称のみ維持し、説明文は日本語化
+Device State,Device State,コマンド出力,dsregcmd /status,いいえ,確認済み,出力セクション名
+AzureAdJoined : YES,AzureAdJoined : YES,コマンド出力,dsregcmd /status,いいえ,確認済み,技術文字列
+DomainJoined : YES,DomainJoined : YES,コマンド出力,dsregcmd /status,いいえ,確認済み,技術文字列
+Join Type,参加の種類,Web UI,Microsoft Entra 管理センター,はい,確認済み,すべてのデバイス画面の列名
+Refresh,更新,Web UI,Microsoft Entra 管理センター,はい,確認済み,ボタン名
