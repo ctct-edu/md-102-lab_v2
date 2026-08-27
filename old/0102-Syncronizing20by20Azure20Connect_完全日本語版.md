@@ -1,101 +1,101 @@
 ---
 lab:
-  title: 'プラクティス ラボ 0102: Microsoft Entra Connect を使用したIDの同期'
-  description: このラボでは、Active Directory Domain Services から Entra ID への同期を構成します。
-  duration: 20 minutes
-  level: 200
-  islab: true
-  primarytopics:
-- Microsoft Entra
-- Active Directory
+ title: '演習ラボ 0102: Microsoft Entra Connect を使用した ID の同期'
+ description: このラボでは、 configure同期 から Active Directory Domain Services に Entra ID.
+ duration: 20 minutes
+ level: 200
+ islab: true
+ primarytopics:
+ - Microsoft Entra
+ - Active Directory
 ---
 
-# プラクティス ラボ 0102: Microsoft Entra Connect を使用したIDの同期
+# 演習ラボ 0102: Microsoft Entra Connect を使用した ID の同期 
 
 ## 概要
 
-このラボでは、Active Directory Domain Services から Entra ID への同期を構成します。
+このラボでは、 configure同期 から Active Directory Domain Services に Entra ID.
 
 ### シナリオ
 
-Contoso Corporation では現在、AD DS と Entra ID のユーザーを別々のプロセスで管理しています。この方法は時間がかかり、情報の不整合も発生しています。この問題に対処するため、Microsoft Entra Connect 同期ツールを使用して2つのディレクトリを接続します。
+次の操作を実行します。Contoso Corporation は currently managingユーザー で both AD DS および Entra ID として separate processes. This は time consuming および があります led に inconsistent information. 担当することになりました。 addressing this issue by connecting two directories by using Microsoft Entra Connect同期 tool.
 
 #### タスク 1: Microsoft Entra Connect を使用してディレクトリ同期を構成する
 
-1. **SEA-SVR1** で、必要に応じて **Contoso\\Administrator** としてパスワード **Pa55w.rd** を使用してサインインし、**Server Manager** を閉じます。
+1. On **SEA-SVR1**, 必要に応じて, 次のアカウントでサインインします。 **Contoso\\Administrator** パスワード **Pa55w.rd** および 閉じます **Server Manager**.
 
-2. タスク バーで **Microsoft Edge** を選択します。
+2. タスク バーで **Microsoft Edge**.
 
-3. アドレス バーに `https://entra.microsoft.com` と入力します。
+3. アドレス バーに `https://entra.microsoft.com`
 
-4. In the left navigation ペイン, under **Entra ID**, 選択します **Entra Connect**。
+4. In left navigation ペイン, 配下で **Entra ID**, 選択します **Entra Connect**.
 
-5. On the **Microsoft Entra Connect | Get started** ペイン, 選択します the **管理** タブ。
+5. **Microsoft Entra Connect | Get started** ペイン, 選択します **管理** タブ.
 
-6. ****インフラストラクチャの管理**** ページで **Connect Sync Agent のダウンロード** を選択します。
+6. In **Manage受講者のinfrastructure** ページ, 選択します **Download Connect Sync Agent**.
 
-7. **条項に同意してダウンロード** を選択します。
+7. 選択します **Accept terms & download**. 
 
->**注**: Entra Connect Sync automatically downloads to the **Downloads** folder on SEA-SVR1。
+ >**注**: Entra Connect Sync automatically downloads に **Downloads** folder on SEA-SVR1.
 
-8. **Open downloads folder** and then in the **Downloads** ウィンドウ, double-click **AzureAdConnect.msi** を選択します。
+8. 選択します **Open downloads folder** 続いて で **Downloads** ウィンドウ, double-click **AzureAdConnect.msi**.
 
-9. In the **Microsoft Entra Connect Sync** wizard, on the **Welcome to Microsoft Entra Connect Sync** ページ, 選択します the **I agree to the license terms and privacy notice** check ボックス, and 続いて **Continue**。
+9. In **Microsoft Entra Connect Sync** wizard, **Welcome に Microsoft Entra Connect Sync** ページ, 選択します **I agree に theライセンス terms および privacy notice** チェック ボックス, 続いて 選択します **Continue**.
 
-10. ****Ex押します Settings**** ページで **カスタマイズ** を選択します。
+10. **Express Settings** ページ, 選択します **カスタマイズ**
     
->**注**: Do not click the Use Ex押します Settings button。
+ >**注**: Do not click Use Express Settings ボタン.
 
-11. ****Install required components**** ページで **Install** を選択します。
+11. **Install required components** ページ, 選択します **Install**.
 
-12. On the **User sign-in** ページ, ensure that **Password Hash Synchronization** is 選択しました, and 続いて **次へ**。
+12. **User sign-in** ページ, 次のことを確認します。 **Password Hash Synchronization** が選択されていること, 続いて 選択します **次へ**.
 
-13. On the **Connect to Microsoft Entra ID** ページ, in the **ユーザー名** ボックスes, 入力します **admin@yourtenant.onmicrosoft.com**, and 続いて **次へ**。
+13. **Connect に Microsoft Entra ID** ページ, で **USERNAME** boxes, 入力します **admin@yourtenant.onmicrosoft.com**, 続いて 選択します **次へ**.
 
-14. In the **Sign in to your account** ウィンドウ, 入力します **admin@yourtenant.onmicrosoft.com**, 選択します **次へ**, then 入力します テナント password, 選択してから **Sign in**。
+14. In **Sign で に yourアカウント** ウィンドウ, 入力します **admin@yourtenant.onmicrosoft.com**, 選択します **次へ**, 続いて 入力します受講者のtenantパスワード, および 選択します **Sign in**.
 
-15. On the **Connect your directories** ページ, ensure that **Contoso.com** が表示されている under **フォレスト**, and 続いて **Add Directory**。
+15. **Connect受講者のdirectories** ページ, 次のことを確認します。 **Contoso.com** が表示されていること 配下で **FOREST**, 続いて 選択します **Add Directory**.
 
-16. In the **AD forest account** ウィンドウ, 選択します the **Create New AD Account** option, and in the **ENTERPRISE ADMIN USERNAME** フィールド, 入力します **Contoso\\Administrator**, and then 入力します **Pa55w.rd** in the **PASSWORD** フィールド. Select **OK**, and 続いて **次へ**。
+16. In **AD forestアカウント** ウィンドウ, 選択します **Create New AD Account** option, および で **ENTERPRISE ADMIN USERNAME** フィールド, 入力します **Contoso\\Administrator**, 続いて 入力します **Pa55w.rd** で **PASSWORD** フィールド. 選択します **OK**, 続いて 選択します **次へ**.
 
-17. On the **Microsoft Entra sign-in configuration** ページ, ensure that in the **USER PRINCIPAL NAME** ドロップダウン リスト, the **userPrincipalName** value is 選択しました。
+17. **Microsoft Entra sign-in構成** ページ, 次のことを確認します。 で **USER PRINCIPAL NAME** drop-down 一覧, **userPrincipal名前** 値 が選択されていること. 
 
-18. **Continue without matching all UPN suffixes to verified domains** and 続いて **次へ** を選択します。
+18. 選択します **Continue without matching all UPN suffixes に verified domains** 続いて 選択します **次へ**.
 
-19. ****Domain and OU filtering**** ページで **Sync 選択しました domains and OUs** を選択します。
+19. **Domain および OU filtering** ページ, 選択します **Sync 選択しますed domains および OUs**.
 
-20. Expand **Contoso.com**, clear the checkボックス next to **Contoso.com** and ensure that the only following check ボックスes are 選択しました: **IT**, **Managers**, **Marketing**, **Research**, and **Sales**. Select **次へ**。
+20. Expおよび **Contoso.com**, clear checkbox next に **Contoso.com** および 次のことを確認します。 only following チェック ボックスes が選択されていること: **IT**, **Managers**, **Marketing**, **Research**, および **Sales**. 選択します **次へ**.
 
-21. ****Uniquely identifying your users**** ページで **次へ** を選択します。
+21. **Uniquely identifying受講者のusers** ページ, 選択します **次へ**.
 
-22. ****Filter users and devices**** ページで **次へ** を選択します。
+22. **Filterユーザー およびデバイス** ページ, 選択します **次へ**.
 
-23. On the **Optional features** ページ, 確認します available options, but 変更しません. Ensure that **Password hash synchronization** is 選択しました, and 続いて **次へ**。
+23. **Optional features** ページ, review利用可能な options, but 変更しないでください. 次のことを確認します。 **Password hash同期** が選択されていること, 続いて 選択します **次へ**.
 
-24. On the **Ready to configure** ページ, ensure that **Start the synchronization process when configuration completes** is 選択しました, and 続いて **Install**。
+24. **Ready に configure** ページ, 次のことを確認します。 **Start the同期 process when構成 completes** が選択されていること, 続いて 選択します **Install**.
 
-25. configuration is completeときは、**Exit** を選択します。
+25. When構成 は complete, 選択します **Exit**. 
 
-> 注: At this time, synchronization of objects from your local Active Directory Domain Services (AD DS) and Entra ID begins. You should wait approximately 3-4 minutes for this process to complete. Or check progress in the Synchronization Service application。
+ > 注: At this time,同期 の objects から yourローカル Active Directory Domain Services (AD DS) および Entra ID begins. You should wait approximately 3-4 minutes のために this process に complete. Or check progress で Synchronization Service application.
 
-26. 開いているすべてのウィンドウを閉じます。
+26. 閉じます 開いているすべてのウィンドウ.
 
 #### タスク 2: Entra ID で同期を確認する
 
-1. Microsoft Entra 管理センターで、 ナビゲーション ペインで、 選択します **ユーザー**。
+1. Microsoft Entra 管理センターで, ナビゲーション ペインで, 選択します **ユーザー**.
 
-2. 表示されている users ローカル AD DS から. Ensure that these users have the value **はい** in the **オンプレミスの同期が有効** 列ことを確認します。
+2. 次のことを確認します。 you seeユーザー から yourローカル AD DS. 次のことを確認します。 theseユーザー があります 値 **はい** で **オンプレミスの同期が有効** 列. 
 
-3. In the Navigation ペイン, 選択します **グループ**, 続いて **すべてのグループ**. Verify that 表示されている groups ローカル AD DS から. Ensure that these groups have the value **Windows Server AD** in the **ソース** 列 (you will need to use the horizontal scroll bar and scroll to the right to be able to see the **ソース** 列)。
+3. In Navigation ペイン, 選択します **グループ**, 続いて 選択します **All Groups**. 次のことを確認します。 you seeグループ から yourローカル AD DS. 次のことを確認します。 theseグループ があります 値 **Windows Server AD** で **Source** 列 (you します need に use horizontal scroll bar および scroll に right に be able に see **Source** 列).
 
-4. Select the **Managers** group。
+4. 選択します **Managers** group.
 
-5. On the **Managers** group ページ, 選択します **メンバー** and then ensure that 表示されている users。
+5. **Managers** group ページ, 選択します **メンバー** 続いて 次のことを確認します。 you seeユーザー. 
 
-> Note that you cannot add to or remove members from this group, as it is sourced from the local AD DS。
+ > 次の点に注意してください。 you cannot add に または remove members から this group, として it は sourced から theローカル AD DS. 
 
-6. Microsoft Edge を閉じます。
+6. 閉じます Microsoft Edge.
 
-**結果**: この演習を完了すると、 configured Azure AD Connect to synchronize identity from Active Directory Domain Services to Entra ID。
+**結果**: この演習を完了すると、 configured Azure AD Connect に synchronize identity から Active Directory Domain Services に Entra ID.
 
 **ラボ終了**
