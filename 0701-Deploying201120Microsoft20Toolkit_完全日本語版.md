@@ -1,7 +1,7 @@
 ---
 lab:
-  title: 'Practice Lab 0701: Deploying Windows 11 using Microsoft Deployment Toolkit'
-  description: In this lab, you will use the Microsoft Deployment Toolkit to create and deploy a Windows 11 operating system image.
+  title: '演習ラボ 0701: Microsoft Deployment Toolkit を使用した Windows 11 の展開'
+  description: このラボでは、Microsoft Deployment Toolkit を使用して Windows 11 オペレーティング システム イメージを作成し、展開します。
   duration: 100 minutes
   level: 200
   islab: true
@@ -14,273 +14,273 @@ lab:
 
 ## 概要
 
-In this lab, you will use the Microsoft Deployment Toolkit to create and deploy a Windows 11 operating system image. 
+このラボでは、Microsoft Deployment Toolkit を使用して Windows 11 オペレーティング システム イメージを作成し、展開します。 
 
 ### シナリオ
 
-SEA-WS4 という名前の新しい Windows 11 仮想マシンを展開する必要があります。Microsoft Deployment Toolkit を使用して、Hyper-V で作成した仮想マシンへオペレーティング システムを展開することにしました。MDT で新しい展開共有を構成し、SEA-WS4 の展開手順を実行するタスク シーケンスを構成します。
+You need to deploy a new Windows 11 virtual machine named SEA-WS4. You decide to use Microsoft Deployment Toolkit to deploy オペレーティング システム to a virtual machine created in Hyper-V. You will configure a new Deployment Share in MDT 、続いて configure the task sequence that will perform the steps to deploy SEA-WS4.
 
-### タスク 1: 新しい展開共有の作成
+### タスク 1: 新しい Deployment Share の作成
 
-1. 対象: **SEA-SVR2**, としてサインインし **Contoso\\Administrator** パスワード **Pa55w.rd**.
+1. On **SEA-SVR2**, としてサインインします **Contoso\\Administrator** パスワード **Pa55w.rd**.
 
-2. タスク バーで **File Explorer** 続いて 参照します: **E:\\Labfiles\\ISOs**.
+2. タスク バーで, **File Explorer** 、続いて browse to **E:\\Labfiles\\ISOs**.
 
-3. 右クリックし **Win11_21H2_Eval.iso** を選択してから **Mount**. ISO mounts as DVD Drive F.
+3. 右クリックします **Win11_21H2_Eval.iso** 、続いて **Mount**. The ISO mounts as DVD Drive F.
 
 4. 閉じます **File Explorer**.
 
-5. 選択します **Start**, 展開し **Microsoft Deployment Toolkit**, を選択してから **Deployment Workbench**.
+5. **Start**, 展開します **Microsoft Deployment Toolkit**, 、続いて **Deployment Workbench**.
 
-6. 対象: **Deployment Workbench**, 右クリックし **Deployment Shares** を選択してから **New Deployment Share**. 。
+6. の **Deployment Workbench**, 右クリックします **Deployment Shares** 、続いて **New Deployment Share**. 
 
    > The **New Deployment Share Wizard** opens.
 
-7. 対象: **Path** ページ, で **Deployment share path**, change value to **E:\DeploymentShare** を選択してから **Next**.
+7. の **Path** ページ, で **Deployment share path**, change the value to **E:\DeploymentShare** 、続いて **Next**.
 
-8. 対象: **Share** ページ, 確認します **Share name**, ただし 変更しないでください. 選択します **Next**.
+8. の **Share** ページ, 確認します: the **Share name**, but do not change it. **Next**.
 
-9. 対象: **Descriptive Name** ページ, 既定値をそのまま使用し を選択し **Next**.
+9. の **Descriptive Name** ページ, accept the default value and **Next**.
 
-10. 対象: **Options** ページ, configure 次の項目, を選択してから **Next**:
+10. の **Options** ページ, configure the following, 、続いて **Next**:
 
        - Ask to set the local Administrator password: **Enabled**
 
        - All other check boxes: **Disabled**
 
-11. 対象: **Summary** ページ, 確認し information を選択してから **Next**. 。
+11. の **概要** ページ, 情報を確認し 、続いて **Next**. 
 
-12. 対象: **Confirmation** ページ, 確認し process 正常に完了したこと を選択してから **Finish**.
+12. の **Confirmation** ページ, 処理が正常に完了したことを確認し 、続いて **Finish**.
 
-13. Under **Deployment Shares**, 展開し **MDT Deployment Share** folder. 。
+13. で **Deployment Shares**, 展開します the **MDT Deployment Share** folder. 
 
-    > Take note of the various nodes that can be configured for the deployment share.
+    > 確認します: the various nodes that can be configured for the deployment share.
 
-### タスク 2: 展開共有へのオペレーティング システム ファイルの追加
+### タスク 2: Deployment Share へのオペレーティング システム ファイルの追加
 
-1. 対象: Deployment Workbench, 展開し **Deployment Shares**, 展開し **MDT Deployment Share**, を選択してから **Operating Systems**.
+1. の Deployment Workbench, 展開します **Deployment Shares**, 展開します **MDT Deployment Share**, 、続いて **Operating Systems**.
 
-2. 右クリックし **Operating Systems** を選択してから **Import Operating System**. Import Operating System Wizard が開きます.
+2. 右クリックします **Operating Systems** 、続いて **Import Operating System**. The Import Operating System Wizard opens.
 
-3. 対象: **Import Operating System Wizard**, on **OS Type** ページ, 選択します **Full set of source files** を選択してから **Next**.
+3. の **Import Operating System Wizard**, の **OS 入力します** ページ, **Full set of source files** 、続いて **Next**.
 
-4. 対象: **Source** ページ, で **Source Directory**, 入力します **F:\\** を選択してから **Next**.
+4. の **Source** ページ, で **Source Directory**, **F:\\** 、続いて **Next**.
 
-5. 対象: **Destination** ページ, change default destination directory name to **Windows 11 入力しますprise x64** を選択してから **Next**.
+5. の **Destination** ページ, change the default destination directory name to **Windows 11 Enterprise x64** 、続いて **Next**.
 
-6. 対象: **Summary** ページ, 確認し information を選択してから **Next**. 。
+6. の **概要** ページ, 情報を確認し 、続いて **Next**. 
 
-   > The operating system source files are copied into the deployment share.
+   > オペレーティング システム source files are copied into the deployment share.
 
-7. 対象: **Confirmation** ページ, 確認し process 正常に完了したこと を選択してから **Finish**.
+7. の **Confirmation** ページ, 処理が正常に完了したことを確認し 、続いて **Finish**.
 
-8. 対象: **Deployment Workbench**, を使用して **Operating Systems** 選択しますed, 確認し operating system が表示されます.
+8. の **Deployment Workbench**, with **Operating Systems** selected, 次のことを確認します: オペレーティング システム displays.
 
-### タスク 3: 展開共有へのアプリケーションの追加
+### タスク 3: Deployment Share へのアプリケーションの追加
 
-1. 対象: Deployment Workbench, 展開し **Deployment Shares**, 展開し **MDT Deployment Share**, を選択してから **Applications**.
+1. の Deployment Workbench, 展開します **Deployment Shares**, 展開します **MDT Deployment Share**, 、続いて **Applications**.
 
-2. 右クリックし **Applications** を選択してから **New Application**. New Application Wizard が開きます.
+2. 右クリックします **Applications** 、続いて **New Application**. The New Application Wizard opens.
 
-3. 対象: **New Application Wizard**, on **Application Type** ページ, 選択します **Application を使用して source files** を選択してから **Next**.
+3. の **New Application Wizard**, の **Application 入力します** ページ, **Application with source files** 、続いて **Next**.
 
-4. 対象: **Details** ページ, configure 次の項目, を選択してから **Next**:
+4. の **Details** ページ, configure the following, 、続いて **Next**:
     - Publisher: **Microsoft**
     - Application Name: **XML Notepad**
 
-5. 対象: **Source** ページ, で **Source directory**, 入力します **E:\\Labfiles\\Apps** を選択してから **Next**.
+5. の **Source** ページ, で **Source directory**, **E:\\Labfiles\\Apps** 、続いて **Next**.
 
-6. 対象: **Destination** ページ, accept default destination directory name を選択してから **Next**.
+6. の **Destination** ページ, accept the default destination directory name 、続いて **Next**.
 
-7. 対象: **Commおよび Details** ページ, で **Commおよび line** 入力します **XmlNotepadSetup.msi /q** を選択してから **Next**.
+7. の **Command Details** ページ, で **Command line** **XmlNotepadSetup.msi /q** 、続いて **Next**.
 
-8. 対象: **Summary** ページ, 確認し information を選択してから **Next**. 。
+8. の **概要** ページ, 情報を確認し 、続いて **Next**. 
 
-9. 対象: **Confirmation** ページ, 確認し process 正常に完了したこと を選択してから **Finish**.
+9. の **Confirmation** ページ, 処理が正常に完了したことを確認し 、続いて **Finish**.
 
-### タスク 4: MDT タスク シーケンスの作成
+### タスク 4: Create an MDT タスク Sequence
 
-1. 対象: Deployment Workbench, 展開し **Deployment Shares**, 展開し **MDT Deployment Share**, を選択してから **Task Sequences**.
+1. の Deployment Workbench, 展開します **Deployment Shares**, 展開します **MDT Deployment Share**, 、続いて **タスク Sequences**.
 
-2. 右クリックし **Task Sequences** を選択してから **New Task Sequence**. **New Task Sequence Wizard** が開きます.
+2. 右クリックします **タスク Sequences** 、続いて **New タスク Sequence**. The **New タスク Sequence Wizard** opens.
 
-3. 対象: **General Settings** ページ, configure 次の項目 を選択してから **Next**:
-   - Task sequence ID: **001**
-   - Task sequence name: **Deploy Windows 11 Enterprise**
+3. の **General Settings** ページ, configure the following 、続いて **Next**:
+   - タスク sequence ID: **001**
+   - タスク sequence name: **Deploy Windows 11 Enterprise**
 
-4. 対象: **選択します Template** ページ, 選択します **Stおよびard Client Task Sequence**, を選択してから **Next**.
+4. の **選択します Template** ページ, **Standard Client タスク Sequence**, 、続いて **Next**.
 
-5. 対象: **選択します OS** ページ, 選択します **Windows 10 入力しますprise Evaluation** を選択してから **Next**.
+5. の **選択します OS** ページ, **Windows 10 Enterprise Evaluation** 、続いて **Next**.
 
-6. 対象: **Specify Product Key** ページ, 選択します **Do not specify a product key at this time**, を選択してから **Next**.
+6. の **Specify Product Key** ページ, **Do not specify a product key at this time**, 、続いて **Next**.
 
-7. 対象: **OS Settings** ページ, configure 次の項目 を選択してから **Next**:
+7. の **OS Settings** ページ, configure the following 、続いて **Next**:
    - Full Name: **User**
    - Organization: **Contoso Corporation**
-   - Internet Explorer Home Page: **about:blank**
+   - Internet Explorer Home ページ: **about:blank**
 
-8. 対象: **Admin Password** ページ, 選択します **Use specified local Administrator password**, 続いて 入力します **Pa55w.rd** in both テキスト ボックスes. 選択します **Next**.
+8. の **Admin Password** ページ, **Use the specified local Administrator password**, 、続いて **Pa55w.rd** in both text boxes. **Next**.
 
-9. 対象: **Summary** ページ, 確認し information を選択してから **Next**. 。
+9. の **概要** ページ, 情報を確認し 、続いて **Next**. 
 
-10. 対象: **Confirmation** ページ, 確認し process 正常に完了したこと を選択してから **Finish**.
+10. の **Confirmation** ページ, 処理が正常に完了したことを確認し 、続いて **Finish**.
 
-11. 対象: **Deployment Workbench**, を使用して **Task Sequences** 選択しますed 確認し **Deploy Windows 11 入力しますprise** task sequence が表示されます.
+11. の **Deployment Workbench**, with **タスク Sequences** selected 次のことを確認します: the **Deploy Windows 11 Enterprise** task sequence displays.
 
-12. 右クリックし **Deploy Windows 11 入力しますprise** task sequence, を選択してから **Properties**. 。
+12. 右クリックします the **Deploy Windows 11 Enterprise** task sequence, 、続いて **Properties**. 
 
-13. 選択します **Task Sequence** タブ. 。
+13. 選択します the **タスク Sequence** タブ. 
 
-14. Expおよび **Validation** node を選択してから **Validate**.
+14. 展開します the **Validation** node 、続いて **Validate**.
 
-15. 対象: **Properties** ページ, remove check marks の横で **Ensure minimum memory** および **Ensure minimum processor speed**. 。
+15. の **Properties** ページ, remove the check marks の横で **Ensure minimum memory** and **Ensure minimum processor speed**. 
 
     > Do not make any other changes.
 
-16. 対象: **Deploy Windows 11 入力しますprise Properties** ウィンドウ, 選択します **OK**.
+16. の **Deploy Windows 11 Enterprise Properties** ウィンドウ, **OK**.
 
-### タスク 5: 展開共有のプロパティと Windows PE 設定の構成
+### タスク 5: Deployment Share のプロパティと Windows PE 設定の構成
 
-1. 対象: Deployment Workbench, 展開し **Deployment Shares**, を選択し **MDT Deployment Share**.
+1. の Deployment Workbench, 展開します **Deployment Shares**, and **MDT Deployment Share**.
 
-2. 右クリックし **MDT Deployment Share** を選択してから **Properties**.
+2. 右クリックします **MDT Deployment Share** 、続いて **Properties**.
 
-3. 対象: **MDT Deployment Share Properties** ウィンドウ, on **General** タブ, 確認します information that was provided when deployment share was created.
+3. の **MDT Deployment Share Properties** ウィンドウ, の **General** タブ, 確認します: 情報 that was provided when the deployment share was created.
 
-4. 選択します **Rules** タブ. 。
+4. 選択します the **Rules** タブ. 
 
-   > The Rules tab displays the content of the CustomSettings.ini file. These values were also provided during the creation of the deployment share.
+   > The Rules タブ displays the content of the CustomSettings.ini file. These values were also provided during the creation of the deployment share.
 
-5. 選択します **Windows PE** タブ. 。
+5. 選択します the **Windows PE** タブ. 
 
-   > The Windows PE tab provides options for creating a Windows PE boot disk.
+   > The Windows PE タブ provides options for creating a Windows PE boot disk.
 
-6. 対象: **Windows PE** タブ, の横で **Platform**, 選択します **x64**.
+6. の **Windows PE** タブ, の横で **Platform**, **x64**.
 
-7. 対象: **Windows PE Customizations** section, の横で **Scratch space size**, 選択します **64**.
+7. の **Windows PE Customizations** section, の横で **Scratch space size**, **64**.
 
-8. 選択します **Features** タブ を選択してから チェック ボックス の横で 次の項目 Feature Packs:
+8. 選択します the **Features** タブ 、続いて の横にあるチェック ボックスを選択し the following Feature Packs:
    - DISM Cmdlets
    - Windows PowerShell
    - Microsoft Data Access Components (MDAC/ADO) support
 
-9. 選択します **Monitoring** タブ.
+9. 選択します the **Monitoring** タブ.
 
-10. 対象: **Monitoring** タブ, 選択します チェック ボックス の横で **Enable monitoring for this deployment share**.
+10. の **Monitoring** タブ, の横にあるチェック ボックスを選択し **Enable monitoring for this deployment share**.
 
-11. 対象: **MDT Deployment Share Properties** ウィンドウ, 選択します **OK**.
+11. の **MDT Deployment Share Properties** ウィンドウ, **OK**.
 
-12. 右クリックし **MDT Deployment Share** を選択してから **Update Deployment Share**. Update Deployment Share Wizard が開きます.
+12. 右クリックします **MDT Deployment Share** 、続いて **Update Deployment Share**. The Update Deployment Share Wizard opens.
 
-13. 対象: **Options** ページ, 選択します **Optimize boot image updating process** を選択してから **Next**.
+13. の **Options** ページ, **Optimize the boot image updating process** 、続いて **Next**.
 
-14. 対象: **Summary** ページ, 選択します **Next**. 。
+14. の **概要** ページ, **Next**. 
 
     > The Deployment Share starts to update and create the Windows PE files. This will take a few minutes to complete.
 
-15. 対象: **Confirmation** ページ, 確認し process 正常に完了したこと を選択してから **Finish**.
+15. の **Confirmation** ページ, 処理が正常に完了したことを確認し 、続いて **Finish**.
 
 ### タスク 6: MDT を使用した Windows 11 の展開
 
-1. 対象: SEA-SVR2, on taskbar, 選択します **Hyper-V Manager**.
+1. On SEA-SVR2, タスク バーで, **Hyper-V Manager**.
 
-2. 対象: Hyper-V Manager, 選択します **Virtual Switch Manager**.
+2. In Hyper-V Manager, **Virtual Switch Manager**.
 
-3. 選択します **New virtual network switch** 続いて in 詳細ペイン, 選択します **External**. 選択します **Create Virtual Switch**.
+3. **New virtual network switch** 、続いて 詳細ペインで, **External**. **Create Virtual Switch**.
 
-4. 対象: **Virtual Switch Properties** ページ, で **Name**, 入力します **External network**, 選択します **OK**, を選択してから **Yes**.
+4. の **Virtual Switch Properties** ページ, で **Name**, **External network**, **OK**, 、続いて **Yes**.
 
-5. 対象: Hyper-V Manager, 選択します **SEA-SVR2** 続いて in Actions pane, 選択します **New** を選択してから **Virtual Machine**.
+5. In Hyper-V Manager, **SEA-SVR2** 、続いて の Actions ペイン, **New** 、続いて **Virtual Machine**.
 
-6. 対象: **Before you Begin** ページ, 選択します **Next**.
+6. の **Before you Begin** ページ, **Next**.
 
-7. 対象: **Specify Name および Location** ページ, in **Name** box 入力します **SEA-WS4**. 。
+7. の **Specify Name and Location** ページ, の **Name** box **SEA-WS4**. 
 
-8. 選択します チェック ボックス の横で **Store virtual machine in a different location** 続いて の横で **Location** 入力します **E:\\Labfiles\\VirtualMachines**. 選択します **Next**.
+8. の横にあるチェック ボックスを選択し **Store the virtual machine in a different location** 、続いて の横で **Location** **E:\\Labfiles\\VirtualMachines**. **Next**.
 
-9. 対象: **Specify Generation** ページ, 確認し **Generation 2** is 選択しますed を選択してから **Next**.
+9. の **Specify Generation** ページ, ensure that **Generation 2** is selected 、続いて **Next**.
 
-10. 対象: **Assign Memory** ページ, の横で **Startup memory** 入力します **8192** を選択してから **Next**.
+10. の **Assign Memory** ページ, の横で **Startup memory** **8192** 、続いて **Next**.
 
-11. 対象: **Configure Networking** ページ, の横で **Connection**, 選択します **External Network** を選択してから **Next**.
+11. の **Configure Networking** ページ, の横で **Connection**, **External Network** 、続いて **Next**.
 
-12. 対象: **Connect Virtual Hard Disk** ページ, 選択します **Create a virtual hard disk** および 入力します 次の項目 続いて 選択します **Next**:
+12. の **Connect Virtual Hard Disk** ページ, **Create a virtual hard disk** and 入力します the following 、続いて click **Next**:
 
     - Name: **SEA-WS4.vhdx**
     - Location: **E:\\Labfiles\\VirtualMachines**
     - Size: **60 GB**
 
-13. 対象: **Installation Options** ページ, 選択します **Install an operating system から a booタブle image file** および configure 次の項目:
+13. の **Installation Options** ページ, **Install an operating system from a bootable image file** and configure the following:
 
     - Image file (.iso): **E:\\DeploymentShare\\Boot\\LiteTouchPE_x64.iso**
 
-14. 選択します **Next** 続いて **Finish**.
+14. **Next** 、続いて **Finish**.
 
-15. 対象: Hyper-V Manager, 右クリックし **SEA-WS4**, を選択してから **Settings**.
+15. In Hyper-V Manager, 右クリックします **SEA-WS4**, 、続いて **Settings**.
 
-16. 選択します **Security**, を選択してから チェック ボックス の横で **Enable Trusted Platform Module**.
+16. **Security**, 、続いて の横にあるチェック ボックスを選択し **Enable Trusted Platform Module**.
 
-17. 選択します **Processor**, 続いて change number of virtual processors to **2**. 。
+17. **Processor**, 、続いて change the number of virtual processors to **2**. 
 
-18. 選択します **OK** to 閉じます Settings ダイアログ ボックス.
+18. **OK** to 閉じます the Settings dialog box.
 
-19. 対象: Hyper-V Manager, 選択します **SEA-WS4**, 選択します **Connect**,  を選択してから **Start**. 。
+19. In Hyper-V Manager, **SEA-WS4**, **Connect**,  、続いて **Start**. 
 
-20. As computer starts press any key on keyboard to invoke MDT Deployment Wizard. Maximize ウィンドウ as needed.
+20. As the computer starts press any key の keyboard to invoke the MDT Deployment Wizard. Maximize the ウィンドウ as needed.
 
-21. 対象: **Welcome** ページ, 選択します **Run Deployment Wizard to install a new Operating System**.
+21. の **Welcome** ページ, **Run the Deployment Wizard to install a new Operating System**.
 
-22. 対象: **Specify credentials for connecting to network shares** ウィンドウ, 入力します 次の項目 を選択してから **OK**:
+22. の **Specify credentials for connecting to network shares** ウィンドウ, 入力します the following 、続いて **OK**:
     - User Name: **Administrator**
     - Password: **Pa55w.rd**
     - Domain: **Contoso**
 
-23. 対象: **Task Sequence** ページ, 選択します **Deploy Windows 11 入力しますprise** を選択してから **Next**.
+23. の **タスク Sequence** ページ, **Deploy Windows 11 Enterprise** 、続いて **Next**.
 
-24. 対象: **Computer Details** ページ, の横で **Computer name** 入力します **SEA-WS4** を選択してから **Next**.
+24. の **Computer Details** ページ, の横で **Computer name** **SEA-WS4** 、続いて **Next**.
 
-25. 対象: **Move Data および Settings** ページ, 選択します **Next**.
+25. の **Move Data and Settings** ページ, **Next**.
 
-26. 対象: **User Data (Restore)** ページ, 選択します **Next**.
+26. の **User Data (Restore)** ページ, **Next**.
 
-27. 対象: **Locale および Time** ページ, 選択します **Next**.
+27. の **Locale and Time** ページ, **Next**.
 
-28. 対象: **Applications** ページ, 選択します **Next**.
+28. の **Applications** ページ, **Next**.
 
-29. 対象: **Administrator Password** ページ, 入力します **Pa55w.rd** in both テキスト ボックスes を選択してから **Next**.
+29. の **Administrator Password** ページ, **Pa55w.rd** in both text boxes 、続いて **Next**.
 
-30. 対象: **Ready** ページ, 選択します **Begin**. 。
+30. の **Ready** ページ, **Begin**. 
 
     > The installation begins. It will take 15-20 minutes to complete and will reboot SEA-WS4 during the installation as needed.
 
-31. 切り替え先: **Deployment Workbench**.
+31. に切り替えます the **Deployment Workbench**.
 
-32. 対象: Deployment Workbench, 展開し **Deployment Shares**, および 展開し **MDT Deployment Share**.
+32. の Deployment Workbench, 展開します **Deployment Shares**, and 展開します **MDT Deployment Share**.
 
-33. 選択します **Monitoring** 続いて in 詳細ペイン, double-選択します **SEA-WS4**.
+33. **Monitoring** 、続いて 詳細ペインで, double-click **SEA-WS4**.
 
     > Review the monitoring status during the deployment.
 
-34. 切り替え先: **SEA-WS4**.
+34. に切り替えます **SEA-WS4**.
 
-35. After installation is complete, desktop will open および finalize deployment. 対象: deployment summary, 選択します **Finish**.
+35. After the installation is complete, the desktop will 開きます and finalize the deployment. At the deployment summary, **Finish**.
 
-36. Shut down **SEA-WS4** および 閉じます Virtual Machine Connection ウィンドウ.
+36. Shut down **SEA-WS4** and 閉じます the Virtual Machine Connection ウィンドウ.
 
-37. 対象: Hyper-V Manager, 右クリックし **SEA-WS4** を選択してから **Settings**.
+37. In Hyper-V Manager, 右クリックします **SEA-WS4** 、続いて **Settings**.
 
-38. 対象: **Settings for SEA-WS4**, 展開し **SCSI Controller** を選択してから **DVD Drive**.
+38. の **Settings for SEA-WS4**, 展開します **SCSI Controller** 、続いて **DVD Drive**.
 
-39. 対象: 詳細ペイン, で **Media**, 選択します **None**, を選択してから **OK**.
+39. 詳細ペインで, で **Media**, **None**, 、続いて **OK**.
 
-40. 右クリックし **SEA-WS4** を選択してから **Checkpoint** to create a checkpoint of current state of SEA-WS4.
+40. 右クリックします **SEA-WS4** 、続いて **Checkpoint** to create a checkpoint of the current state of SEA-WS4.
 
-41. 対象: SEA-SVR2, 閉じます **Hyper-V Manager** および 閉じます **Deployment Workbench**.
+41. On SEA-SVR2, 閉じます **Hyper-V Manager** and 閉じます the **Deployment Workbench**.
 
-42. Open **File Explorer**, 右クリックし **DVD Drive F** を選択してから **Eject**.
+42. 開きます **File Explorer**, 右クリックします **DVD Drive F** 、続いて **Eject**.
 
-43. 閉じます **File Explorer** および sign out of **SEA-SVR2**.
+43. 閉じます **File Explorer** and sign out of **SEA-SVR2**.
 
-**結果**: この演習を完了すると、Microsoft Deployment Toolkit を使用して Windows 11 ワークステーションを作成し、展開できるようになります。
+**結果**: この演習を完了すると、 successfully used the Microsoft Deployment Toolkit to create and deploy a Windows 11 workstation.
 
 **ラボ終了**
