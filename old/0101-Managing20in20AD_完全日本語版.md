@@ -1,437 +1,497 @@
 ---
 lab:
- title: '演習ラボ 0101: Entra ID での ID 管理'
- description: このラボでは、 use Entra admin c入力します に create および modifyユーザー, assign administrative roles, create および modifyグループ, および manageライセンス割り当てs で Entra ID.
- duration: 60 minutes
- level: 200
- islab: true
+    title: '演習ラボ 0101: Entra ID での ID の管理'
+    description: このラボでは、Entra 管理センターを使用して、Entra ID でユーザーの作成と変更、管理者ロールの割り当て、グループの作成と変更、およびライセンス割り当ての管理を行います。
+    duration: 60 minutes
+    level: 200
+    islab: true
 ---
 
-# 演習ラボ 0101: Entra ID での ID 管理
+## 演習ラボ 0101: Entra ID での ID の管理
 
-## WWL Tenants - Terms of Use
+### WWL テナント - 利用規約
 
-次の操作を実行します。If you は being provided を使用して tenant として part の instructor-led training delivery, please note that tenant は made利用可能な のために purpose の supporting hおよびs-on labs で instructor-led training.
+インストラクター主導のトレーニングの一環としてテナントが提供される場合、そのテナントはインストラクター主導トレーニングのハンズオン ラボを支援する目的で提供されるものであることにご注意ください。
 
-次の操作を実行します。Tenants should not be shared または used のために purposes outside の hおよびs-on labs. tenant used で this course は trial tenant および cannot be used または accessed after class は over および は not eligible のために extension.
+テナントを共有したり、ハンズオン ラボ以外の目的で使用したりしないでください。このコースで使用するテナントは試用版テナントであり、クラス終了後は使用およびアクセスできず、延長の対象にもなりません。
 
-次の操作を実行します。Tenants must not be converted に paid subscription. Tenants obtained として part の this course remain property の Microsoft Corporation および we reserve right に obtain access および repossess at any time.
+テナントを有料サブスクリプションへ変換することはできません。このコースの一環として取得したテナントは Microsoft Corporation の資産であり、当社はいつでもアクセスを取得し、回収する権利を留保します。
 
-## 概要
+### 概要
 
-このラボでは、 use Entra admin c入力します に create および modifyユーザー, assign administrative roles, create および modifyグループ, および manageライセンス割り当てs で Entra ID.
+このラボでは、Entra 管理センターを使用して、Entra ID でユーザーの作成と変更、管理者ロールの割り当て、グループの作成と変更、およびライセンス割り当ての管理を行います。
 
-## 演習 1: Entra ID でのユーザー作成
+### 演習 1: Entra ID でのユーザーの作成
 
-### シナリオ
+#### シナリオ
 
-次の作業を行う必要があります。 create userアカウントs で Azure AD のために new employees that します start next week. Newユーザー は 一覧ed で following タブle:
+来週入社する新入社員のために、Azure AD でユーザー アカウントを作成する必要があります。新しいユーザーは次の表に記載されています。
 
-| 名前 | ユーザー名 | Password | 役職 | 部署 |
-| -------------- | ------------------------------------- | ---------- | ---------------- | ---------- |
-| Edmund Reeve | `ereeve@yourtenant.onmicrosoft.com` | Pa55-w.rd! | HR Rep | HR |
-| Mirおよびa Snider | `msnider@yourtenant.onmicrosoft.com` | Pa55-w.rd! | Helpdesk Manager | Operations |
-| Cody Godinez | `cgodinez@yourtenant.onmicrosoft.com` | Pa55-w.rd! | Sales Rep | Sales |
+<table>
+<tr>
+<th>名前</th>
+<th>ユーザー名</th>
+<th>パスワード</th>
+<th>役職</th>
+<th>部署</th>
+</tr>
+<tr>
+<td>Edmund Reeve</td>
+<td>ereeve@yourtenant.onmicrosoft.com</td>
+<td>Pa55-w.rd!</td>
+<td>HR Rep</td>
+<td>HR</td>
+</tr>
+<tr>
+<td>Miranda Snider</td>
+<td>msnider@yourtenant.onmicrosoft.com</td>
+<td>Pa55-w.rd!</td>
+<td>Helpdesk Manager</td>
+<td>Operations</td>
+</tr>
+<tr>
+<td>Cody Godinez</td>
+<td>cgodinez@yourtenant.onmicrosoft.com</td>
+<td>Pa55-w.rd!</td>
+<td>Sales Rep</td>
+<td>Sales</td>
+</tr>
+</table>
 
-_注: For location use either yourローカル region または United States._
+_注: 場所には、お住まいの地域または米国のいずれかを使用してください。_
 
-次の操作を実行します。You've also been told that several more employees します be hired over next couple の months. You've decided that scripting would be far more efficient method の adding large number の newユーザー. You've decided に create PowerShell script および test it out when you create Cody Godinez'sアカウント.
+さらに、今後数か月でさらに数名の従業員が採用されることも伝えられています。多数の新しいユーザーを追加するには、スクリプトを使用する方がはるかに効率的な方法だと判断しました。そこで PowerShell スクリプトを作成し、Cody Godinez のアカウントを作成する際にそれを試してみることにしました。
 
-### タスク 1: Microsoft Entra 管理センターを使用してユーザーを作成する
+#### タスク 1: Microsoft Entra 管理センターを使用したユーザーの作成
 
-1. On **SEA-SVR1**, 次のアカウントでサインインします。 **Contoso\\Administrator** パスワード **Pa55w.rd**.
+1. **SEA-SVR1** に、**Contoso\Administrator** としてパスワード **Pa55w.rd** でサインインします。
 
-2. 閉じます **Server Manager**.
+2. **Server Manager** を閉じます。
 
-3. タスク バーで **Microsoft Edge**.
+3. タスク バーで、**Microsoft Edge** を選択します。
 
-4. アドレス バーに **https://entra.microsoft.com**.
+4. アドレス バーに [**https://entra.microsoft.com**](https://entra.microsoft.com) を入力します。
 
-5. At Sign-in prompt, 入力します **admin@yourtenant.onmicrosoft.com** 続いて 選択します **次へ**.
+5. サインインの画面で、**admin@yourtenant.onmicrosoft.com** を入力し、**次へ** を選択します。
 
-6. At 入力しますパスワード ページ, 入力します theパスワード のために Adminアカウント 続いて 選択します **Sign in**.
+6. パスワードの入力ページで、Admin アカウントのパスワードを入力し、**サインイン** を選択します。
 
- > 注: Check を使用して受講者のinstructor パスワード に use のために signing で を使用して Adminアカウント.
+   > **注**: Admin アカウントでサインインする際に使用するパスワードについては、インストラクターに確認してください。
 
-7. At Edge Saveパスワード prompt, 選択します **Save & Turn on**.
+7. Microsoft Edge のパスワード保存の確認画面で、**保存してオンにする** を選択します。
 
-8. At Stay signed で prompt, 選択します **はい**.
+8. サインインの状態を維持しますか？の画面で、**はい** を選択します。
 
-9. **Let's keep yourアカウント secure** dialog, 選択します **次へ**.
+9. **アカウントのセキュリティ保護** ダイアログで、**次へ** を選択します。
 
-10. **Install Microsoft Au続いてticator** dialog, 選択します **次へ**.
+10. **Microsoft Authenticator のインストール** ダイアログで、**次へ** を選択します。
 
-11. **set up yourアカウント で app** ページ, 選択します **次へ**.
+11. アプリでアカウントを設定するページで、**次へ** を選択します。
 
-12. Using Au続いてticator app on受講者のmobile device, scan QR code 続いて 選択します **次へ**.
+12. モバイル デバイスの Authenticator アプリを使用して QR コードをスキャンし、**次へ** を選択します。
 
-13. **Let's try it out** dialog, take note の code, 入力します that で to受講者のAu続いてticator app.
+13. 試してみましょうダイアログで、コードを控え、それを Authenticator アプリに入力します。
 
-14. **Au続いてticator Added** dialog, 選択します **Done**. 
+14. **Authenticator が追加されました** ダイアログで、**完了** を選択します。
 
-15. Microsoft Entra 管理センターで, ナビゲーション ペインで, 選択します **ユーザー**.
+15. Microsoft Entra 管理センターのナビゲーション ペインで、**ユーザー** を選択します。
 
- > 次の点を確認してください。 theユーザー that already exist として members の Microsoft Entra ID. **オンプレミスの同期が有効** 列 states **いいえ** のために all現在のユーザー. これは、 each user was created directly で Microsoft Entra ID および not synchronized から on-premises directory service.
+    > **注**: Microsoft Entra ID のメンバーとして既に存在するユーザーを確認します。**オンプレミスの同期が有効** 列は、現在のすべてのユーザーで **いいえ** と表示されます。これは、各ユーザーがオンプレミスのディレクトリ サービスから同期されたのではなく、Microsoft Entra ID で直接作成されたことを示しています。
 
-16. **ユーザー | すべてのユーザー** ページ, 選択します **新しいユーザー** 続いて 選択します **新しいユーザーの作成**.
+16. **ユーザー | すべてのユーザー** ページで、**新しいユーザー** を選択し、続いて **新しいユーザーの作成** を選択します。
 
-17. **新しいユーザーの作成** ページ, 入力します following:
+17. **新しいユーザーの作成** ページで、次の情報を入力します。
 
- - User Principal 名前: **ereeve**
- - Display 名前: **Edmund Reeve**
+    - ユーザー プリンシパル名: **ereeve**
+    - 表示名: **Edmund Reeve**
+    - **パスワードの自動生成** のチェックを外します
+    - **パスワード** の横に、**Pa55-w.rd!** を入力します。
 
-18. Uncheck **パスワードの自動生成**
+      > **注**: パスワードが脆弱である、または一般的に使用されているというエラー メッセージが表示された場合は、このラボ プロファイルの **Resources** タブにある受講者用パスワードを入力してください。または、任意の複雑なパスワードを入力することもできます。
 
-19. Next に **パスワード**, 入力します **Pa55-w.rd!**.
+18. ページ下部にある **次へ: プロパティ** を選択します。
 
- > 注: If you receive error message stating that thisパスワード で weak または commonly used, 入力します studentパスワード found 配下で **Resources** タブ の this lab profile. Alternatively, you できます 入力します complexパスワード of受講者のchoice.
+19. **名** の横に、**Edmund** を入力します。
 
-20. 選択します **次へ: プロパティ** located ページ下部で.
+20. **姓** の横に、**Reeve** を入力します。
 
-21. Next に **名**, 入力します **Edmund**.
+21. **ユーザーの種類** の横で、**メンバー** が選択されていることを確認します。
 
-22. Next に **姓**, 入力します **Reeve**.
+    > **注**: **メンバー** のユーザーの種類は既定のユーザーの種類です。このユーザーの種類は、組織内のほとんどのユーザーに使用されます。
 
-23. Next に **User 入力します**, make note that **メンバー** が選択されていること.
+22. **役職** の横に、**HR Rep** を入力します。
 
- > 注: **メンバー** user 入力します は default user 入力します. This user 入力します は used のために mostユーザー で an組織.
+23. **部署** の横に、**HR** を入力します。
 
-24. Next に **役職**, 入力します **HR Rep**.
+24. **利用場所** の横で、**United States** を選択します。
 
-25. Next に **部署**, 入力します **HR**.
+25. ページ下部にある **次へ: 割り当て** を選択します。
 
-26. Next に **利用場所**, 選択します **United States**.
+26. **割り当て** ページで、割り当てが選択されていないことを確認します。
 
-27. 選択します **次へ: 割り当て** located ページ下部で.
+    > 既定では、ユーザーにグループは割り当てられていません。これは、割り当てを行うまで、ユーザーがどのグループのメンバーでもないためです。
 
-28. **割り当て** ページ, note that no割り当てs が選択されていること.
+27. ページ下部にある **次へ: 確認と作成** を選択します。
 
- > By default, noグループ は assigned に user. This は because user は not member の anyグループ until you assign them.
+    > このページの情報を確認し、正しいことを確かめます。
 
-29. 選択します **Next: 確認します + create** located ページ下部で.
- > 確認します information on this ページ に 次のことを確認します。 it は correct.
+28. **作成** を選択します。
 
-30. 選択します **作成**.
+29. **ユーザー | すべてのユーザー** ページで、**新しいユーザー** を選択し、続いて **新しいユーザーの作成** を選択します。
 
-31. **ユーザー | すべてのユーザー** ページ, 選択します **新しいユーザー** 続いて 選択します **新しいユーザーの作成**.
+30. **新しいユーザーの作成** ページで、次の情報を入力します。
 
-32. **新しいユーザーの作成** ページ, 入力します following:
+    - ユーザー プリンシパル名: **msnider**
+    - 表示名: **Miranda Snider**
+    - **パスワードの自動生成** のチェックを外します
+    - **パスワード** の横に、**Pa55-w.rd!** を入力します。
 
- - User Principal 名前: **msnider**
- - Display 名前: **Mirおよびa Snider**
+      > **注**: パスワードが脆弱である、または一般的に使用されているというエラー メッセージが表示された場合は、このラボ プロファイルの **Resources** タブにある受講者用パスワードを入力してください。または、任意の複雑なパスワードを入力することもできます。
 
-33. Uncheck **パスワードの自動生成**
+31. ページ下部にある **次へ: プロパティ** を選択します。
 
-34. Next に **パスワード**, 入力します **Pa55-w.rd!**.
+32. **名** の横に、**Miranda** を入力します。
 
- > 注: If you receive error message stating that thisパスワード で weak または commonly used, 入力します studentパスワード found 配下で **Resources** タブ の this lab profile. Alternatively, you できます 入力します complexパスワード of受講者のchoice.
+33. **姓** の横に、**Snider** を入力します。
 
-35. 選択します **次へ: プロパティ** located ページ下部で.
+34. **ユーザーの種類** の横で、**メンバー** が選択されていることを確認します。
 
-36. Next に **名**, 入力します **Mirおよびa**.
+35. **役職** の横に、**Helpdesk Manager** を入力します。
 
-37. Next に **姓**, 入力します **Snider**.
+36. **部署** の横に、**Operations** を入力します。
 
-38. Next に **User 入力します**, make note that **メンバー** が選択されていること.
+37. **利用場所** の横で、**United States** を選択します。
 
-39. Next に **役職**, 入力します **Helpdesk Manager**.
+38. ページ下部にある **次へ: 割り当て** を選択します。
 
-40. Next に **部署**, 入力します **Operations**.
+39. **割り当て** ページで、割り当てが選択されていないことを確認します。
 
-41. Next に **利用場所**, 選択します **United States**.
+40. ページ下部にある **次へ: 確認と作成** を選択します。
 
-42. 選択します **次へ: 割り当て** located ページ下部で.
+41. **作成** を選択します。
 
-43. **割り当て** ページ, note that no割り当てs が選択されていること.
+#### タスク 2: PowerShell を使用したユーザーの作成
 
-44. 選択します **Next: 確認します + create** located ページ下部で.
+## SEA-SVR1 に PowerShell 7.5.4 をインストールする手順
 
-45. 選択します **作成**.
+1. **SEA-SVR1** の **Microsoft Edge** で、新しいタブを開きます。
 
-### タスク 2: PowerShell を使用してユーザーを作成する
+2. アドレス バーに [**https://github.com/PowerShell/PowerShell/releases/download/v7.5.4/PowerShell-7.5.4-win-x64.msi**](https://github.com/PowerShell/PowerShell/releases/download/v7.5.4/PowerShell-7.5.4-win-x64.msi) を入力します。
 
-# SEA-SVR1 に PowerShell 7.5.4 をインストールする手順
+3. タスク バーで **File Explorer** を選択し、**Downloads** フォルダーに移動します。
 
-1. On **SEA-SVR1**, で **Microsoft Edge**, open new タブ. 
+4. **PowerShell-7.5.4-win-x64.msi** をダブルクリックして、セットアップ ウィザードを起動します。
 
-2. アドレス バーに **https://github.com/PowerShell/PowerShell/releases/download/v7.5.4/PowerShell-7.5.4-win-x64.msi** 
+5. **Next** を選択します。
 
-3. タスク バーで **File Explorer**, 続いて navigate to受講者の**Downloads** folder. 
+6. **Destination Folder** は変更せず、**Next** を選択します。
 
-4. Double-click **PowerShell-7.5.4-win-x64.msi** に launch setup wizard. 
+7. **Optional Actions** は変更せず、**Next** を選択します。
 
- - 選択します **次へ** 
- - Leave **Destination Folder** として is, 続いて 選択します **次へ** 
- - Leave **Optional Actions** として is, 続いて 選択します **次へ** 
- - Leave checkboxes blank 配下で *Use Microsoft Update に help keep受講者のcomputer secure および up に date*, 続いて 選択します **次へ** 
- - 選択します **Install** 
+8. _Use Microsoft Update to help keep your computer secure and up to date_ の下のチェック ボックスは空白のままにして、**Next** を選択します。
 
-5. **Installation completed successfully** ウィンドウ, check **Launch PowerShell**, 続いて 選択します **Finish**. 
+9. **Install** を選択します。
 
- > **注:** If installer 閉じますd without launching PowerShell, click **Windows Search** bar, 入力します **pwsh**, right-click **PowerShell 7**, および 選択します **Run as管理者**. 
+10. **Installation completed successfully** ウィンドウで、**Launch PowerShell** をオンにし、**Finish** を選択します。
 
-6. In **PowerShell 7** ウィンドウ, 入力します following commおよび, を入力し、 **入力します**. If prompted, 入力します **Y** at NuGet および repository messages:
+    > **注**: インストーラーが PowerShell を起動せずに閉じた場合は、**Windows Search** バーをクリックして **pwsh** と入力し、**PowerShell 7** を右クリックして **Run as administrator** を選択します。
 
- ```powershell
- Install-Module Microsoft.Graph -Scope CurrentUser
+11. **PowerShell 7** ウィンドウで、次のコマンドを入力し、**Enter** キーを押します。NuGet とリポジトリのメッセージが表示された場合は、**Y** を入力します。
+
+    ```powershell
+    Install-Module Microsoft.Graph -Scope CurrentUser
     ```
 
-7. In **PowerShell 7** ウィンドウ, 入力します following commおよび, を入力し、 **入力します**:
+12. **PowerShell 7** ウィンドウで、次のコマンドを入力し、**Enter** キーを押します。
 
- ```powershell
- Connect-MgGraph -scopes "user.readwrite.all, group.readwrite.all"
+    ```powershell
+    Connect-MgGraph -scopes "user.readwrite.all, group.readwrite.all"
     ```
 
-8. 要求されたら で **Let's get you signed in** ウィンドウ, 選択します **Work または Schoolアカウント** 続いて 選択します **Continue**.
+13. **Let's get you signed in** ウィンドウで確認が表示されたら、**Work or School account** を選択し、続いて **Continue** を選択します。
 
-9. In **Sign in** ダイアログ ボックス, 次のアカウントでサインインします。 **`admin@yourtenant.onmicrosoft.com`** を使用して administrativeパスワード, 続いて 選択します **Sign in**.
+14. **Sign in** ダイアログ ボックスで、**admin@yourtenant.onmicrosoft.com** として管理者パスワードでサインインし、**Sign in** を選択します。
 
-10. **Permissions Requested** prompt that が表示された場合, check **Consent on behalf の your組織** 続いて 選択します **Accept**.
+15. 表示される **Permissions Requested** の確認画面で、**Consent on behalf of your organization** をオンにし、**Accept** を選択します。
 
-11. **Sign で に all apps, websites, および services on this device?** 選択します, **No, this app only**.
+16. **Sign in to all apps, websites, and services on this device?** で、**No, this app only** を選択します。
 
-12. In **PowerShell 7** ウィンドウ, 入力します following code に create new profile object, を入力し、 **入力します**. Replace **Pa55w.rd** を使用して complexパスワード of受講者のchoice:
+17. **PowerShell 7** ウィンドウで、新しいプロファイル オブジェクトを作成するために次のコードを入力し、**Enter** キーを押します。**Pa55w.rd** は任意の複雑なパスワードに置き換えてください。
 
- ```powershell
- $PWProfile = @{
- Password = "Pa55w.rd";
- ForceChangePasswordNextSignIn = $false
+    ```powershell
+    $PWProfile = @{
+        Password = "Pa55w.rd";
+        ForceChangePasswordNextSignIn = $false
     }
     ```
-    
-14. Next, 入力します following code に create new user, を入力し、 **入力します**. Ensure "yourtenant" matches受講者のassigned tenant name:
 
- ```powershell
- New-MgUser `
- -Display名前 "Cody Godinez" `
- -Given名前 "Cody" -Surname "Godinez" `
- -MailNickname "cgodinez" `
- -UsageLocation "US" `
- -UserPrincipal名前 "cgodinez@yourtenant.onmicrosoft.com" `
- -PasswordProfile $PWProfile -AccountEnabled `
- -部署 "Sales" -JobTitle "Sales Rep"
+18. 次に、新しいユーザーを作成するために次のコードを入力し、**Enter** キーを押します。"yourtenant" が割り当てられたテナント名と一致していることを確認してください。
+
+    ```powershell
+    New-MgUser `
+        -DisplayName "Cody Godinez" `
+        -GivenName "Cody" -Surname "Godinez" `
+        -MailNickname "cgodinez" `
+        -UsageLocation "US" `
+        -UserPrincipalName "cgodinez@yourtenant.onmicrosoft.com" `
+        -PasswordProfile $PWProfile -AccountEnabled `
+        -Department "Sales" -JobTitle "Sales Rep"
     ```
 
-15. To confirm that user **Cody Godinez** was created, In **PowerShell 7** ウィンドウ, 入力します following commおよび を入力し、 **入力します**:
+19. ユーザー **Cody Godinez** が作成されたことを確認するために、**PowerShell 7** ウィンドウで次のコマンドを入力し、**Enter** キーを押します。
 
- ```powershell
- Get-MgUser
+    ```powershell
+    Get-MgUser
     ```
 
-> 次のことを確認します。 一覧 ofユーザー から受講者のtenant が表示されていること. 
+    テナントのユーザーの一覧が表示されることを確認します。
 
-**結果**: この演習を完了すると、 created new userアカウントs で Entra ID.
+**結果**: この演習を完了すると、Entra ID で新しいユーザー アカウントを正常に作成できています。
 
-## 演習 2: Entra ID での管理ロールの割り当て
+### 演習 2: Entra ID での管理者ロールの割り当て
 
-### シナリオ
+#### シナリオ
 
-次の作業を行う必要があります。 review および modify the現在の administrative roles for受講者のtenant.
+テナントの現在の管理者ロールを確認し、変更する必要があります。
 
-次の操作を実行します。You があります been provided 一覧 ofユーザー should があります administrative roles assigned として indicated で following タブle. 
+次の表に示すとおり、管理者ロールを割り当てる必要があるユーザーの一覧が提供されています。
 
-| 名前 | 必要な操作: | 必要な管理ロール: |
-| -------------- | ---------------------------------------- | --------------------------- |
-| Allan Deyoung | テナントを管理する | Global管理者 |
-| Edmund Reeve | ユーザー、グループ、パスワードのリセットを管理する | User管理者 |
-| Mirおよびa Snider | パスワードのリセットを管理する | Helpdesk管理者 |
+<table>
+<tr>
+<th>名前</th>
+<th>実行できる必要がある操作:</th>
+<th>必要な管理者ロール:</th>
+</tr>
+<tr>
+<td>Allan Deyoung</td>
+<td>テナントの管理</td>
+<td>グローバル管理者</td>
+</tr>
+<tr>
+<td>Edmund Reeve</td>
+<td>ユーザー、グループ、パスワード リセットの管理</td>
+<td>ユーザー管理者</td>
+</tr>
+<tr>
+<td>Miranda Snider</td>
+<td>パスワード リセットの管理</td>
+<td>ヘルプデスク管理者</td>
+</tr>
+</table>
 
-### タスク 1: 管理ロールを確認して割り当てる
+#### タスク 1: 管理者ロールの確認と割り当て
 
-1. On SEA-SVR1, switch に Microsoft Edge.
+1. **SEA-SVR1** で、**Microsoft Edge** に切り替えます。
 
-2. Microsoft Entra 管理センターで, で Navigation ペイン, 選択します **ロールと管理者**.
+2. Microsoft Entra 管理センターのナビゲーション ペインで、**ロールと管理者** を選択します。
 
- > 次の点に注意してください。 you できます scroll down 一覧 または use 検索ボックス に find **ロール** you は looking for.
+   > **注**: 一覧をスクロールするか、検索ボックスを使用して、目的の **ロール** を見つけることができます。
 
-3. Using 検索ボックス, search のために **グローバル管理者**.
+3. 検索ボックスを使用して、**グローバル管理者** を検索します。
 
-4. 選択します **グローバル管理者** (選択します name, not checkbox).
+4. **グローバル管理者** を選択します (チェック ボックスではなく、名前を選択します)。
 
-5. In **グローバル管理者** ペイン, 選択します **+ Add割り当てs**.
+5. **グローバル管理者** ペインで、**+ 割り当ての追加** を選択します。
 
-6. Under **選択します members**, 選択します **No member 選択しますed**, 続いて search のために および 選択します **Allan Deyoung**.
+6. **メンバーの選択** の下で、**メンバーが選択されていません** を選択し、**Allan Deyoung** を検索して選択します。
 
-7. 選択します **選択します**, 続いて 選択します **次へ**, および finally 選択します **割り当て**.
+7. **選択** を選択し、続いて **次へ** を選択し、最後に **割り当て** を選択します。
 
-8. In navigation breadcrumbs, 選択します **ロールと管理者 | すべてのロール**.
+8. ナビゲーションのパンくずリストで、**ロールと管理者 | すべてのロール** を選択します。
 
-9. Using 検索ボックス, search のために **ユーザー管理者**.
+9. 検索ボックスを使用して、**ユーザー管理者** を検索します。
 
-10. 選択します **ユーザー管理者** (選択します name, not checkbox).
+10. **ユーザー管理者** を選択します (チェック ボックスではなく、名前を選択します)。
 
-11. In **ユーザー管理者** ペイン, 選択します **+ Add割り当てs**.
+11. **ユーザー管理者** ペインで、**+ 割り当ての追加** を選択します。
 
-12. Under **選択します members**, 選択します **No member 選択しますed**, 続いて search のために および 選択します **Edmund Reeve**.
+12. **メンバーの選択** の下で、**メンバーが選択されていません** を選択し、**Edmund Reeve** を検索して選択します。
 
-13. 選択します **選択します**, 続いて 選択します **次へ**, および finally 選択します **割り当て**.
+13. **選択** を選択し、続いて **次へ** を選択し、最後に **割り当て** を選択します。
 
-14. In navigation breadcrumbs, 選択します **ロールと管理者 | すべてのロール**.
+14. ナビゲーションのパンくずリストで、**ロールと管理者 | すべてのロール** を選択します。
 
-15. Using 検索ボックス, search のために **ヘルプデスク管理者**.
+15. 検索ボックスを使用して、**ヘルプデスク管理者** を検索します。
 
-16. 選択します **ヘルプデスク管理者** (選択します name, not checkbox).
+16. **ヘルプデスク管理者** を選択します (チェック ボックスではなく、名前を選択します)。
 
-17. In **ヘルプデスク管理者** ペイン, 選択します **+ Add割り当てs**
+17. **ヘルプデスク管理者** ペインで、**+ 割り当ての追加** を選択します。
 
-18. Under **選択します members**, 選択します **No member 選択しますed**, 続いて search のために および 選択します **Mirおよびa Snider**.
+18. **メンバーの選択** の下で、**メンバーが選択されていません** を選択し、**Miranda Snider** を検索して選択します。
 
-19. 選択します **選択します**, 続いて 選択します **次へ**, および finally 選択します **割り当て**.
+19. **選択** を選択し、続いて **次へ** を選択し、最後に **割り当て** を選択します。
 
-20. ナビゲーション ペインで, 選択します **ホーム**.
+20. ナビゲーション ペインで、**ホーム** を選択します。
 
-**結果**: この演習を完了すると、 assigned administrative roles toユーザー.
+**結果**: この演習を完了すると、ユーザーに管理者ロールを正常に割り当てられています。
 
-## 演習 3: グループの作成と管理、およびライセンス割り当ての検証
+### 演習 3: グループの作成と管理、およびライセンス割り当ての検証
 
-### シナリオ
+#### シナリオ
 
-次の作業を行う必要があります。 add three newユーザー に Security group および assignライセンスs として indicated で following タブle. 
+3 人の新しいユーザーをセキュリティ グループに追加し、次の表に示すとおりライセンスを割り当てる必要があります。
 
-| 名前 | 所属グループ: | 割り当てるライセンス |
-| -------------- | ---------------- | ------------------------------------------------------------ |
-| Edmund Reeve | Contoso_Managers | Office 365 E5, 入力しますprise Mobility + Security E5 via group membership |
-| Mirおよびa Snider | Contoso_Managers | Office 365 E5, 入力しますprise Mobility + Security E5 via group membership |
-| Cody Godinez | Contoso_Sales | Office 365 E5, 入力しますprise Mobility + Security E5 via group membership direct割り当て |
+<table>
+<tr>
+<th>名前</th>
+<th>所属:</th>
+<th>割り当てるライセンス</th>
+</tr>
+<tr>
+<td>Edmund Reeve</td>
+<td>Contoso_Managers</td>
+<td>Office 365 E5、Enterprise Mobility + Security E5 (グループ メンバーシップ経由)</td>
+</tr>
+<tr>
+<td>Miranda Snider</td>
+<td>Contoso_Managers</td>
+<td>Office 365 E5、Enterprise Mobility + Security E5 (グループ メンバーシップ経由)</td>
+</tr>
+<tr>
+<td>Cody Godinez</td>
+<td>Contoso_Sales</td>
+<td>Office 365 E5、Enterprise Mobility + Security E5 (グループ メンバーシップ経由の直接割り当て)</td>
+</tr>
+</table>
 
-次の操作を実行します。You also been asked に modify Company brおよびing のために sign-in ページ.
+また、サインイン ページの会社のブランドを変更するよう依頼されています。
 
-### タスク 1: Microsoft Entra 管理センターを使用してグループを作成する
+#### タスク 1: Microsoft Entra 管理センターを使用したグループの作成
 
-1. On **SEA-SVR1**, Microsoft Entra 管理センターで, ナビゲーション ペインで, 選択します **グループ**.
+1. **SEA-SVR1** の Microsoft Entra 管理センターで、ナビゲーション ペインで **グループ** を選択します。
 
-2. 選択します **新しいグループ**.
+2. **新しいグループ** を選択します。
 
-3. **新しいグループ** ページ, 入力します following:
+3. **新しいグループ** ページで、次の情報を入力します。
 
- - Group 入力します: **セキュリティ**
- - Group name: **Contoso_Managers**
- - Membership 入力します: **割り当て済み**
+   - グループの種類: **セキュリティ**
+   - グループ名: **Contoso_Managers**
+   - メンバーシップの種類: **割り当て済み**
 
-4. Under Members, 選択します **No members 選択しますed**.
+4. **メンバー** の下で、**メンバーが選択されていません** を選択します。
 
-5. In Add members ページ add **Edmund Reeve**, **Mirおよびa Snider**, 続いて click **選択します**.
+5. **メンバーの追加** ページで、**Edmund Reeve** と **Miranda Snider** を追加し、**選択** をクリックします。
 
-6. 選択します **作成**.
+6. **作成** を選択します。
 
-### タスク 2: PowerShell を使用してグループを作成する
+#### タスク 2: PowerShell を使用したグループの作成
 
-1. On SEA-SVR1, switch に PowerShell 7.
+1. **SEA-SVR1** で、**PowerShell 7** に切り替えます。
 
-2. In **PowerShell 7** ウィンドウ, 入力します following code に create new group, を入力し、 **入力します**:
+2. **PowerShell 7** ウィンドウで、新しいグループを作成するために次のコードを入力し、**Enter** キーを押します。
 
- ```powershell
- New-MgGroup -Display名前 "Contoso_Sales" -Description "Contoso Sales teamユーザー" -MailEnabled:$false -Mailnickname "Contoso_Sales" -SecurityEnabled
-    ```
+   ```powershell
+   New-MgGroup -DisplayName "Contoso_Sales" -Description "Contoso Sales team users" -MailEnabled:$false -Mailnickname "Contoso_Sales" -SecurityEnabled
+   ```
 
-3. In **PowerShell 7** ウィンドウ, 入力します following commおよび, を入力し、 **入力します**:
+3. **PowerShell 7** ウィンドウで、次のコマンドを入力し、**Enter** キーを押します。
 
- ```powershell
- Get-MgGroup
-    ```
+   ```powershell
+   Get-MgGroup
+   ```
 
-4. 次のことを確認します。 you get 一覧 ofグループ in受講者のtenant, including Contoso_Sales group you just created.
+4. テナント内のグループの一覧に、今作成した **Contoso_Sales** グループが含まれていることを確認します。
 
-5. In **PowerShell 7** ウィンドウ, 入力します following code に define variable として Contoso_Sales group, を入力し、 **入力します**:
+5. **PowerShell 7** ウィンドウで、**Contoso_Sales** グループを変数として定義するために次のコードを入力し、**Enter** キーを押します。
 
- ```powershell
- $group = Get-MgGroup | Where-Object {$_.Display名前 -eq "Contoso_Sales"}
-    ```
+   ```powershell
+   $group = Get-MgGroup | Where-Object {$_.DisplayName -eq "Contoso_Sales"}
+   ```
 
-6. In **PowerShell 7** ウィンドウ, 入力します following code に define another variable として user, を入力し、 **入力します**:
+6. **PowerShell 7** ウィンドウで、ユーザーを別の変数として定義するために次のコードを入力し、**Enter** キーを押します。
 
- ```powershell
- $user = Get-MgUser | Where-Object {$_.Display名前 -eq "Cody Godinez"}
-    ```
+   ```powershell
+   $user = Get-MgUser | Where-Object {$_.DisplayName -eq "Cody Godinez"}
+   ```
 
-7. In **PowerShell 7** ウィンドウ, 入力します following code に add Cody に Contoso_Sales using set variables, を入力し、 **入力します**:
+7. **PowerShell 7** ウィンドウで、設定した変数を使用して Cody を **Contoso_Sales** に追加するために次のコードを入力し、**Enter** キーを押します。
 
- ```powershell
- New-MgGroupMember -GroupId $group.Id -DirectoryObjectId $user.Id
-    ```
+   ```powershell
+   New-MgGroupMember -GroupId $group.Id -DirectoryObjectId $user.Id
+   ```
 
-8. In **PowerShell 7** ウィンドウ, 入力します following code, を入力し、 **入力します**:
+8. **PowerShell 7** ウィンドウで、次のコードを入力し、**Enter** キーを押します。
 
- ```powershell
- Get-MgGroupMember -GroupId $group.Id | FL
-    ```
+   ```powershell
+   Get-MgGroupMember -GroupId $group.Id | FL
+   ```
 
-9. 次のことを確認します。 you see **Cody Godinez** として 値 で **AdditionalProperties**.
+9. **AdditionalProperties** の値として **Cody Godinez** が表示されることを確認します。
 
-10. 閉じます PowerShell 7.
+10. **PowerShell 7** を閉じます。
 
-### タスク 3: ライセンスを確認して会社のブランドを変更する
+#### タスク 3: ライセンスの確認と会社のブランドの変更
 
-1. Microsoft Entra 管理センターで, ナビゲーション ペインで, 選択します **課金** > **ライセンス**.
+1. Microsoft Entra 管理センターのナビゲーション ペインで、**課金** > **ライセンス** を選択します。
 
-2. **ライセンス** ページ, で c入力します navigation ペイン, 配下で **管理**, 選択します **すべての製品**.
+2. **ライセンス** ページの中央のナビゲーション ペインで、**管理** の下の **すべての製品** を選択します。
 
- > 次の点を確認してください。 the現在のライセンスs利用可能な および assigned のために **入力しますprise Mobility + Security E5** および **Office 365 E5**.
+   > **Enterprise Mobility + Security E5** と **Office 365 E5** について、現在利用可能なライセンスと割り当て済みのライセンスを確認します。
 
-3. Microsoft Entra 管理センターで, で Navigation ペイン,配下で **Entra ID**, 選択します **Custom brおよびing**.
+3. Microsoft Entra 管理センターのナビゲーション ペインで、**Entra ID** の下の **会社のブランド** を選択します。
 
-4. **Company Brおよびing** ページ, 配下で **既定のサインイン エクスペリエンス**, 選択します **カスタマイズ**.
+4. **会社のブランド** ページで、**既定のサインイン エクスペリエンス** の下の **カスタマイズ** を選択します。
 
-5. **既定のサインイン エクスペリエンスのカスタマイズ** ページ, navigate に **サインイン フォーム** タブ および configure following設定:
+5. **既定のサインイン エクスペリエンスのカスタマイズ** ページで、**サインイン フォーム** タブに移動し、次の設定を構成します。
 
- - Sign-in ページ text: **Contoso Corp. Sign-in Page**
+   - サインイン ページのテキスト: **Contoso Corp. Sign-in Page**
 
-6. 選択します **確認します + Create**, review the設定 続いて 選択します **作成**.
+6. **確認と作成** を選択し、設定を確認して **作成** を選択します。
 
-7. Microsoft Entra 管理センターで, で Navigation ペイン, 選択します **ユーザー**.
+7. Microsoft Entra 管理センターのナビゲーション ペインで、**ユーザー** を選択します。
 
-8. In user 一覧, 選択します **Cody Godinez** (選択します name, not checkbox).
+8. ユーザーの一覧で、**Cody Godinez** を選択します (チェック ボックスではなく、名前を選択します)。
 
-9. In Cody Godinez Profile ページ, で c入力します navigation menu, 選択します **ライセンス**.
+9. **Cody Godinez** の **プロファイル** ページで、中央のナビゲーション メニューの **ライセンス** を選択します。
 
- > 次の点に注意してください。 Cody does not があります any現在のライセンス割り当てs. And that licensing must now be performed で 365 Admin c入力します.
+   > Cody に現在割り当てられているライセンスがないことに注意してください。また、ライセンスの割り当ては、365 管理センターで行う必要があります。
 
-10. Open new タブ で **Microsoft Edge**, で address bar, 入力します **https://admin.microsoft.com**.
+10. **Microsoft Edge** で新しいタブを開き、アドレス バーに [**https://admin.microsoft.com**](https://admin.microsoft.com) を入力します。
 
-11. ナビゲーション ペインで left, 選択します **ユーザー** > **アクティブなユーザー**.
+11. 左側のナビゲーション ペインで、**ユーザー** > **アクティブなユーザー** を選択します。
 
-12. In user 一覧, 選択します **Cody Godinez** (選択します name, not checkbox).
+12. ユーザーの一覧で、**Cody Godinez** を選択します (チェック ボックスではなく、名前を選択します)。
 
-13. 選択します **Licenses および apps** タブ.
+13. **ライセンスとアプリ** タブを選択します。
 
-14. 選択します チェック ボックスes next に **入力しますprise Mobility + Security E5** および **Office 365 E5 (no Teams)**.
+14. **Enterprise Mobility + Security E5** と **Office 365 E5 (no Teams)** の横のチェック ボックスをオンにします。
 
-15. 選択します **変更の保存**.
+15. **変更の保存** を選択します。
 
-16. Once changes があります been saved, 選択します **X** で upper-right corner に 閉じます **Cody Godinez** ペイン. 
+16. 変更が保存されたら、右上隅の **X** を選択して **Cody Godinez** ペインを閉じます。
 
-17. Microsoft 365 管理センターで, で Navigation ペイン, 選択します **課金** > **ライセンス**.
+17. Microsoft 365 管理センターのナビゲーション ペインで、**課金** > **ライセンス** を選択します。
 
-18. In **サブスクリプション** 一覧, 選択します **入力しますprise Mobility + Security E5**.
+18. **サブスクリプション** の一覧で、**Enterprise Mobility + Security E5** を選択します。
 
-19. 選択します **グループ** タブ, 続いて 選択します **+ Assignライセンスs**.
+19. **グループ** タブを選択し、続いて **+ ライセンスの割り当て** を選択します。
 
-20. Navigate into **入力します group name** textbox, および 選択します **Contoso_Managers** group.
+20. **グループ名を入力** テキスト ボックスに移動し、**Contoso_Managers** グループを選択します。
 
-21. 選択します **ライセンスの割り当て**.
+21. **ライセンスの割り当て** を選択します。
 
-22. **Contoso_Managers にライセンスを割り当てました** ペイン, 選択します **X** で upper-right corner に 閉じます it.
+22. **Contoso_Managers にライセンスを割り当てました** ペインで、右上隅の **X** を選択して閉じます。
 
-23. In upper-left corner の **入力しますprise Mobility + Security E5** ページ, 選択します **ライセンスに戻る** リンク.
+23. **Enterprise Mobility + Security E5** ページの左上隅で、**ライセンスに戻る** リンクを選択します。
 
-24. In **サブスクリプション** 一覧, 選択します **Office 365 E5 (no Teams)**.
+24. **サブスクリプション** の一覧で、**Office 365 E5 (no Teams)** を選択します。
 
-25. 選択します **グループ** タブ, 続いて 選択します **+ Assignライセンスs**.
+25. **グループ** タブを選択し、続いて **+ ライセンスの割り当て** を選択します。
 
-26. Navigate into **入力します group name** textbox, および 選択します **Contoso_Managers** group.
+26. **グループ名を入力** テキスト ボックスに移動し、**Contoso_Managers** グループを選択します。
 
-27. 選択します **ライセンスの割り当て**.
+27. **ライセンスの割り当て** を選択します。
 
-28. **Contoso_Managers にライセンスを割り当てました** ペイン, 選択します **X** で upper-right corner に 閉じます it.
+28. **Contoso_Managers にライセンスを割り当てました** ペインで、右上隅の **X** を選択して閉じます。
 
-29. Microsoft 365 管理センターで, で Navigation ペイン, 選択します **課金** > **ライセンス**.
+29. Microsoft 365 管理センターのナビゲーション ペインで、**課金** > **ライセンス** を選択します。
 
-30. In **サブスクリプション** 一覧, 選択します **Office 365 E5 (no Teams)**.
+30. **サブスクリプション** の一覧で、**Office 365 E5 (no Teams)** を選択します。
 
- > 次の点を確認してください。 theユーザー that は assigned Office 365 E5ライセンス. Edmund および Mirおよびa both receive theirライセンス割り当て から their membership で Contoso_Managers group. You できます 選択します **グループ** タブ see if theライセンスs assigned correctly. It may take 3-5 minutes のために theライセンスs に reprocess.
+    > **Office 365 E5** ライセンスが割り当てられているユーザーを確認します。Edmund と Miranda はどちらも、**Contoso_Managers** グループのメンバーシップからライセンスの割り当てを受けています。**グループ** タブを選択すると、ライセンスが正しく割り当てられているかどうかを確認できます。ライセンスが再処理されるまでに 3～5 分かかる場合があります。
 
-31. 閉じます Microsoft Edge.
+31. **Microsoft Edge** を閉じます。
 
-**結果**: この演習を完了すると、 created および managedグループ, modified company brおよびing, および assignedライセンスs.
+**結果**: この演習を完了すると、グループの作成と管理、会社のブランドの変更、およびライセンスの割り当てが正常に行えています。
 
 **ラボ終了**
