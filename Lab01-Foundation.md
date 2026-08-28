@@ -1,1261 +1,1094 @@
----
-lab:
-  title: 'Lab 01: Foundation — Identity, enrollment, and Autopilot'
-  description: 'In this lab, you configure Microsoft Entra ID identity governance, device registration and enrollment policies, and Windows Autopilot to prepare a Microsoft 365 tenant for Intune device management.'
-  duration: 90 minutes
-  level: 200
-  islab: true
-  primarytopics:
-    - Microsoft Intune
-    - Microsoft Entra ID
-    - Windows
-    - Windows Autopilot
----
-
-# Lab 01: Foundation — Identity, enrollment, and Autopilot
-
-## Lab scenario
-
-You are **Jordan Chen**, Modern Endpoint Administrator at Contoso Healthcare. Contoso is adopting a cloud-first endpoint management strategy using Microsoft Intune and Microsoft Entra ID. Your first task is to prepare the Microsoft 365 tenant for device management by configuring identity governance (users, groups, and roles), device registration policies, Windows enrollment policies, and Windows Autopilot. This foundational configuration will enable the device enrollment and policy deployment work in subsequent labs.
-
-By the end of this lab, you'll have:
-- Configured users and dynamic groups (including a compound-rule dynamic group) for organizational targeting
-- Delegated administrative access using Microsoft Entra ID roles, administrative units, and a custom Intune RBAC role with a scope tag
-- Set device registration policies and enabled Microsoft Entra Local Administrator Password Solution (LAPS)
-- Verified automatic Intune enrollment and configured Enrollment Status Page profiles
-- Blocked personally owned Android device enrollment
-- Enrolled two Windows 11 devices via Microsoft Entra join
-- Registered a device for Windows Autopilot with a deployment profile
+ラボ	
+タイトル	説明	期間	レベル	ISLAB	プライマリートピック
+ラボ01:基礎 — アイデンティティ、入学、そしてオートパイロット
+このラボでは、Microsoft Entra IDのアイデンティティガバナンス、デバイス登録および登録ポリシー、Windows Autopilotを設定し、Intuneデバイス管理用のMicrosoft 365テナントを準備します。
+90分
+200
+確かに
+Microsoft Intune
+Microsoft Entra ID
+窓
+Windows Autopilot
+ラボ01:基礎 — アイデンティティ、入学、そしてオートパイロット
+実験シナリオ
+あなたはContoso Healthcareのモダンエンドポイント管理者、ジョーダン・チェンです。ContosoはMicrosoft IntuneとMicrosoft Entra IDを用いたクラウドファーストのエンドポイント管理戦略を採用しています。最初の作業は、Microsoft 365テナントをデバイス管理用に準備し、アイデンティティガバナンス(ユーザー、グループ、ロール)、デバイス登録ポリシー、Windowsエンロールメントポリシー、Windows Autopilotの設定を行うことです。この基礎的な構成により、今後のラボでのデバイス登録およびポリシー展開作業が可能になります。
+
+このラボの終わりには、以下の成果が得られます:
 
----
+組織のターゲティング用に設定されたユーザーおよび動的グループ(複合ルールの動的グループを含む)
+Microsoft Entra IDロール、管理ユニット、スコープタグ付きのカスタムIntune RBACロールを使った管理権限の委譲
+デバイス登録ポリシーを設定し、Microsoft Entraローカル管理者パスワードソリューション(LAPS)を有効にしてください。
+認証済みの自動Intune登録および設定済みの登録ステータスページプロファイル
+個人所有のAndroidデバイスの登録がブロックされました
+Microsoft Entra Joinを通じて2台のWindows 11デバイスを登録しました
+Windows Autopilotのデバイスをデプロイプロファイルで登録しました
+実験期間
+推定時間:90分
+
+指示
+始める前に
+このラボには以下が必要です:
+
+ContosoのMicrosoft 365テナント(または同等のもの)へのアクセス<TenantPrefix>.onmicrosoft.com
+グローバル管理者資格
+4つの仮想マシン:SEA-DEV1、SEA-DEV2、SEA-DEV3、LIN-SRV1
+すべてのVMからのインターネット接続
+重要:ここはMD-102実験シリーズの基礎ラボです。以降のすべてのラボは、このラボで完了した設定(登録済みデバイス、ユーザー、グループ、ポリシー)を前提としています。
 
-## Lab Duration
+重要
 
-**Estimated Time:** 90 minutes
+演習2を始める前に多要素認証(MFA)登録を完了してください。一部のContosoラボのテナントには、Azure管理APIの(MFA)認証コンテキストを強制する条件付きアクセスポリシーがあります。管理者アカウントがMFAに登録されるまで、entra.microsoft.com や intune.microsoft.com へのアクセスがブロックされます。Microsoft 365管理センター(admin.cloud.microsoft)は免除されており、MFAなしで動作します。初回サインイン時に追加のセキュリティ認証を設定するよう促された場合は、先に進む前にMicrosoft Authenticatorの設定を完了してください。p1
 
----
+Microsoft 365管理センターはデフォルトで簡易表示で開くことがあります。右上のトグルからダッシュボードビューに切り替えて、このラボのスクリーンショットと一致させてください。
 
-## Instructions
+重要
 
-### Before you begin
+Lab 03を始める前に、今すぐMicrosoft Intune Suite 90日間のトライアルを有効化してください。その後のいくつかの演習(Lab 03演習4、Lab 04演習4–5、Lab 06演習1–3)ではIntune Suiteの機能が必要です。試験を最初に起動することで、下流のラボは「ただ動作する」だけで、実験中の予期せぬブロッカーを避けられます。トライアルは無料で、90日間、テナントあたり最大250ユーザーまで利用可能で、既存のテナントの請求関係を再利用します。支払い方法は不要です。
 
-This lab requires:
-- Access to the Contoso Microsoft 365 tenant (`<TenantPrefix>.onmicrosoft.com` or equivalent)
-- Global Administrator credentials
-- Four virtual machines: **SEA-DEV1**, **SEA-DEV2**, **SEA-DEV3**, and **LIN-SRV1**
-- Internet connectivity from all VMs
+手順(約2分):
 
-**Important:** This is the foundational lab for the MD-102 lab series. All subsequent labs assume the configuration completed in this lab (enrolled devices, users, groups, and policies).
+Microsoft Intune管理センター() でテナント管理を選択し、次にIntuneアドオンを選択してください。intune.microsoft.com
+「すべてのアドオン」タブを選択してください。
+Microsoft Intune Suiteの行の「試すか購入するか」欄の「詳細を見る」を選択してください。
+詳細パネルで「試すか購入するか」を選択し、Microsoft 365管理センターに行きます。新しいタブがMicrosoft 365管理センターの製品ページを開きます。
+Microsoft Intune Suiteのオファーページで、「無料トライアル開始」を選択してください。
+チェックアウトページで確認してください:Microsoft Intune Suite Trial、90日間の期間、250ライセンス、USD 0.00、支払い方法不要。
+編集を選択し、組織プロフィールフォームに以下の情報を記入してから「保存」を選択してください:
+名前:MOD
+姓:管理者1
+アドレス行1:1 Microsoft Way
+都市:レッドモンド
+州:ワシントン州
+郵便番号:98052
+電話番号:425-555-1234
+メールアドレス:admin@.onmicrosoft.com
+「今すぐ試して」を選択してトライアルを有効化してください。
+Intune管理センターに戻る。Intuneアドオン→テナント管理をリフレッシュします。「Your add-ons」タブを選択すると、数分以内にMicrosoft Intune Suite Trialが「購入数250」と表示されるはずです。スイートには、Intune Plan 2、リモートヘルプ、エンドポイント特権管理、エンタープライズアプリ管理、高度な分析、クラウドPKIが含まれています。
+「すべてのアドオン」タブに惑わされないでください。Microsoft Intune Suiteの行はサブスクリプションステータス欄に「~90日残りトライアル」と表示されますが、個別の機能行(Intune Plan 2、エンドポイント特権管理、リモートヘルプ、エンタープライズアプリ管理、Advanced Analytics、Cloud PKI)では引き続き「試用または購入可能」と表示されます。それは予想通りです — それらは単独の追加SKUです。スイートトライアルでは、それらすべてがスイートレベルでバンドルされています。Microsoft Intune Suiteトライアルが有効かどうかは、サブスクリプションステータス欄にトライアル残り約89〜90日が表示されているか確認してください。
 
-> [!IMPORTANT]
-> **Complete multifactor authentication (MFA) enrollment before starting Exercise 2.** Some Contoso lab tenants have a Conditional Access policy that enforces the `p1` (MFA) authentication context for the Azure management API. This blocks access to **entra.microsoft.com** and **intune.microsoft.com** until your admin account is enrolled in MFA. The Microsoft 365 admin center (**admin.cloud.microsoft**) is exempt and works without MFA. If you're prompted to set up additional security verification on first sign-in, complete the Microsoft Authenticator setup before continuing.
->
-> The Microsoft 365 admin center may open in **Simplified view** by default. Switch to **Dashboard view** from the toggle in the top-right corner to match the screenshots in this lab.
+裁判は90日間続き、その後30日間の猶予期間が設けられます。テナントごとにトライアルは一度しか開始できないので、その期間内にLabs 02–06を完了する計画を立ててください。すでにトライアルが有効であれば、サブスクリプションステータス欄に「アクティブ」が表示され、上記の手順を飛ばすことができます。
 
----
+演習1:ユーザーとグループの構成
+シナリオ
+Contosoにはマーケティング、法務、IT、営業、人事、オペレーション、エンジニアリングなど複数の部署にまたがる33人の既存ユーザーがいます。これらのユーザーを検証し、ラボシナリオ用の追加のテストユーザーを作成し、部署やデバイスタイプごとにポリシーターゲティングを有効にする動的グループを設定します。
 
-> [!IMPORTANT]
-> **Activate the Microsoft Intune Suite 90-day trial now — before you start Lab 03.** Several later exercises (Lab 03 Exercise 4, Lab 04 Exercises 4–5, Lab 06 Exercises 1–3) require Intune Suite capabilities. Activating the trial up front means every downstream lab “just works” and avoids surprise blockers mid-lab. The trial is free, 90 days, up to 250 users per tenant, and reuses your existing tenant billing relationship — no payment method is required.
->
-> **Steps (takes about two minutes):**
->
-> 1. In the **Microsoft Intune admin center** (`intune.microsoft.com`), select **Tenant administration** and then select **Intune add-ons**.
-> 2. Select the **All add-ons** tab.
-> 3. In the row for **Microsoft Intune Suite**, under the **Try or buy** column, select **View details**.
-> 4. In the details pane, select **To try or buy, go to Microsoft 365 admin center**. A new tab opens to the Microsoft 365 admin center product page.
-> 5. On the **Microsoft Intune Suite** offer page, select **Start free trial**.
-> 6. On the **Checkout** page, confirm: **Microsoft Intune Suite Trial**, 90-day term, 250 licenses, **USD 0.00**, no payment method required.
-> 7. Select **Edit**, fill the organization profile form with the following information, then select **Save**:
-> - **First name**: MOD
-> - **Last name**: Administrator1
-> - **Address line 1**: 1 Microsoft Way
-> - **City**: Redmond
-> - **State**: Washington
-> - **ZIP**: 98052
-> - **Phone**: 425-555-1234
-> - **Email address**: admin@<TenantPrefix>.onmicrosoft.com
-> 8. Select **Try Now** to activate the trial.
-> 9. Return to the Intune admin center. Refresh **Tenant administration → Intune add-ons**. Select the **Your add-ons** tab — within a few minutes you should see **Microsoft Intune Suite Trial** listed with a **Purchased quantity** of **250**. The Suite includes: **Intune Plan 2**, **Remote Help**, **Endpoint Privilege Management**, **Enterprise App Management**, **Advanced Analytics**, and **Cloud PKI**.
->
-> **Don't be misled by the All add-ons tab.** The **Microsoft Intune Suite** row will show **"~90 days left in trial"** in the Subscription status column, but the individual capability rows (Intune Plan 2, Endpoint Privilege Management, Remote Help, Enterprise App Management, Advanced Analytics, Cloud PKI) will continue to show **"Available for trial or purchase"**. That's expected — those are the *standalone* add-on SKUs; the Suite trial bundles all of them at the Suite level. Confirm that the Microsoft Intune Suite trial is active by verifying that the Subscription status column displays approximately 89–90 days left in trial.
->
-> The trial runs for 90 days, followed by a 30-day grace period. **You can only start the trial once per tenant**, so plan to complete Labs 02–06 inside that window. If the trial is already active, you'll see **Active** in the Subscription status column and can skip the steps above.
+タスク1:既存のユーザーとライセンスの確認
+SEA-DEV1でMicrosoft Edgeを開いてください。
 
----
+https://admin.cloud.microsoft.com へナビゲーション。
 
-## Exercise 1: Configure users and groups
+グローバル管理者アカウントでサインイン:
 
-### Scenario
+ユーザー名: admin@<TenantPrefix>.onmicrosoft.com
+パスワード:(ラボ環境提供)
+サインインを続けるよう促された場合は、モバイル端末で「いいえ」を選択し、MFAプロンプトを承認してください。
 
-Contoso has 33 existing users across multiple departments (Marketing, Legal, IT, Sales, HR, Operations, Engineering, etc.). You'll verify these users, create additional test users for lab scenarios, and configure dynamic groups to enable policy targeting by department and device type.
+左のナビゲーションで「ユーザー」を展開し、「アクティブユーザー」を選択してください。
 
-### Task 1: Review existing users and licenses
+ユーザーリストを確認しましょう。約33名のライセンス保持アクティブユーザーが以下の通りです:
 
-1. On **SEA-DEV1**, open **Microsoft Edge**.
+メーガン・ボーウェン(マーケティングマネージャー)
+アレックス・ウィルバー(マーケティングアシスタント)
+ジョニ・シャーマン(パラリーガル、リーガル)
+アラン・デヤング(IT管理者)
+アデル・ヴァンス(小売マネージャー)
+そして様々な部署の他にも
+[!注] また、ライセンスされていないサービスアカウント(例:Automate Bot、Conf Room)も含まれることがあります。33人のライセンスユーザーのみを見るには、リスト上の表示フィルターを「すべてのユーザー」から「ライセンス済みユーザー」に変更してください。これらのユーザーはContosoテナントで事前プロビジョニングされており、Microsoft 365 E5ライセンスが割り当てられています。これらの既存ユーザーをラボ全体のポリシーターゲティングに活用します。
 
-1. Navigate to **https://admin.cloud.microsoft.com**.
+リストからメーガン・ボーウェンを選択してください。
 
-1. Sign in with the **Global Administrator** account:
-   - **Username:** `admin@<TenantPrefix>.onmicrosoft.com`
-   - **Password:** (provided by your lab environment)
+Megan Bowenのユーザー詳細パネルで「ライセンスとアプリ」タブを選択してください。
 
-1. If prompted to stay signed in, select **No** and approve the MFA prompt on your mobile device.
+以下のライセンスが割り当てられているか確認してください:
 
-1. In the left navigation, expand **Users** and select **Active users**.
+Microsoft 365 E5(Teamsなし)
+Microsoft Teams Enterprise
+ユーザー詳細のパネルを閉じてください。
 
-1. Review the list of users. You should see approximately **33 licensed active users** including:
-   - Megan Bowen (Marketing Manager)
-   - Alex Wilber (Marketing Assistant)
-   - Joni Sherman (Paralegal, Legal)
-   - Allan Deyoung (IT Admin)
-   - Adele Vance (Retail Manager)
-   - And others across various departments
+既存のユーザーの確認とライセンスの確認は成功しました。
 
-   > [!NOTE]
-   > The list may also contain unlicensed service accounts (for example, Automate Bot, Conf Room). To see only the 33 licensed users, change the view filter from **All users** to **Licensed users** above the list. These users are pre-provisioned in the Contoso tenant and have Microsoft 365 E5 licenses assigned. You'll use these existing users for policy targeting throughout the labs.
+タスク2:追加シナリオ用のテストユーザーを作成する
+Contosoには33人の既存ユーザーがいますが、特定の実験シナリオ向けにさらに2人のテストユーザーを作成します。
 
-1. Select **Megan Bowen** from the list.
+Microsoft 365管理センターのアクティブユーザーページで、上部のツールバーから「ユーザーを追加」を選択してください。
 
-1. In the **Megan Bowen** user details pane, select the **Licenses and apps** tab.
+「基本設定」ページに以下を入力してください:
 
-1. Verify that the following licenses are assigned:
-   - **Microsoft 365 E5 (no Teams)**
-   - **Microsoft Teams Enterprise**
+名前: Lab
+苗字: User1
+表示名: Lab User1
+ユーザー名: LabUser1
+ドメイン:セレクト<TenantPrefix>.onmicrosoft.com
+パスワード:チェックを解除 自動パスワードを作成し、パスワード欄にあらかじめ用意された強力なパスワード(例えば)を入力してください(またはお好みの安全なパスワードを使用)。<UserPassword>
+このユーザーにサインイン時にパスワード変更を義務付ける:このボックスのチェックを外す
+「次」を選択します。
 
-1. Close the user details pane.
+「製品ライセンスの割り当て」ページで両方のライセンスをチェックせずに「製品ライセンスなしでユーザーを作成」を選択し、次に選択します。
 
-**You have successfully reviewed the existing users and verified licensing.**
+[!注] Lab User1とLab User2はライセンスを必要としません。これらは(1) タスク3に入力すること、(2) 演習2タスク5でスコープ指定のIntune管理者役割を得るためだけに存在します — いずれもライセンスされたワークロード(Teams、Exchange、Intuneデバイス登録)には触れません。ライセンスをスキップすることで実際の容量問題も回避できます。ContosoラボのテナントのトライアルSKUは、33人の既存ユーザー(Microsoft 365 E5(Teamsなし):20/20割り当て済み、Microsoft Teams Enterprise:20/20割り当て済み)で完全に消費されているため、新規ユーザーに割り当てる席数も残っていません。sg-Intune-Pilot-Users
 
----
+オプション設定ページで、プロフィール情報を展開してください。
 
-### Task 2: Create test users for additional scenarios
+以下を設定してください:
 
-While Contoso has 33 existing users, you'll create two additional test users for specific lab scenarios.
+職種名: Test User
+学科: IT
+「次」を選択します。
 
-1. In the **Microsoft 365 admin center**, on the **Active users** page, select **Add a user** from the top toolbar.
+「レビューして完了」ページで設定を確認し、「追加完了」を選択してください。
 
-1. In the **Set up the basics** page, enter the following:
-   - **First name:** `Lab`
-   - **Last name:** `User1`
-   - **Display name:** `Lab User1`
-   - **Username:** `LabUser1`
-   - **Domains:** Select `<TenantPrefix>.onmicrosoft.com`
-   - **Password:** Uncheck **Automatically create a password**, then enter a strong password, such as the pre-provided `<UserPassword>`, in the password field (or use a secure password of your choice).
-   - **Require this user to change their password when they first sign in:** Uncheck this box
+確認ページで「クローズ」を選択してください。
 
-1. Select **Next**.
+ステップ1から10までを繰り返して、2つ目のテストユーザーを作成します:
 
-1. On the **Assign product licenses** page, leave both licenses **unchecked** and select **Create user without product license**, then select **Next**.
+名前: Lab
+苗字: User2
+表示名: Lab User2
+ユーザー名: LabUser2
+ドメイン:セレクト<TenantPrefix>.onmicrosoft.com
+パスワード:チェックを解除 自動パスワードを作成し、パスワード欄にあらかじめ用意された強力なパスワード(例えば)を入力してください(またはお好みの安全なパスワードを使用)。<UserPassword>
+職種名: Test User
+学科: Engineering
+ライセンス:未割り当てのままにする(Lab User1と同じ理由)
+あなたは無事に2人の追加テストユーザーを作成しました。
 
-   > [!NOTE]
-   > Lab User1 and Lab User2 don't need a license. They exist only to (1) populate `sg-Intune-Pilot-Users` in Task 3 and (2) receive a scoped Intune Administrator role in Exercise 2 Task 5 — neither use touches a licensed workload (Teams, Exchange, Intune device enrollment). Skipping the license also avoids a real capacity problem: the Contoso lab tenant's trial SKUs are fully consumed by the 33 existing users (**Microsoft 365 E5 (no Teams): 20/20 assigned**, **Microsoft Teams Enterprise: 20/20 assigned**), so there are no seats left to give a new user anyway.
+タスク3:割り当てられたセキュリティグループを作成する
+Intuneのポリシーターゲティング用に割り当てられた(静的メンバーシップ)セキュリティグループを作成します。
 
-1. On the **Optional settings** page, expand **Profile info**.
+注記
 
-1. Set the following:
-   - **Job title:** `Test User`
-   - **Department:** `IT`
+もし以前のラボで既に存在している場合は、名前の衝突エラーを作ろうとすると表示されます。その場合は、作成ステップを飛ばしてステップ9に進んで、既存のグループにメンバーを追加してください。sg-Intune-Pilot-Users
 
-1. Select **Next**.
+Microsoft 365管理センターの左ナビゲーションで「Teams & groups」を展開し、「Active Teams and groups」を選択します。
 
-1. On the **Review and finish** page, review the settings and select **Finish adding**.
+セキュリティグループタブを選択してください。
 
-1. Select **Close** on the confirmation page.
+「セキュリティグループを追加する」を選択します。
 
-1. Repeat steps 1–10 to create a second test user:
-   - **First name:** `Lab`
-   - **Last name:** `User2`
-   - **Display name:** `Lab User2`
-   - **Username:** `LabUser2`
-   - **Domains:** Select `<TenantPrefix>.onmicrosoft.com`
-   - **Password:** Uncheck **Automatically create a password**, then enter a strong password, such as the pre-provided `<UserPassword>`, in the password field (or use a secure password of your choice).
-   - **Job title:** `Test User`
-   - **Department:** `Engineering`
-   - **Licenses:** Leave unassigned (same reason as Lab User1)
+「基本設定」ページで、以下を入力してください:
 
-**You have successfully created two additional test users.**
+名前: sg-Intune-Pilot-Users
+説明: Pilot users for Intune policy testing
+「次」を選択します。
 
----
+設定編集ページで、デフォルト設定のまま「次へ」を選択してください。
 
-### Task 3: Create an assigned security group
+「グループをレビューして終了」ページで、グループ作成を選択します。
 
-You'll create an assigned (static membership) security group for Intune policy targeting.
+確認ページで「クローズ」を選択してください。
 
-> [!NOTE]
-> If `sg-Intune-Pilot-Users` already exists from a prior lab run, you'll see a name-collision error when you try to create it. In that case, skip the creation steps and jump to step 9 to add members to the existing group.
+セキュリティグループタブで、リストからsg-Intune-Pilot-Usersを選択します。
 
-1. In the **Microsoft 365 admin center**, in the left navigation, expand **Teams & groups** and select **Active teams & groups**.
+グループ詳細のパネルで「メンバー」タブを選択してください。
 
-1. Select the **Security groups** tab.
+「全てを表示」と「メンバー管理」を選択します。
 
-1. Select **Add a security group**.
+「メンバーを追加」を選択してください。
 
-1. On the **Set up the basics** page, enter the following:
-   - **Name:** `sg-Intune-Pilot-Users`
-   - **Description:** `Pilot users for Intune policy testing`
+以下のユーザーを検索して選択します:
 
-1. Select **Next**.
+メーガン・ボーウェン
+アレックス・ウィルバー
+ジョニ・シャーマン
+Lab User1
+Lab User2
+Add (5)を選択します。
 
-1. On the **Edit settings** page, leave the default settings and select **Next**.
+グループの詳細パネルを閉じます。
 
-1. On the **Review and finish adding group** page, select **Create group**.
+5人のパイロットユーザーからなる割り当てられたセキュリティグループを無事に作成しました。
 
-1. Select **Close** on the confirmation page.
+タスク4:複合ルールで動的なユーザーグループを作成する
+動的グループはユーザー属性に基づいて自動的にメンバーシップを更新します。薬局の臨床業務では、2つの条件を組み合わせた複合ルールを用いて、米国にいる薬局部門のユーザーをターゲットに動的なグループを作成します。複合ルールは規制および地域ごとのスコーピングの標準的なパターンです(例:Contoso Healthcareは米国の臨床業務負荷により厳格な遵守を適用しています)。-and
 
-1. On the **Security groups** tab, select **sg-Intune-Pilot-Users** from the list.
+ブラウザで https://entra.microsoft.com に移動します。
 
-1. In the group details pane, select the **Members** tab.
+Microsoft Entra管理センターで、左側のナビゲーションで「グループ」を選択し、「すべてのグループ」を選択してください。
 
-1. Select **View all and manage members**.
+トップツールバーから「新しいグループ」を選択してください。
 
-1. Select **Add members**.
+新しいグループパネルで以下を設定します:
 
-1. Search for and select the following users:
-   - **Megan Bowen**
-   - **Alex Wilber**
-   - **Joni Sherman**
-   - **Lab User1**
-   - **Lab User2**
+グループタイプ:セキュリティ
+グループ名: dyn-Pharmacy-Users
+グループ説明: Dynamic group for Pharmacy department users located in the US
+Microsoft Entraの役割はグループに割り当てることができます:いいえ
+会員タイプ:動的ユーザー
+動的ユーザーメンバーの中で、動的クエリを追加を選択します。
 
-1. Select **Add (5)**.
+動的メンバーシップルールのページ、Configure RulesタブのRule syntaxボックスをページ下部に見つけ、右側のEditを選択します。複合ルールの場合は、その上のプロパティ/オペレータ/値ビルダーよりも、シンタックスエディターで直接ルールを作成する方が読みやすいです。
 
-1. Close the group details pane.
+編集ルール構文エディタで、以下の複合ルールを正確に入力します:
 
-**You have successfully created an assigned security group with five pilot users.**
+(user.department -eq "Pharmacy") -and (user.country -eq "US")
+[!注] オペレーターは、ユーザーが含まれるには両方の条件が満たされている必要があることを意味します。また、どちらかの条件に合致するユーザーを含めることもでき、より複雑な論理の場合は部分式を括弧内にまとめることができます。ルール構文エディタは式を検証します — 保存前に赤いアレク線を修正してください。また、オペレーターに関するプレビューバナーも見られることがあります。このルールは ではなく を使用しているため、これを無視できます。-and-orMemberOf-eqMemberOf
 
----
+「OK」を選択してエディターを閉じ、その後ページ上部で「保存」を選択してください。
 
-### Task 4: Create a dynamic user group with a compound rule
+新しいグループページに戻って「作成」を選択してください。
 
-Dynamic groups automatically update membership based on user attributes. For the Pharmacy clinical workload, you'll create a dynamic group that uses a **compound rule** — combining two conditions with `-and` — to target users in the Pharmacy department who are also located in the US. Compound rules are the canonical pattern for regulatory and per-region scoping (for example, Contoso Healthcare applies stricter compliance to US clinical workloads).
+グループが作成された後、グループリストからdyn-Pharmacy-Usersを選択します。
 
-1. In the browser, navigate to **https://entra.microsoft.com**.
+グループの概要ページのフィードセクションで、動的ルール処理ステータスカードを見つけて「成功」と表示されているか確認してください。
 
-1. In the **Microsoft Entra admin center**, select **Groups** in the left navigation, and then select **All groups**.
+[!注] 動的グループメンバーシップ評価は5〜15分かかることがあります。完成すると、そのグループは属性が と 、属性が と等しいユーザーのみを含みます。もし現在、両方の属性に合致するContosoサンプルユーザーがいなければ、グループは空になります。これはこのラボテナントで予想されることで、後の演習には影響しません。departmentPharmacycountryUS
 
-1. Select **New group** from the top toolbar.
+グループメンバーを見るには「メンバー」タブを選択してください。
 
-1. In the **New Group** pane, configure the following:
-   - **Group type:** Security
-   - **Group name:** `dyn-Pharmacy-Users`
-   - **Group description:** `Dynamic group for Pharmacy department users located in the US`
-   - **Microsoft Entra roles can be assigned to the group:** No
-   - **Membership type:** Dynamic User
+複合メンバーシップルールで動的なユーザーグループを成功裏に作成しました。
 
-1. Under **Dynamic user members**, select **Add dynamic query**.
+タスク5:動的デバイスグループの作成
+Intuneに登録されているすべてのWindowsデバイスを自動的に含む動的グループを作成します。
 
-1. On the **Dynamic membership rules** page, on the **Configure Rules** tab, locate the **Rule syntax** box at the bottom of the page and select **Edit** to its right. Authoring the rule directly in the syntax editor is easier to read for compound rules than the property/operator/value builder above it.
+Microsoft Entra管理センターの「すべてのグループ」ページで「新しいグループ」を選択してください。
 
-1. In the **Edit rule syntax** editor, enter the following compound rule exactly:
+新しいグループページで、以下を設定してください:
 
-   ```text
-   (user.department -eq "Pharmacy") -and (user.country -eq "US")
-   ```
+グループタイプ:セキュリティ
+グループ名: dyn-Windows-Devices
+グループ説明: Dynamic group for all Windows devices
+会員タイプ:動的デバイス
+動的デバイスメンバーの中で、動的クエリを追加を選択します。
 
-   > [!NOTE]
-   > The `-and` operator means **both** conditions must be true for a user to be included. You can also use `-or` to include users matching either condition, and group sub-expressions in parentheses for more complex logic. The Rule syntax editor validates the expression — fix any red underlines before saving. You may also see a preview banner about the `MemberOf` operator; you can dismiss it because this rule uses `-eq`, not `MemberOf`.
+動的メンバーシップルールページで、以下のルールを設定してください:
 
-1. Select **OK** to close the editor, then select **Save** at the top of the page.
+プロパティ:deviceOSType
+オペレーター:等しい
+価値: Windows
+「保存」を選択します。
 
-1. Back in the **New Group** page, select **Create**.
+新しいグループページに戻って「作成」を選択してください。
 
-1. After the group is created, select **dyn-Pharmacy-Users** from the groups list.
+[!注] このグループは、WindowsデバイスがIntuneに登録されると自動的に登録されます(演習5)。
 
-1. On the group's **Overview** page, in the **Feed** section, locate the **Dynamic rules processing status** card and verify it shows **Succeeded**.
+Windowsデバイス用の動的デバイスグループを作成しました。
 
-   > [!NOTE]
-   > Dynamic group membership evaluation can take 5–15 minutes. Once complete, the group will contain only users whose `department` attribute equals `Pharmacy` **and** whose `country` attribute equals `US`. If no Contoso sample users currently match both attributes, the group will be empty — that's expected for this lab tenant and doesn't affect later exercises.
+タスク6:Windows Autopilot用の動的デバイスグループを作成する
+2つ目の動的デバイスグループを作成し、これはWindows Autopilotの登録用です。SEA-DEV3をAutopilotに登録し、デプロイプロファイルを割り当てる際にエクササイズ6で使います。
 
-1. Select the **Members** tab to view group members.
+Microsoft Entra管理センターの「すべてのグループ」ページで「新しいグループ」を選択してください。
 
-**You have successfully created a dynamic user group with a compound membership rule.**
+新しいグループページで、以下を設定してください:
 
----
+グループタイプ:セキュリティ
+グループ名: dyn-Autopilot-Devices
+グループ説明: Dynamic group for all Windows Autopilot-registered devices
+会員タイプ:動的デバイス
+動的デバイスメンバーの中で、動的クエリを追加を選択します。
 
-### Task 5: Create a dynamic device group
+動的メンバーシップルールのページ、Configure RulesタブのRule syntaxボックスをページ下部に見つけ、右側のEditを選択します。Editルール構文エディターで、以下のルールを正確に入力し、OKを選択してください:
 
-You'll create a dynamic group that automatically includes all Windows devices enrolled in Intune.
+(device.devicePhysicalIds -any _ -startsWith "[ZTDId]")
+「保存」を選択し、新しいグループページに戻って「作成」を選びます。
 
-1. In the **Microsoft Entra admin center**, on the **All groups** page, select **New group**.
+[!注:(ゼロタッチ展開ID)は、ハードウェアハッシュがWindows Autopilotに登録されるとすぐにデバイスのディレクトリオブジェクトに設定されます。これはデバイスがOOBEを通過するずっと前のことです。(すでに登録されているデバイスのみをマッチングする)のとは異なり、このルールではデバイスが登録された瞬間にターゲットを絞ることができ、これはAutopilotのデプロイメントプロファイル割り当てに必要なものです。[ZTDId]dyn-Windows-Devices
 
-1. In the **New Group** page, configure the following:
-   - **Group type:** Security
-   - **Group name:** `dyn-Windows-Devices`
-   - **Group description:** `Dynamic group for all Windows devices`
-   - **Membership type:** Dynamic Device
+Windows Autopilot用の動的デバイスグループを成功裏に作成しました。
 
-1. Under **Dynamic device members**, select **Add dynamic query**.
+演習2:行政委任の構成
+シナリオ
+管理権限は、Intuneやデバイス管理のさまざまな側面を管理するチームメンバーに委任する必要があります。Microsoft Entra IDの役割や管理ユニットを使って権限の範囲を適切に設定します。
 
-1. In the **Dynamic membership rules** page, configure the following rule:
-   - **Property:** deviceOSType
-   - **Operator:** Equals
-   - **Value:** `Windows`
+タスク1:Intune管理者の役割を割り当てる
+Microsoft Entra管理センターの左側ナビゲーションのEntra IDで「Users」を選択し、「All users」を選択してください。
 
-1. Select **Save**.
+ユーザーリストからAllan Deyoungを検索して選択してください。
 
-1. Back in the **New Group** page, select **Create**.
+Allan Deyoungのユーザー詳細で、左のナビゲーションから「割り当てられた役割」を選択してください。
 
-   > [!NOTE]
-   > This group will automatically populate with Windows devices after they are enrolled in Intune (Exercise 5).
+[!注] 一部のContosoラボテナントでは、アラン・デヤングがグローバル管理者の役割(アクティブ割り当てタブで確認)に事前割り当てされています。グローバル管理者の上にIntune管理者の役割を追加するのは機能的冗長です。グローバル管理者はすでにすべてのIntune権限を継承しています。とにかく、役割割り当てのワークフローを練習するために手順を踏んでください。
 
-**You have successfully created a dynamic device group for Windows devices.**
+上部のツールバーから「割り当てを追加」を選択してください。
 
----
+割り当てを追加ページの会員タブで「Intune管理者」を検索して選択してください。
 
-### Task 6: Create a dynamic device group for Windows Autopilot
+設定タブを選択し、以下を設定します:
 
-You'll create a second dynamic device group, this one for Windows Autopilot registration. You'll use it in **Exercise 6** when you register SEA-DEV3 for Autopilot and assign it a deployment profile.
+割り当てタイプ:アクティブ(対象外 — 適格とはアラン・デヤングが後でPIMを通じて手動で役割を有効化する必要がある場合;アクティブは即座に許可を与えます)
+恒久的に適格/恒久的に任命された:出て行け、確認済み
+任務開始:自動で入力された現在の日付と時間はそのままにしてください
+任務終了:空欄のままにしてください(永久チェックボックスがチェックされている間はグレーアウト)
+正当化ボックスに理由を入力します(例:)。PIMは、すべてのアクティブ任務、たとえ恒久的なものであっても、正当化が必要です。Lab 01 role delegation exercise — assigning Intune Administrator to the IT admin
 
-1. In the **Microsoft Entra admin center**, on the **All groups** page, select **New group**.
+「割り当て」を選択します。
 
-1. In the **New Group** page, configure the following:
-   - **Group type:** Security
-   - **Group name:** `dyn-Autopilot-Devices`
-   - **Group description:** `Dynamic group for all Windows Autopilot-registered devices`
-   - **Membership type:** Dynamic Device
+[!注] メンバーシップ/設定の2タブフローは、ContosoラボのテナントがMicrosoft Entra ID P2とPrivileged Identity Management(PIM)を有効にしているために現れます。すべてのディレクトリロール割り当てはデフォルトでPIMを経由します。アクティブ+パーマネント割り当ては、古典的な常時オンロール割り当てを再現します。
 
-1. Under **Dynamic device members**, select **Add dynamic query**.
+[!注] Intune管理者の役割は、デバイス設定、コンプライアンスポリシー、アプリケーション、登録設定など、Microsoft Intuneのすべての側面を管理する権限を与えます。これはグローバル管理者よりも特権が低い役割です。
 
-1. On the **Dynamic membership rules** page, on the **Configure Rules** tab, locate the **Rule syntax** box at the bottom of the page and select **Edit** to its right. In the **Edit rule syntax** editor, enter the following rule exactly, then select **OK**:
+[!注:このラボはPIMのジャストインタイム(適格)モデルではなく、恒久的なアクティブ割り当てを使用しています。これは推奨される生産パターンではなく、意図的な簡素化です。Microsoftのガイダンスおよびこのコースの単元内容(デバイス管理のためのMicrosoft Entra役割の割り当て)では、管理者が必要な時だけロールを有効化し、アクティベーションが自動的に期限切れになる敏感な役割には適格な割り当てを推奨しています。ここではActiveを使っているのは、Allan、Joni、Lab User1がこのラボシリーズの残りの部分で毎回追加のアクティベーションステップを経ずに動作権限を持つためです。このシリーズのどのラボも、学習者が適格役割の自己発動(アクセスを要求→時間ボックス発動の→正当化を提供する)を実施していません。このワークフローは単元の内容で概念的にのみカバーされています。最も実践的な連携はLab 06演習5(LP6ユニット05)で、PIMアクティベーション監査ログを確認するだけで、アクティベーションを行うわけではありません。
 
-   ```text
-   (device.devicePhysicalIds -any _ -startsWith "[ZTDId]")
-   ```
+あなたはアラン・デヤングにIntune管理者の役割を無事に割り当てました。
 
-1. Select **Save**, then back in the **New Group** page, select **Create**.
+タスク2:クラウドデバイス管理者の役割を割り当てる
+Microsoft Entra管理センターのEntra ID>「ユーザー>すべてのユーザー」で検索し、Joni Shermanを選択します。
 
-   > [!NOTE]
-   > `[ZTDId]` (Zero Touch Deployment ID) is set on a device's directory object as soon as its hardware hash is registered with Windows Autopilot — well before the device goes through OOBE. Unlike `dyn-Windows-Devices` (which only matches devices that have already enrolled), this rule lets you target a device the moment it's registered, which is exactly what an Autopilot deployment profile assignment needs.
+Joni Shermanのユーザー詳細で「割り当てられた役割」を選択してください。
 
-**You have successfully created a dynamic device group for Windows Autopilot.**
+「割り当てを追加」を選択します。
 
----
+「割り当てを追加」ページの「メンバーシップ」タブで「クラウドデバイス管理者」を検索して選択してください。
 
-## Exercise 2: Configure administrative delegation
+設定タブを選択し、タスク1と同じように設定します:
 
-### Scenario
+割り当ての種類:現役
+恒久的に適格/恒久的に任命された:出て行け、確認済み
+課題の開始・終了:デフォルトはそのままにします(自動入力開始、終了日なし)
+正当化ボックスに理由を入力します(例:)。Lab 01 role delegation exercise — assigning Cloud Device Administrator to help desk staff
 
-You need to delegate administrative access to team members who will manage different aspects of Intune and device management. You'll use Microsoft Entra ID roles and administrative units to scope permissions appropriately.
+「割り当て」を選択します。
 
-### Task 1: Assign the Intune Administrator role
+[!注] クラウドデバイス管理者の役割は、Microsoft Entra ID内でデバイスの識別を管理し、デバイスの有効化、無効化、削除を行えます。この役割は、Intuneの完全なアクセス権がないデバイスオブジェクトを管理するヘルプデスクスタッフに有用です。
 
-1. In the **Microsoft Entra admin center**, in the left navigation under **Entra ID**, select **Users**, then select **All users**.
+あなたはJoni ShermanにCloud Device Administratorの役割を正常に割り当てました。
 
-1. Search for and select **Allan Deyoung** from the user list.
+タスク3:管理単位の作成
+管理ユニットは、管理者権限を一部のユーザーやデバイスに制限することを可能にします。IT部門の管理部門を作ってくれ。
 
-1. In Allan Deyoung's user details, select **Assigned roles** from the left navigation.
+Microsoft Entra管理センターの左側ナビゲーションのEntra IDで「役割と管理者」を選択し、その後「管理者ユニット」を選択してください。
 
-   > [!NOTE]
-   > In some Contoso lab tenants, Allan Deyoung is pre-assigned the **Global Administrator** role (visible on the **Active assignments** tab). Adding the Intune Administrator role on top of Global Administrator is functionally redundant — Global Administrator already inherits all Intune permissions. Perform the steps anyway to practice the role-assignment workflow.
+トップツールバーから「追加」を選択してください。
 
-1. Select **Add assignments** from the top toolbar.
+「行政単位を追加」ページで、以下の項目を入力してください:
 
-1. In the **Add assignments** page, on the **Membership** tab, search for and select **Intune Administrator**.
+名前: IT Department
+説明: Administrative unit for IT department users and devices
+「次を選び:役割を割り当てる」
 
-1. Select the **Setting** tab and configure the following:
-   - **Assignment type:** **Active** (not **Eligible** — Eligible would require Allan Deyoung to manually activate the role later through PIM before he could use it; Active grants the permissions immediately)
-   - **Permanently eligible / Permanently assigned:** Leave checked
-   - **Assignment starts:** Leave the auto-populated current date and time
-   - **Assignment ends:** Leave blank (greyed out while the permanent checkbox is checked)
+役割割り当てページで、次:レビュー+作成を選択します(メンバーを追加した後に役割を割り当てます)。
 
-1. In the **Justification** box, enter a reason (for example: `Lab 01 role delegation exercise — assigning Intune Administrator to the IT admin`). PIM requires a justification for every Active assignment, even permanent ones.
+レビュー+作成ページで「作成」を選択してください。
 
-1. Select **Assign**.
+IT部門の管理ユニットを無事に作成しました。
 
-   > [!NOTE]
-   > The **Membership**/**Setting** two-tab flow appears because the Contoso lab tenant has Microsoft Entra ID P2 and Privileged Identity Management (PIM) enabled — every directory role assignment goes through PIM by default. **Active** + **Permanently assigned** replicates a classic, always-on role assignment.
+タスク4:管理ユニットへのメンバー追加
+管理ユニットのページで、リストからIT部門を選択します。
 
-   > [!NOTE]
-   > The Intune Administrator role grants permissions to manage all aspects of Microsoft Intune, including device configuration, compliance policies, applications, and enrollment settings. This is a less privileged role than Global Administrator.
+IT部門の管理ユニットの詳細で、左のナビゲーションから「ユーザー」を選択します。
 
-   > [!NOTE]
-   > **This lab uses permanent Active assignments, not PIM's just-in-time (Eligible) model, and that's a deliberate simplification, not the recommended production pattern.** Microsoft's guidance — and this course's own unit content ([Assign Microsoft Entra roles for device management](../Learning%20Path%201%20-%20Prepare%20infrastructure%20for%20devices%20using%20Microsoft%20Intune%20and%20Microsoft%20Entra%20ID/configure-entraid-device-management/includes/04-assign-entra-id-roles-device-management.md)) — recommends **Eligible** assignments for sensitive roles, where the admin activates the role only when needed and the activation expires automatically. We use **Active** here purely so Allan, Joni, and Lab User1 have working permissions for the rest of this lab series without an extra activation step every time. **No lab in this series has learners perform an Eligible-role self-activation** (request access → provide justification → time-boxed activation) — that workflow is covered conceptually in the unit content only. The closest hands-on tie-in is **Lab 06 Exercise 5** (LP6 Unit 05), which has you review PIM activation audit logs, not perform an activation.
+トップツールバーから「メンバーを追加」を選択します。
 
-**You have successfully assigned the Intune Administrator role to Allan Deyoung.**
+「Allan Deyoung(IT管理者)」を検索して選択してください。
 
----
+選択。
 
-### Task 2: Assign the Cloud Device Administrator role
+IT部門の管理ユニットの詳細で、左のナビゲーションからグループを選択します。
 
-1. In the **Microsoft Entra admin center**, under **Entra ID** > **Users** > **All users**, search for and select **Joni Sherman**.
+トップツールバーから「追加」を選択してください。
 
-1. In Joni Sherman's user details, select **Assigned roles**.
+既存のsg-ITセキュリティグループ(IT部門ユーザー向けの既存のグループ)を検索して選択してください。
 
-1. Select **Add assignments**.
+選択。
 
-1. In the **Add assignments** page, on the **Membership** tab, search for and select **Cloud Device Administrator**.
+[!注] 管理者ユニットにユーザーやグループを追加することで、管理役割をこれらのオブジェクトのみを管理するように設定できます。これは地域や県の管理を委任するのに役立ちます。
 
-1. Select the **Setting** tab and configure the same way as Task 1:
-   - **Assignment type:** Active
-   - **Permanently eligible / Permanently assigned:** Leave checked
-   - **Assignment starts / ends:** Leave the defaults (auto-populated start, no end date)
+IT部門の管理ユニットにメンバーを追加することに成功しました。
 
-1. In the **Justification** box, enter a reason (for example: `Lab 01 role delegation exercise — assigning Cloud Device Administrator to help desk staff`).
+タスク5:管理ユニットにスコープ付きの役割を割り当てる
+IT部門の管理部門にのみ限定されたヘルプデスク管理者の役割を割り当てます。
 
-1. Select **Assign**.
+注記
 
-   > [!NOTE]
-   > The Cloud Device Administrator role allows managing device identities in Microsoft Entra ID, including enabling, disabling, and deleting devices. This role is useful for help desk staff who need to manage device objects without full Intune access.
+Intune管理者は管理ユニットのスコープに割り当てられません。Microsoft Entraの役割のうち、AUスコープをサポートしているのは固定されたものだけです — 認証管理者、属性割り当て管理者/リーダー、クラウドデバイス管理者、グループ管理者、ヘルプデスク管理者、ライセンス管理者、パスワード管理者、プリンター管理者、特権認証管理者、SharePoint管理者、Teams管理者、Teams デバイス管理者、ユーザー管理者、そして任意のカスタムロール — Intune管理者は含まれていません。だからこそ、Intuneには独自のスコープタグシステム(タスク6)があります。これは、Intune固有の管理を一部のデバイスやポリシーに委譲するサポート方法です。Helpdesk AdministratorはMicrosoft独自の標準的なAu-Scoped委任の例なので、ここではEntraレイヤーのスコーピングメカニクスを実証するために使います。
 
-**You have successfully assigned the Cloud Device Administrator role to Joni Sherman.**
+IT部門の管理ユニットの詳細で、左のナビゲーションから役割と管理者を選択します。
 
----
+ロール一覧で「ヘルプデスク管理者」を検索して選択してください(このページは管理ユニットの範囲をサポートするロールのみを一覧にしており、任意のロールを検索できるツールバー「追加」ボタンはありません。表示されたリストから選択します)。
 
-### Task 3: Create an administrative unit
+役割の割り当てページで「割り当てを追加」を選択してください。
 
-Administrative units allow you to restrict administrative permissions to a subset of users or devices. You'll create an administrative unit for the IT department.
+割り当てを追加ページの「メンバーシップ」タブで「選択されていないメンバー」を選択し、「Lab User1(演習1で作成)」を検索して選択します。
 
-1. In the **Microsoft Entra admin center**, in the left navigation under **Entra ID**, select **Roles & admins**, then select **Admin units**.
+設定タブを選択して、以下を設定します:
 
-1. Select **Add** from the top toolbar.
+割り当ての種類:現役
+恒久的に適格/恒久的に任命された:出て行け、確認済み
+課題の開始・終了:デフォルトはそのままにしておく
+正当化ボックスに理由を入力します(例:)。Lab 01 role delegation exercise — scoped Helpdesk Administrator for IT Department AU
 
-1. In the **Add administrative unit** page, enter the following:
-   - **Name:** `IT Department`
-   - **Description:** `Administrative unit for IT department users and devices`
+「割り当て」を選択します。
 
-1. Select **Next: Assign roles**.
+[!注] Lab User1は現在、IT部門の管理ユニット内のユーザーとデバイスに対してヘルプデスク管理者権限を持っています。これはMicrosoft Entra層におけるロールベースアクセス制御(RBAC)のスコーピングを示しています。
 
-1. On the **Assign roles** page, select **Next: Review + create** (we'll assign roles after adding members).
+あなたはスコープ付きのヘルプデスク管理者の役割を無事に割り当てました。
 
-1. On the **Review + create** page, select **Create**.
+タスク6:薬局臨床業務用のカスタムIntuneロールとスコープタグを作成
+Microsoft Entra ID roles (Task 1–5) delegate Entra-level permissions.Intune自体は独自のRBACシステムを持ち、独自のカスタムロールとスコープタグを持っています。Contoso Healthcareは薬局ヘルプデスクに、薬局の臨床機器のみを見て行動させることを望んでいます。テナント全体ではなく、今すぐスコープタグとカスタムIntuneロールを作成します。Labs 2–4では、特定の構成、コンプライアンス、アプリ、セキュリティポリシーにスコープタグを適用します。Lab 05演習3では、役割を委任された管理者(リー・グー)に割り当て、エンドツーエンドで薬局の範囲対象のみを見ていることを確認します。PharmacyPharmacy HelpdeskPharmacyPharmacy Helpdesk
 
-**You have successfully created an administrative unit for the IT department.**
+パートA — 薬局の範囲タグを作成する
 
----
+ブラウザで https://intune.microsoft.com(Microsoft Intune管理センター)にアクセスします。
 
-### Task 4: Add members to the administrative unit
+左のナビゲーションでテナント管理を選択し、次にロールを選択します。
 
-1. On the **Admin units** page, select **IT Department** from the list.
+ロールページで「スコープ(タグ)」(一部のポータルビルドではスコープタグとも表記)を選択してください。
 
-1. In the **IT Department** administrative unit details, select **Users** from the left navigation.
+選択+作成。
 
-1. Select **Add member** from the top toolbar.
+「ベーシック」タブで、以下を入力してください:
 
-1. Search for and select **Allan Deyoung** (IT Admin).
+名前: Pharmacy
+説明: Pharmacy clinical devices and policies (Contoso Healthcare)
+「次」を選択します。
 
-1. Select **Select**.
+割り当てタブでは、グループは空にしておいてください。Lab 02演習1から特定のポリシー(グループではなく)にタグ付けします。「次」を選択します。
 
-1. In the **IT Department** administrative unit details, select **Groups** from the left navigation.
+レビュー+作成タブで「作成」を選択してください。
 
-1. Select **Add** from the top toolbar.
+パートB — 薬局ヘルプデスクのカスタムIntune役割を作成する
 
-1. Search for and select the existing **sg-IT** security group (pre-existing group for IT department users).
+テナント管理で「ロール」を選択し、「すべてのロール」を選択します。
 
-1. Select **Select**.
+選択 + Create → Intune ロール。
 
-   > [!NOTE]
-   > By adding users and groups to the administrative unit, you can scope administrative roles to only manage these objects. This is useful for delegating regional or departmental administration.
+基本ページに以下を入力してください:
 
-**You have successfully added members to the IT Department administrative unit.**
+名前: Pharmacy Helpdesk
+説明: Delegated helpdesk role scoped to Pharmacy clinical devices. Read + remote actions on devices; no policy authoring.
+「次」を選択します。
 
----
+権限ページで「はい」を選択し、以下の権限を選択してください(それ以外はすべて「いいえ」のままにしてください—これは最小権限の原則です)。ポータルは権限を管理デバイス、リモートタスク、組織、役割などのカテゴリに分類しています。ポータル内の最も近いラベルを一致させてください:
 
-### Task 5: Assign a scoped role to the administrative unit
+マネージドデバイス:読み込み、プライマリユーザーを設定し、更新する
+リモートタスク:デバイスを同期し、今すぐ再起動(または今すぐ再起動)、Collect Diagnostics
+組織:読む
+役割:読む
+リモートヘルプアプリ:全ての操作を、画面を表示
+[!重要] アプリ、デバイスコンプライアンスポリシー、デバイス設定、エンドポイント保護、登録プログラム、ポリシーセットのすべての権限は「No」に設定してください。薬局ヘルプデスクはデバイスに対して行動を起こす権限はあっても、ポリシーを作成・修正することはできません。これが上位中級の委任パターンです。狭いリモートアクションの役割が広範囲のリードの上に重ねられているのです。
 
-You'll assign a Helpdesk Administrator role scoped to only the IT Department administrative unit.
+「次」を選択します。
 
-> [!NOTE]
-> **Intune Administrator can't be assigned with administrative unit scope.** Only a fixed set of Microsoft Entra roles support AU scoping — Authentication Administrator, Attribute Assignment Administrator/Reader, Cloud Device Administrator, Groups Administrator, **Helpdesk Administrator**, License Administrator, Password Administrator, Printer Administrator, Privileged Authentication Administrator, SharePoint Administrator, Teams Administrator, Teams Devices Administrator, User Administrator, and any custom role — Intune Administrator isn't one of them. This is exactly why Intune has its own separate scope-tag system (Task 6): that's the supported way to delegate Intune-specific administration to a subset of devices/policies. Helpdesk Administrator is Microsoft's own canonical example for AU-scoped delegation, so we'll use it here to demonstrate the Entra-layer scoping mechanic.
+スコープタグページで、+「スコープタグを選択」を選択し、パートAで作成した薬局スコープタグを追加します。「セレクト」を選択します。
 
-1. In the **IT Department** administrative unit details, select **Roles and administrators** from the left navigation.
+デフォルトスコープタグのチップを削除してください(省略を選択... → 削除)して、薬局のみが選択されたままになります。
 
-1. On the list of roles, search for and select **Helpdesk Administrator** by clicking its name (this page only lists roles that support administrative unit scope — there's no toolbar **Add** button that lets you search for an arbitrary role; you pick from the list shown).
+[!注] このステップは役割定義そのものの範囲を指し、割り当てられた管理者が管理できる範囲ではなく、これは別のものです。Microsoftによると:「役割に追加されたスコープタグは、その役割自体の可視性を制御します。役割割り当てに追加されたスコープタグは、ポリシー、アプリ、デバイスなどのIntuneオブジェクトの可視性を、その役割割り当ての管理者のみに限定しています。」ここでデフォルトを削除すると、薬局ヘルプデスクの役割定義はすでに薬局スコープタグを持つ管理者のみに見えます(グローバル/Intune管理者は依然として全てを確認できますが、Entraの役割にはスコープタグは適用されません)。リー・グが日常的に管理できる範囲を実際に制限するステップは、ラボ05の演習3で、薬学を課題の範囲に割り当てるときに起こります。
 
-1. On the role's assignment page, select **Add assignments**.
+「次」を選択します。
 
-1. In the **Add assignments** page, on the **Membership** tab, select **No member selected**, then search for and select **Lab User1** (created in Exercise 1).
+レビュー+作成ページで「作成」を選択してください。
 
-1. Select the **Setting** tab and configure:
-   - **Assignment type:** Active
-   - **Permanently eligible / Permanently assigned:** Leave checked
-   - **Assignment starts / ends:** Leave the defaults
+注記
 
-1. In the **Justification** box, enter a reason (for example: `Lab 01 role delegation exercise — scoped Helpdesk Administrator for IT Department AU`).
+あなたが作成したスコープタグと役割は、このラボシリーズ全体にわたる委任管理の基盤です。Labs 02–04では、スコープタグを設定プロファイル、コンプライアンスポリシー、LOBアプリ、セキュリティベースラインに適用します。Lab 05の演習3では、役割を委任された管理者(リー・グー)に割り当て、薬局のスコープ対象オブジェクトのみを見ているか確認します。ラボ06演習2では、薬局ヘルプデスク管理者が薬局機器でリモートヘルプを使用します。PharmacyPharmacy HelpdeskPharmacyPharmacy Helpdesk
 
-1. Select **Assign**.
+薬局スコープタグと薬局ヘルプデスクのカスタムIntuneロールを成功裏に作成しました。
 
-   > [!NOTE]
-   > Lab User1 now has Helpdesk Administrator permissions, but only for users and devices within the IT Department administrative unit. This demonstrates role-based access control (RBAC) scoping at the Microsoft Entra layer.
+演習3:デバイス登録と設定の設定を設定する
+シナリオ
+デバイスをIntuneに登録する前に、Microsoft Entra IDでデバイス登録設定を設定する必要があります。これには、誰がデバイスを登録できるか、デバイスの制限、追加のローカル管理者アカウントなどが含まれます。また、Microsoft Entra LAPSをローカル管理者のパスワード管理に有効にします。
 
-**You have successfully assigned a scoped Helpdesk Administrator role.**
+タスク1:デバイスジョイン設定の設定
+Microsoft Entra管理センターの左側ナビゲーションのEntra IDで「デバイス」を選択し、「概要」を選択してください。
 
----
+左のナビゲーションからデバイス設定を選択します。
 
-### Task 6: Create a custom Intune role and scope tag for the Pharmacy clinical workload
+デバイス設定ページのMicrosoft Entra参加および登録設定で、以下を設定してください:
 
-Microsoft Entra ID roles (Task 1–5) delegate Entra-level permissions. Intune itself has a **separate RBAC system** with its own custom roles and **scope tags**. Contoso Healthcare wants the Pharmacy helpdesk to see and act on Pharmacy clinical devices only — not the whole tenant — so you'll create a `Pharmacy` scope tag and a `Pharmacy Helpdesk` custom Intune role now. In **Labs 2–4** you'll apply the `Pharmacy` scope tag to specific configuration, compliance, app, and security policies. In **Lab 05 Exercise 3** you'll assign the `Pharmacy Helpdesk` role to a delegated administrator (Lee Gu) and verify end-to-end that they see only Pharmacy-scoped objects.
+ユーザーはデバイスをMicrosoft Entraに接続できます:すべて選択(オプション:全て/選択/なし)
+ユーザーはMicrosoft Entraでデバイスを登録できます:すでに「全て」が表示されているはずで、コントロールもグレーアウト/非インタラクティブです — これは予想される問題で、バグではありません
+Microsoft Entraでのデバイスの登録または参加には多要素認証を義務付ける:ノーを選べ
+ユーザーあたりの最大デバイス数: 50
+[!注] 「ユーザーはデバイスを登録できます」は「全」でグレーアウトされており、これは予想されるバグではありません。このテナントではIntune/MDMの自動登録がすでに有効で、MDM登録には登録が必要なため、Entraはその切り替えをロックします。ここで設定するものは何もありません。
 
-**Part A — Create the `Pharmacy` scope tag**
+黄色の推奨バナーが表示され、条件付きアクセスによるMFAを必須にするよう促します。このラボではMFAトグルを「いいえ」に設定してください。条件付きアクセスの強制はLab 04で扱われています。本番環境では、デバイス登録を特定のグループに限定し、MFAが必要です。実験室の目的で、登録を簡素化するためにMFAなしですべてのユーザーがデバイスを登録できるようにしています。
 
-1. In the browser, navigate to **https://intune.microsoft.com** (Microsoft Intune admin center).
+変更を加えた場合はページ上部の「保存」を選択してください。
 
-1. In the left navigation, select **Tenant administration**, and then select **Roles**.
+デバイス参加設定の設定は成功しました。
 
-1. On the **Roles** page, select **Scope (Tags)** (also labeled **Scope tags** in some portal builds).
+タスク2:Microsoft Entraで参加したデバイスに追加のローカル管理者を設定する
+デフォルトでは、Microsoft Entra Joinを行うユーザーはデバイスのローカル管理者となります。ローカル管理者グループに追加ユーザーやグループを追加できます。
 
-1. Select **+ Create**.
+デバイス設定ページで、ローカル管理者設定のセクションまでスクロールしてください。
 
-1. On the **Basics** tab, enter:
-   - **Name:** `Pharmacy`
-   - **Description:** `Pharmacy clinical devices and policies (Contoso Healthcare)`
+[!注] ここでは2つのプレビュー切り替えが見えます。Microsoft Entrajoin(プレビュー)中にデバイス上でグローバル管理者ロールが追加され、Microsoft Entrajoin(プレビュー)中にデバイス上でローカル管理者として登録ユーザーが追加されます。このラボでは両方ともデフォルトのままにしておきましょう。
 
-1. Select **Next**.
+すべてのMicrosoft Entra参加デバイスで「追加のローカル管理者を管理する」リンクを選択してください。
 
-1. On the **Assignments** tab, leave **Groups** empty for now — you'll tag specific policies (not groups) starting in **Lab 02 Exercise 1**. Select **Next**.
+デバイス管理者について |割り当てページから「Add assignments」を選択してください。
 
-1. On the **Review + create** tab, select **Create**.
+アラン・デヤングを検索して選択してください。
 
-**Part B — Create the `Pharmacy Helpdesk` custom Intune role**
+「追加」を選択します。
 
-1. In **Tenant administration**, select **Roles**, then select **All roles**.
+[!注] Allan Deyoungは、Microsoft Entraに参加した任意のデバイスでローカル管理者グループに追加されました。これは、管理されたデバイスにローカル管理者権限が必要なヘルプデスクスタッフにとって有用です。個別ユーザーではなくグループを通じて委任するには、専用のロール割り当て可能なグループが必要です(Microsoft Entraの役割はグループに割り当てられます:はい、作成時に設定可能です)。
 
-1. Select **+ Create** → **Intune role**.
+Microsoft Entra参加デバイスに追加のローカル管理者を設定することに成功しました。
 
-1. On the **Basics** page, enter the following:
-   - **Name:** `Pharmacy Helpdesk`
-   - **Description:** `Delegated helpdesk role scoped to Pharmacy clinical devices. Read + remote actions on devices; no policy authoring.`
+タスク3:Microsoft Entraローカル管理者パスワードソリューション(LAPS)を有効にする
+Microsoft Entra LAPSは、Microsoft Entraに参加したデバイス上でローカル管理者パスワードを自動的に管理・ローテーションします。
 
-1. Select **Next**.
+重要
 
-1. On the **Permissions** page, select **Yes** for the following permissions (leave everything else **No** — this is principle of least privilege). Portal labels group permissions into categories like **Managed devices**, **Remote tasks**, **Organization**, and **Roles**. Match the closest available labels in your portal:
+詳細なLAPSポリシー設定(パスワードの複雑さ、長さ、使用年数、管理アカウント名)はEntra管理センターからMicrosoft Intuneにエンドポイントセキュリティポリシーとして移行されました。Entraの設定は現在、テナントのLAPS機能を有効にする単一のオン/オフトグルになっています。パスワードポリシー自体はIntuneで設定されています。
 
-   - **Managed devices:** Read, Set primary user, Update
-   - **Remote tasks:** Sync devices, Restart now (or Reboot now), Collect diagnostics
-   - **Organization:** Read
-   - **Roles:** Read
-   - **Remote Help app**: Take full control, View screen
+パートA — テナントレベルでLAPSを有効にする(Entra管理センター):
 
-   > [!IMPORTANT]
-   > Leave **all** permissions on **Apps**, **Device compliance policies**, **Device configurations**, **Endpoint protection**, **Enrollment programs**, and **Policy sets** set to **No**. The Pharmacy Helpdesk should be able to act on devices but **not** author or modify any policy. This is the upper-intermediate delegation pattern: a narrow remote-action role layered on top of broad read.
+Microsoft Entra管理センターの左側ナビゲーションのEntra IDで「デバイス」を選択し、「デバイス設定」を選択してください。
 
-1. Select **Next**.
+ローカル管理者設定のセクションまでスクロールしてください。
 
-1. On the **Scope tags** page, select **+ Select scope tags** and add the **Pharmacy** scope tag you created in Part A. Select **Select**.
+Microsoft Entraローカル管理者パスワードソリューション(LAPS)を有効にすることを「はい」に設定してください。
 
-1. Remove the **Default** scope tag chip (select the ellipsis **...** → **Remove**) so only **Pharmacy** remains selected.
+ページ上部で「保存」を選択してください。
 
-   > [!NOTE]
-   > This step scopes the **role definition itself**, not what the assigned admin can manage — those are two different things. Per Microsoft: *"The scope tag added on a role controls visibility of the role itself. The scope tag added in role assignment limits the visibility of Intune objects, like policies, apps, or devices, to only administrators in that role assignment."* Removing **Default** here keeps the Pharmacy Helpdesk role definition visible only to admins who already have the Pharmacy scope tag (Global/Intune Administrators still see everything — scope tags don't apply to Entra roles). The step that actually restricts what Lee Gu can manage day-to-day happens in **Lab 05 Exercise 3**, when you assign this role with Pharmacy as the assignment's scope.
+パートB — LAPSパスワードポリシーの設定(Intune管理センター):
 
-1. Select **Next**.
+ブラウザで https://intune.microsoft.com に移動します。
 
-1. On the **Review + create** page, select **Create**.
+Microsoft Intune管理センターの左ナビゲーションで「エンドポイントセキュリティ」を選択し、次に「アカウント保護」を選択してください。
 
-> [!NOTE]
-> The `Pharmacy` scope tag and `Pharmacy Helpdesk` role you just created are the foundation for delegated administration across the rest of this lab series. In **Labs 02–04** you'll apply the `Pharmacy` scope tag to configuration profiles, compliance policies, an LOB app, and a security baseline. In **Lab 05 Exercise 3** you'll assign the `Pharmacy Helpdesk` role to a delegated administrator (Lee Gu) and verify they see only Pharmacy-scoped objects. In **Lab 06 Exercise 2** the Pharmacy Helpdesk admin uses Remote Help on Pharmacy devices.
+選択+ポリシー作成。
 
-**You have successfully created the `Pharmacy` scope tag and the `Pharmacy Helpdesk` custom Intune role.**
+プロファイル作成パネルで、以下を設定してください:
 
----
+プラットフォーム:窓
+プロフィール:ローカル管理者パスワードソリューション(Windows LAPS)
+「作成」を選択します。
 
-## Exercise 3: Configure device registration and settings
+「ベーシック」タブで、以下を入力してください:
 
-### Scenario
+名前: Contoso LAPS Policy
+説明: Manages and rotates the local Administrator password on Microsoft Entra joined devices
+「次」を選択します。
 
-Before devices can enroll in Intune, you need to configure device registration settings in Microsoft Entra ID, including who can register devices, device limits, and additional local administrator accounts. You'll also enable Microsoft Entra LAPS for local administrator password management.
+設定タブで、以下を設定してください:
 
-### Task 1: Configure device join settings
+バックアップディレクトリ:パスワードはMicrosoft Entra IDのみにバックアップしてください
+パスワード時代: 30
+管理者アカウント名:設定されていないままにする(組み込みの管理者を使用)
+パスワードの複雑さ:大きい文字 + 小さな文字 + 数字 + 特殊文字(デフォルト)
+パスワードの長さ: 14
+自動アカウント管理有効:ターゲットアカウントは自動的に管理されません(デフォルト)
+認証後のアクション:パスワードをリセットして管理アカウントをログオフしろ...
+認証後リセット遅延:設定を選択し、数時間内入力24
+[!注意] 自動アカウント管理(Windows 11 24H2+のみ)では、LAPSでローカル管理者アカウントを自動で作成・有効化できます。ここでターゲットアカウントは自動的に管理されません(デフォルト)。ラボのVMは24H2で必ずしも稼働しているわけではなく、既存の組み込み管理者アカウントを使っているため、必要ありません。認証後の操作オプションは、パスワードをリセットする/管理されたアカウント(デフォルトで使っているもの)をパスワードをリセットしてログオフする/パスワードをリセットして再起動する。
 
-1. In the **Microsoft Entra admin center**, in the left navigation under **Entra ID**, select **Devices**, then select **Overview**.
+「次」を選択します。
 
-1. Select **Device settings** from the left navigation.
+Scopeタグタブで「Next」を選択します。
 
-1. On the **Device settings** page, under **Microsoft Entra join and registration settings**, configure the following:
-   - **Users may join devices to Microsoft Entra:** Select **All** *(options: All / Selected / None)*
-   - **Users may register their devices with Microsoft Entra:** Should already show **All**, and the control is **greyed out/non-interactive** — this is expected, not a bug
-   - **Require Multifactor Authentication to register or join devices with Microsoft Entra:** Select **No**
-   - **Maximum number of devices per user:** `50`
+割り当てタブのグループで「すべてのデバイス」を選択します。
 
-   > [!NOTE]
-   > **"Users may register their devices" is greyed out at All** — expected, not a bug. Intune/MDM auto-enrollment is already active in this tenant, and registration is required for MDM enrollment, so Entra locks the toggle. Nothing to configure here.
-   >   > You'll see a yellow recommendation banner advising you to require MFA via Conditional Access rather than this toggle. For this lab, leave the MFA toggle set to **No** — Conditional Access enforcement is covered in Lab 04. In a production environment, you would restrict device registration to specific groups and require MFA. For lab purposes, we're allowing all users to register devices without MFA to simplify enrollment.
+「次」を選択します。
 
-1. Select **Save** at the top of the page if you made any changes.
+レビュー+作成タブで設定を確認し、「作成」を選択してください。
 
-**You have successfully configured device join settings.**
+[!注] Microsoft Entra LAPSは30日ごとにローカル管理者パスワードを自動的にローテーションし、Microsoft Entra IDに安全に保存します。認可された管理者はEntra管理センターの「Devices > Local administrator password recovery」からパスワードを取得できます。
 
----
+Microsoft Entra LAPSを有効にし、Intuneでパスワードポリシーを設定しました。
 
-### Task 2: Configure additional local administrators on Microsoft Entra joined devices
+演習4:Windows登録ポリシーの設定
+シナリオ
+演習5では同僚がSEA-DEV1とSEA-DEV2にサインインし、Microsoft Entraの参加を行います。演習6ではWindows Autopilot用のSEA-DEV3を登録します。その前に、テナントの設定が初回実行の体験が正しくなっているかを確認する必要があります。デバイスは自動的にIntuneに登録され、重要なアプリやポリシーが整うまではユーザーが作業を開始できず、各ユーザーが登録できるデバイス数にガードレールを設けます。
 
-By default, the user who performs a Microsoft Entra join becomes a local administrator on the device. You can add additional users or groups to the local administrators group.
+この演習では、以下のことをします:
 
-1. On the **Device settings** page, scroll down to the **Local administrator settings** section.
+新しいテナントに対して自動Intune登録が正しく設定されているか確認してください
+登録ステータスページ(ESP)を設定し、デバイスがアプリやポリシーが適用されるまでブロックされるようにしましょう。これはAutopilotの展開を洗練された印象にするのと同じゲートです
+パイロットグループのために、より厳格でターゲットを絞ったESPプロファイルを作成します
+デフォルトのプラットフォーム制限ポリシーを確認し、デバイス制限ポリシーを作成してください
+注記
 
-   > [!NOTE]
-   > Two preview toggles are visible here — **Global administrator role is added as local administrator on the device during Microsoft Entra join (Preview)** and **Registering user is added as local administrator on the device during Microsoft Entra join (Preview)**. Leave both at their default values for this lab.
+なぜ自動MDM登録がもはや焦点でなくなったのか。現代のクラウド専用Microsoft 365テナントでは、全員のスコープで自動的にIntune登録がデフォルトでオンになっています。従来の「MDMユーザースコープの設定」ステップは、ハイブリッドアイデンティティやConfiguration Managerの共同管理シナリオで最も重要であり、オンプレミス同期ユーザーを自動的に登録するスコープを決める必要があります。タスク1で設定を確認し、その後、ユーザーの初回実行体験を形作るポリシーに進みます。
 
-1. Select the **Manage Additional local administrators on all Microsoft Entra joined devices** link.
+タスク1:自動MDM登録の確認
+ブラウザで https://intune.microsoft.com に移動します。
 
-1. On the **Device Administrators | Assignments** page, select **Add assignments**.
+Microsoft Intune管理センターの左側ナビゲーションで「デバイス」を選択してください。
 
-1. Search for and select **Allan Deyoung**.
+[!注] 一度だけ「デバイスが変わった」というツアーバナーが見えるかもしれません。スキップを選択して無効にしてください。
 
-1. Select **Add**.
+デバイスオンボーディングの中で、登録を選択します。
 
-   > [!NOTE]
-   > Allan Deyoung is now added to the local Administrators group on any Microsoft Entra joined device. This is useful for help desk staff who need local admin rights on managed devices. To delegate this via a group instead of individual users, you'd need a dedicated role-assignable group (**Microsoft Entra roles can be assigned to the group: Yes**, set at creation).
+Windowsタブの登録オプションで「自動登録」を選択してください。
 
-**You have successfully configured additional local administrators for Microsoft Entra joined devices.**
+MDMのユーザースコープが「All」に設定されているか確認してください。
 
----
+[!注] 新しいクラウド専用テナントでは、この設定はすでに設定されています。「なし」と表示されたら「すべて」に変更し、「保存」を選択してください。
 
-### Task 3: Enable Microsoft Entra Local Administrator Password Solution (LAPS)
+なお、Windows Information Protection(WIP)のユーザー範囲は「None」に設定されており、「登録ポリシーなしで新しいWIPを作成する(WIP-ME)はもはやサポートされていません...」というバナーが表示されます。この設定はNoneのままにしてください — Windows Information Protectionは非推奨です。Lab 03ではモバイルデータ保護にはアプリ保護ポリシー(MAM)を使用します。
 
-Microsoft Entra LAPS automatically manages and rotates local administrator passwords on Microsoft Entra joined devices.
+MDM利用規約URL、MDMディスカバリーURL、MDMコンプライアンスURLは、自動で入力されたデフォルトのままにしてください。
 
-> [!IMPORTANT]
-> Detailed LAPS policy configuration (password complexity, length, age, and managed account name) has moved out of the Entra admin center and into Microsoft Intune as an endpoint security policy. The Entra setting is now a single on/off toggle that enables the LAPS feature for the tenant; the password policy itself is configured in Intune.
+変更を加えた場合は「保存」を選択してください。そうでなければ、自動登録のペインを閉じてください。
 
-**Part A — Enable LAPS at the tenant level (Entra admin center):**
+テナント向けに自動MDM登録が設定されていることを確認しました。
 
-1. In the **Microsoft Entra admin center**, in the left navigation under **Entra ID**, select **Devices**, then select **Device settings**.
+タスク2:デフォルトの登録ステータスページを設定する
+登録ステータスページ(ESP)は、Windowsの登録中(Microsoft Entra参加、Autopilot、またはデバイス登録)中にユーザーに表示されます。設定済みのアプリやポリシーが適用されるまでデバイスの利用をブロックするため、半分プロビジョニングされたデバイスにサインインすることはありません。デフォルトのESPプロファイルはすべてのユーザーと無効化されたデバイスや出荷を対象にします — Contosoの基準を設定するために有効にします。
 
-1. Scroll down to the **Local administrator settings** section.
+Microsoft Intune管理センターの登録ページで、Windowsタブにいることを確認してください。Windows Autopilotで「登録ステータスページ」を選択してください。
 
-1. Set **Enable Microsoft Entra Local Administrator Password Solution (LAPS)** to **Yes**.
+登録ステータスページリストで「すべてのユーザーおよびすべてのデバイス」リンクを選択します(デフォルト優先度で割り当てられています)。
 
-1. Select **Save** at the top of the page.
+「すべてのユーザーおよびすべてのデバイス」ページで、左のナビゲーションで「>プロパティ管理」を選択し、設定の横にある「編集」を選びます。
 
-**Part B — Configure the LAPS password policy (Intune admin center):**
+以下の設定を設定してください:
 
-1. In the browser, navigate to **https://intune.microsoft.com**.
+アプリとプロフィールの設定進行状況を表示:はい
+設置時間が指定された時間を超えた場合にエラーを表示します: 60
+制限時間やエラーが発生した場合にカスタムメッセージを表示します:はい
+カスタムメッセージ: Contoso device setup is taking longer than expected. Contact the Service Desk at x4040 if this persists.
+エンドユーザー向けにログ収集および診断ページをオンにします:はい
+ボックス外での体験(OOBE)でプロビジョニングされたデバイスにのみページを表示する:いいえ
+すべてのアプリとプロファイルがインストールされるまでデバイスの使用をブロックしてください:いいえ
+[!注] デフォルトプロファイルで「すべてのアプリとプロファイルがインストールされるまでデバイス使用をブロックする」と設定すると、標準ユーザーは素早くサインインでき、非ブロックポリシーはバックグラウンドで処理されます。タスク3では、パイロットグループに対してより厳格でブロック的なESPを作成します。
 
-1. In the **Microsoft Intune admin center**, select **Endpoint security** in the left navigation, and then select **Account protection**.
+レビュー+保存を選択し、次に保存を選択します。
 
-1. Select **+ Create Policy**.
+デフォルト登録ステータスページの設定に成功しました。
 
-1. In the **Create a profile** pane, configure the following:
-   - **Platform:** Windows
-   - **Profile:** Local admin password solution (Windows LAPS)
+タスク3:パイロットグループ用のブロッキングESPプロファイルを作成する
+Contoso Healthcareのパイロットユーザーには、臨床ワークフロー用にあらかじめ準備された企業用ノートパソコンを受け取ります。必要なアプリがインストールされるまでデバイスの使用をブロックするより厳格なESPプロファイルを作成し、デフォルトよりも優先的に割り当てます。sg-Intune-Pilot-Users
 
-1. Select **Create**.
+登録ステータスページリストで+作成を選択してください。
 
-1. On the **Basics** tab, enter:
-   - **Name:** `Contoso LAPS Policy`
-   - **Description:** `Manages and rotates the local Administrator password on Microsoft Entra joined devices`
+「ベーシック」タブで、以下を入力してください:
 
-1. Select **Next**.
+名前: ESP - Pilot - Blocking
+説明: Blocks pilot devices from use until clinical apps and security baseline are installed
+「次」を選択します。
 
-1. On the **Configuration settings** tab, configure the following:
-   - **Backup Directory:** Backup the password to Microsoft Entra ID only
-   - **Password Age Days:** `30`
-   - **Administrator Account Name:** Leave as Not configured (uses the built-in Administrator)
-   - **Password Complexity:** Large letters + small letters + numbers + special characters (Default)
-   - **Password Length:** `14`
-   - **Automatic Account Management Enabled:** The target account will not be automatically managed (Default)
-   - **Post Authentication Actions:** Reset the password and logoff the managed account...
-   - **Post Authentication Reset Delay:** select Configured and enter `24` for hours
+設定ページで、以下を設定します:
 
-   > [!NOTE]
-   > **Automatic Account Management** (Windows 11 24H2+ only) lets LAPS create/enable a local admin account itself. Leave it **the target account will not be automatically managed (Default)** here — the lab VMs aren't guaranteed to be on 24H2, and we're already using the existing built-in Administrator account, so it isn't needed. **Post Authentication Actions** options are: *Reset the password* / *Reset the password and logoff the managed account* (the default, and what we're using) / *Reset the password and reboot*.
+アプリとプロフィールの設定進行状況を表示:はい
+設置時間が指定された時間を超えた場合にエラーを表示します: 60
+制限時間やエラーが発生した場合にカスタムメッセージを表示します:はい
+カスタムメッセージ: Contoso pilot device setup is in progress. Contact the Service Desk at x4040 if this persists.
+エンドユーザー向けにログ収集および診断ページをオンにします:はい
+ボックス外での体験(OOBE)でプロビジョニングされたデバイスにのみページを表示する:いいえ
+すべてのアプリとプロファイルがインストールされるまでデバイスの使用をブロックしてください:はい
+インストールエラーが発生した場合にユーザーがデバイスをリセットできるようにする:はい
+インストールエラーが発生した場合にユーザーがデバイスを使用できるよう:いいえ
+必要なアプリがユーザー/デバイスに割り当てられている場合、インストールされるまでデバイスの利用をブロックしてください:全員
+「次」を選択します。
 
-1. Select **Next**.
+割り当てページの「含まれるグループ」の「グループを追加」を選択してください。
 
-1. On the **Scope tags** tab, select **Next**.
+sg-Intune-Pilot-Usersを検索して選択し、その後「Select」を選択します。
 
-1. On the **Assignments** tab, under **Groups**, select **All devices**.
+「次へ」を選んでから「次へ」を選んで、スコープタグをスキップしてください。
 
-1. Select **Next**.
+レビュー+作成タブで「作成」を選択してください。
 
-1. On the **Review + create** tab, review the settings and select **Create**.
+登録ステータスページに戻ると、確認は優先度1(デフォルトより上)が表示されます。ユーザーやデバイスが最初に一致するプロファイルが勝ちます。ESP - Pilot - Blocking
 
-   > [!NOTE]
-   > Microsoft Entra LAPS automatically rotates the local administrator password every 30 days and stores the password securely in Microsoft Entra ID. Authorized administrators can retrieve the password from the Entra admin center under **Devices** > **Local administrator password recovery**.
+[!注] ESPプロファイルは優先順位で評価されます。割り当てられ優先度が高いため、パイロットユーザーはブロッキング体験を受け取り、他のユーザーはデフォルトに移行します。ESP - Pilot - Blockingsg-Intune-Pilot-Users
 
-**You have successfully enabled Microsoft Entra LAPS and configured the password policy in Intune.**
+パイロットユーザー向けのターゲット登録ステータスページのプロフィールを作成しました。
 
----
+タスク4:デフォルトの登録制限を見直す
+登録制限は、どのデバイスプラットフォームがIntuneに登録できるかを制御します。デフォルトを確認することで、SEA-DEV1およびSEA-DEV2が演習5に登録する前にContosoのテナントが何を受け入れるかを理解するのに役立ちます。
 
-## Exercise 4: Configure Windows enrollment policies
+Microsoft Intune管理センターの登録ページで、Windowsタブにいることを確認してください。登録オプションの中で「デバイスプラットフォーム制限」を選択してください。
 
-### Scenario
+登録制限ページのデバイスタイプの制限欄で、「すべてのユーザー」リンク(デフォルト優先)を選択してください。
 
-In Exercise 5 your colleagues will sign in to **SEA-DEV1** and **SEA-DEV2** and perform a Microsoft Entra join, and in Exercise 6 you'll register **SEA-DEV3** for Windows Autopilot. Before any of that happens, you need to make sure the tenant is configured so the **first-run experience is right**: devices get automatically enrolled in Intune, the user can't start working until critical apps and policies are in place, and you have guardrails on how many devices each user can enroll.
+左側のナビゲーションで「>プロパティ管理」を選択してください。プラットフォーム設定の隣にある「編集」を選択してください。
 
-In this exercise you'll:
+デフォルトの制限ポリシーで、現在のプラットフォーム設定を確認してください。許可されているデバイスプラットフォーム(例:Windows、Android、iOS/iPadOS、macOS)や、各プラットフォームに設定されている登録制限(個人所有、バージョン、デバイスメーカー設定など)を確認しましょう。
 
-- Verify that automatic Intune enrollment is configured correctly for new tenants
-- Configure the **Enrollment Status Page (ESP)** so devices block until apps and policies are applied — the same gate that makes Autopilot deployments feel polished
-- Create a targeted, stricter ESP profile for the pilot group
-- Review the default platform restriction policy and create a device limit restriction policy
+[!注] デフォルトのポリシーでは、すべてのプラットフォームと個人所有のデバイスが許可されています。本番環境では個人所有のWindowsデバイスをブロックしたり、特定のOSバージョンを制限したりするかもしれませんが、ラボではデフォルトをそのままにして、SEA-DEV1とSEA-DEV2が演習5に登録できるようにします。
 
-> [!NOTE]
-> **Why automatic MDM enrollment isn't the focus anymore.** In modern, cloud-only Microsoft 365 tenants, **automatic Intune enrollment is on by default** for the All-users scope. The classic "configure MDM user scope" step is now most relevant in **hybrid identity** and **Configuration Manager co-management** scenarios where you need to scope which on-premises-synced users are auto-enrolled. You'll verify the setting in Task 1, then move on to the policies that actually shape the user's first-run experience.
+ポリシーの詳細パネルを変更しずに閉じてください。
 
-### Task 1: Verify automatic MDM enrollment
+デフォルトの登録制限を正常に確認しました。
 
-1. In the browser, navigate to **https://intune.microsoft.com**.
+タスク5:デバイス制限ポリシーの作成
+各ユーザーが登録できるデバイス数を制限するポリシーを作成します。これにより、Contosoはライセンスの拡散や資格の盗用から守られます。
 
-1. In the **Microsoft Intune admin center**, select **Devices** in the left navigation.
+Microsoft Intune管理センターの登録ページ(デバイス>デバイスオンボーディング>登録)で、Windowsタブにいることを確認してください。 登録オプションで「デバイス制限制限」を選択してください。
 
-   > [!NOTE]
-   > You may see a one-time **"Devices has changed"** tour banner. Select **Skip** to dismiss it.
+「制限作成」を選択します。
 
-1. Under **Device onboarding**, select **Enrollment**.
+「制限作成」ページで、以下を入力して「次へ」を選択してください:
 
-1. On the **Windows** tab, under **Enrollment options**, select **Automatic Enrollment**.
+名前: Device Limit - 10 Devices
+説明: Limit users to 10 enrolled devices
+デバイス制限の中で入力し、次を選びます。10
 
-1. Confirm that **MDM user scope** is set to **All**.
+「次へ」を選択して「スコープ」タグをスキップしてください。
 
-   > [!NOTE]
-   > In a brand-new cloud-only tenant, this setting is already configured. If it shows **None**, change it to **All** and select **Save**.
+割り当ての中で「グループを追加」を選択してください。
 
-1. Note that **Windows Information Protection (WIP) user scope** is set to **None** and shows the banner: *"Creating new WIP without enrollment policies (WIP-ME) is no longer supported..."* Leave this set to **None** — Windows Information Protection is deprecated. You'll use App Protection Policies (MAM) for mobile data protection in Lab 03.
+sg-Intune-Pilot-Usersを検索して選択してください。
 
-1. Leave the **MDM terms of use URL**, **MDM discovery URL**, and **MDM compliance URL** at their auto-populated defaults.
+選択。
 
-1. If you made any change, select **Save**. Otherwise, close the **Automatic Enrollment** pane.
+「次」を選択します。
 
-**You have verified that automatic MDM enrollment is configured for your tenant.**
+レビュー+作成の「作成」を選択してください。
 
----
+[!注] このポリシーでは、すべてのユーザーが登録済みデバイス10台に制限されています。ユーザーが制限に達したら、新しいデバイスに登録する前に既存のデバイスをアンロールしなければなりません。
 
-### Task 2: Configure the Default Enrollment Status Page
+デバイス制限ポリシーを作成・割り当てることに成功しました。
 
-The **Enrollment Status Page (ESP)** is shown to users during Windows enrollment (Microsoft Entra join, Autopilot, or device enrollment). It blocks device use until configured apps and policies are applied, so users don't sign in to a half-provisioned device. The **Default** ESP profile targets all users and all devices and ships disabled — you'll enable it to set a baseline for Contoso.
+タスク6:個人所有のAndroidデバイスをブロックする
+Contoso Healthcareは個人用AndroidスマートフォンのIntune登録を望んでいません。企業所有のAndroid Enterpriseデバイス(Samsung Knoxや企業支給)のみが許可されています。これは、Contosoの医療データ処理規則により、ネットワークに接続するすべてのデバイスに企業所有が義務付けられているためです。個人所有のAndroid登録をブロックしつつ、企業のAndroid Enterpriseは許可されたままにするデバイスプラットフォーム制限を作成します。
 
-1. In the **Microsoft Intune admin center**, on the **Enrollment** page, make sure you are on the **Windows** tab. Under **Windows Autopilot**, select **Enrollment Status Page**.
+Microsoft Intune管理センターの登録ページ(デバイス>デバイスオンボーディング>登録)でAndroidタブを選択してください。
 
-1. On the **Enrollment Status Page** list, select the **All users and all devices** link (assigned with **Default** Priority).
+[!注] プラットフォームの制限はプラットフォームごとに設定されます。デフォルトのAndroidプラットフォーム制限は、すべてのAndroidサブタイプ(個人の仕事用プロファイル、企業所有の仕事用プロファイル、完全管理型、専用型)を許可しています。個人所有のサブタイプをブロックする、より優先度の高いカスタム制限を作成します。
 
-1. On the **All users and all devices** page, select **Manage > Properties** in the left navigation, then select **Edit** next to **Settings**.
+登録オプションの中で「デバイスプラットフォーム制限」を選択してください。
 
-1. Configure the following settings:
-   - **Show app and profile configuration progress:** Yes
-   - **Show an error when installation takes longer than specified number of minutes:** `60`
-   - **Show custom message when time limit or error occurs:** Yes
-     - **Custom message:** `Contoso device setup is taking longer than expected. Contact the Service Desk at x4040 if this persists.`
-   - **Turn on log collection and diagnostics page for end users:** Yes
-   - **Only show page to devices provisioned by out-of-box experience (OOBE):** No
-   - **Block device use until all apps and profiles are installed:** No
+Android制限を選択し→ + 制限を作成してください。
 
-   > [!NOTE]
-   > Setting **Block device use until all apps and profiles are installed** to **No** on the Default profile lets standard users sign in quickly while non-blocking policies finish in the background. In Task 3 you'll create a stricter, blocking ESP for the pilot group.
+「ベーシック」タブで、以下を入力してください:
 
-1. Select **Review + save**, then select **Save**.
+名前: Android - Block personal
+説明: Block personally owned Android enrollment; allow corporate-owned Android Enterprise only
+「次」を選択します。
 
-**You have successfully configured the Default Enrollment Status Page.**
+プラットフォーム設定タブには、Android Enterprise(業務用プロファイル)とAndroidデバイス管理者の2行のテーブルがあり、それぞれプラットフォーム(許可/ブロック)と個人所有(許可/ブロック)の切り替えがあり、オプションでバージョン範囲やデバイスメーカー別フィルターも選択できます。「企業所有」には別途行やトグルはありません。所有権は「個人所有」によって行ごとに設定されます。プラットフォームを「許可」に設定し、個人所有がブロックに設定されている場合、その行が企業所有でもそのタイプを許可していることを意味します。
 
----
+構成:
 
-### Task 3: Create a blocking ESP profile for the pilot group
+Android Enterprise(ワークプロファイル)→プラットフォーム:許可して
+Android Enterprise(ワークプロファイル) → 個人所有:ブロック
+Androidデバイス管理者→プラットフォーム:ブロック(レガシーDAの登録は終了しました。また、2024年12月31日をもってIntuneがGMSデバイスにおけるAndroidデバイス管理者管理のサポートを終了したことを記載するバナーも表示されます)
+Androidデバイス管理者→個人所有:ブロック(行がすでにブロックされているためグレーアウト)
+両列のバージョン範囲とデバイスメーカーは空欄にしてください。
 
-Pilot users at Contoso Healthcare receive corporate laptops pre-staged for clinical workflows. You'll create a stricter ESP profile that blocks device use until required apps are installed, and assign it to `sg-Intune-Pilot-Users` so it takes priority over the Default.
+[!注] 結果として、個人所有のAndroid Enterpriseワークプロファイル(BYOD)デバイスがブロックされます。企業所有のAndroid Enterpriseのワークプロファイルデバイスは許可されています(Platform = Allowは個人のサブセットのみがブロックされるためカバーします)。Androidデバイス管理者は所有権に関係なく完全にブロックされています。
 
-1. On the **Enrollment Status Page** list, select **+Create**.
+「次」を選択します。
 
-1. On the **Basics** tab, enter:
-   - **Name:** `ESP - Pilot - Blocking`
-   - **Description:** `Blocks pilot devices from use until clinical apps and security baseline are installed`
+Scopeタグタブでは、デフォルトのScopeタグを残してください(この制限はテナント全体に適用され、薬局限定ではありません)。「次」を選択します。
 
-1. Select **Next**.
+割り当てタブの「含まれるグループ」の「Add groups」を選択し、sg-Intune-Pilot-Usersを検索してから「Next」を選択します。
 
-1. On the **Settings** page, configure:
-   - **Show app and profile configuration progress:** Yes
-   - **Show an error when installation takes longer than specified number of minutes:** `60`
-   - **Show custom message when time limit or error occurs:** Yes
-     - **Custom message:** `Contoso pilot device setup is in progress. Contact the Service Desk at x4040 if this persists.`
-   - **Turn on log collection and diagnostics page for end users:** Yes
-   - **Only show page to devices provisioned by out-of-box experience (OOBE):** No
-   - **Block device use until all apps and profiles are installed:** Yes
-   - **Allow users to reset device if installation error occurs:** Yes
-   - **Allow users to use device if installation error occurs:** No
-   - **Block device use until required apps are installed if they are assigned to the user/device:** All
+レビュー+作成タブで「作成」を選択してください。
 
-1. Select **Next**.
+登録制限ページでは、確認が優先度1(デフォルトより上)のリストに表示されます。優先度の高い制限が最初に評価されます。Android - Block personal
 
-1. On the **Assignments** page, under **Included groups**, select **Add groups**.
+[!注] 本番環境では、管理していないプラットフォーム(個人用iOSやLinuxブロックなど)に対してこれを行うことが一般的です。Contosoの薬局臨床業務は、Contosoが所有していないデバイスに対して暗号化、脱獄検出、アプリ保護の基準を強制できないため、ネットワーク上での個人用デバイスを明確に禁止しています。
 
-1. Search for and select **sg-Intune-Pilot-Users**, then select **Select**.
+個人所有のAndroidデバイスの登録をブロックすることに成功しました。
 
-1. Select **Next**, then **Next** again to skip **Scope tags**.
+演習5:Windowsデバイスの登録
+シナリオ
+Microsoft Entraの参加を行うことで、Windows 11の2台(SEA-DEV1とSEA-DEV2)をIntuneに登録できます。これは、従業員が自分のデバイスを企業テナントに加入させるユーザー主導の登録シナリオをシミュレートします。
 
-1. On the **Review + create** tab, select **Create**.
+タスク1:SEA-DEV1でMicrosoft Entraの参加と登録を行う
+SEA-DEV1では、サインインしていれば現在のセッションからサインアウトしてください。
 
-1. Back on the **Enrollment Status Page** list, confirm `ESP - Pilot - Blocking` appears with **Priority 1** (above **Default**). The first profile a user/device matches wins.
+Windowsのサインイン画面で、左下のアカウントリストから管理者を選択します。(管理者がリストにない場合は、「その他のユーザー」を選択してユーザー名を入力してください。)Admin
 
-   > [!NOTE]
-   > ESP profiles are evaluated by priority. Because `ESP - Pilot - Blocking` is assigned to `sg-Intune-Pilot-Users` and sits at higher priority, pilot users will receive the blocking experience while everyone else falls through to **Default**.
+ローカル管理者アカウントでサインインしてください:
 
-**You have successfully created a targeted Enrollment Status Page profile for pilot users.**
+ユーザー名: Admin
+パスワード:(ラボ環境提供)
+サインイン後、設定を開き(キーを押して)してください。Windows + I
 
----
+職場や学校にアクセスする→アカウントへ移動してください。
 
-### Task 4: Review default enrollment restrictions
+「接続」を選択してください。
 
-Enrollment restrictions control which device platforms can enroll in Intune. Reviewing the defaults helps you understand what the Contoso tenant will accept before SEA-DEV1 and SEA-DEV2 enroll in Exercise 5.
+「職場または学校アカウントの設定」ダイアログで、「このデバイスをMicrosoft Entra IDに参加する」を選択します。
 
-1. In the **Microsoft Intune admin center**, on the **Enrollment** page, make sure you are on the **Windows** tab. Under **Enrollment options**, select **Device platform restriction**.
+サインインダイアログで以下を入力し、次を選びます:
 
-1. On the **Enrollment restrictions** page, under **Device type restrictions**, select the **All Users** link (**Default** priority).
+メールアドレス: MeganB@<TenantPrefix>.OnMicrosoft.com
+「パスワード入力」ダイアログで、Megan Bowenのパスワードを入力し、「サインイン」を選択してください。
 
-1. Select **Manage > Properties** in the left navigation. Select **Edit** next to **Platform settings**.
+「これがあなたの組織であることを確認し」ダイアログで、テナントが.onmicrosoft.com であることを確認し、参加を選択します。
 
-1. In the **Default** restriction policy, review the current **Platform settings**. Review which device platforms are allowed (for example, Windows, Android, iOS/iPadOS, and macOS) and the enrollment restrictions configured for each platform, such as Personally owned, Versions, and Device manufacturer settings.
+「You're all ready!」ページで、「完了」を選択してください。
 
-   > [!NOTE]
-   > The default policy allows all platforms and personally owned devices. In production you might block personally owned Windows devices or restrict specific OS versions, but for the lab leave the defaults in place so SEA-DEV1 and SEA-DEV2 can enroll in Exercise 5.
+[!注] このデバイスはMicrosoft Entraに参加し、Intuneに自動的に登録されています。メーガンは、アプリやポリシーが適用されている間、エクササイズ4で設定した登録ステータスページを見ています。メーガンがグループにいないため、より厳しいESP(パイロット)ブロックプロファイルではなく、ブロックしないデフォルトプロファイルが使われます。sg-Intune-Pilot-Users
 
-1. Close the policy details pane without making changes.
+Microsoft EntraおよびIntuneでSEA-DEV1の登録に成功しました。
 
-**You have successfully reviewed the default enrollment restrictions.**
+タスク2:Intune管理センターでSEA-DEV1の登録を確認する
+SEA-DEV1でMicrosoft Edgeを開き、https://intune.microsoft.com に移動します。
 
----
+admin@.onmicrosoft.comとしてサインインしてください(すでにサインインしていなければ)。
 
-### Task 5: Create a device limit restriction policy
+Microsoft Intune管理センターで「デバイス」を選択し、「すべてのデバイス」を選択してください。
 
-You'll create a policy that limits how many devices each user can enroll. This protects Contoso from license sprawl and stolen-credential abuse.
+以下でSEA-DEV1がデバイスリストに表示されているか確認してください:
 
-1. In the **Microsoft Intune admin center**, on the **Enrollment** page (**Devices** > **Device onboarding** > **Enrollment**), make sure you are on the **Windows** tab. Under **Enrollment options**, select **Device limit restriction**.
+管理者:インチューン
+所有権:企業
+コンプライアンス:準拠(最初は「評価されていない」と表示されることがあります)
+デバイス詳細を見るにはリストからSEA-DEV1を選択してください。
 
-1. Select **Create restriction**.
+以下のタブを確認してください:
 
-1. In the **Create restriction** page, enter the following and select **Next**:
-   - **Name:** `Device Limit - 10 Devices`
-   - **Description:** `Limit users to 10 enrolled devices`
+概要:デバイス名、オペレーティングシステム、コンプライアンス状況、最後のチェックイン時間。
+ハードウェア:シリアル番号、TPMバージョン、総ストレージ容量
+発見されたアプリ:(アプリのインベントリ同期に伴い時間とともに増えます)
+この装置を薬局臨床機器としてタグ付けし、委任された薬局ヘルプデスク管理者が後の検査で確認し対応できるようにします。SEA-DEV1デバイスページの管理下でプロパティを選択します。
 
-1. Under **Device limit**, enter `10` and select **Next**.
+Scopeタグの横で「Open」を選択して「Select tags」ペインを開きます。
 
-1. Select **Next** and skip **Scope tags**.
+「Selectタグ」パネルで「Pharmacy」(Exercise 2 Task 6で作成したスコープタグ)を選択し、次に「Select」を選択します。
 
-1. Under **Assignments**, select **Add groups**.
+「保存」を選択します。
 
-1. Search for and select **sg-Intune-Pilot-Users**.
+IntuneでのSEA-DEV1登録を正常に確認しました。
 
-1. Select **Select**.
+タスク3:SEA-DEV2でMicrosoft Entraの結合および登録を行う
+SEA-DEV2に切り替えてください。
 
-1. Select **Next**.
+ローカル管理者アカウントでサインインしてください:
 
-1. Under **Review + create**, select **Create**.
+ユーザー名: Admin
+パスワード:(ラボ環境提供)
+設定()を開きます。Windows + I
 
-   > [!NOTE]
-   > This policy limits all users to 10 enrolled devices. When a user reaches the limit, they must unenroll an existing device before enrolling a new one.
+職場や学校にアクセスする→アカウントへ移動してください。
 
-**You have successfully created and assigned a device limit restriction policy.**
+「接続」を選択してください。
 
----
+「職場または学校アカウントの設定」ダイアログで、「このデバイスをMicrosoft Entra IDに参加する」を選択します。
 
-### Task 6: Block personally owned Android devices
+サインインダイアログで、以下を入力してください:
 
-Contoso Healthcare doesn't want personal Android phones enrolling in Intune — only corporate-owned Android Enterprise devices (Samsung Knox / corporate-issued) are permitted, primarily because clinical data handling rules at Contoso require corporate ownership for any device that touches the network. You'll create a **Device platform restriction** that blocks personally owned Android enrollment while leaving corporate Android Enterprise allowed.
+メールアドレス: JoniS@<TenantPrefix>.OnMicrosoft.com
+セレクト・ネーション
+「パスワード入力」ダイアログで、ジョニ・シャーマンのパスワードを入力し、「サインイン」を選択してください。
 
-1. In the **Microsoft Intune admin center**, on the **Enrollment** page (**Devices** > **Device onboarding** > **Enrollment**), select the **Android** tab.
+「これがあなたの組織であることを確認しましょう」ダイアログで「参加」を選択してください。
 
-   > [!NOTE]
-   > Platform restrictions are configured per platform. The **Default** Android platform restriction allows all Android subtypes (personal work profile, corporate-owned work profile, fully managed, dedicated). You'll create a higher-priority custom restriction that blocks the personally owned subtypes.
+「You're all ready!」ダイアログで「完了」を選択してください。
 
-1. Under **Enrollment options**, select **Device platform restriction**.
+SEA-DEV2を再起動してください。
 
-1. Select **Android restriction → + Create restriction**.
+再起動後、サインアウトして以下のようにサインインしてください:
 
-1. On the **Basics** tab, enter:
-   - **Name:** `Android - Block personal`
-   - **Description:** `Block personally owned Android enrollment; allow corporate-owned Android Enterprise only`
+ユーザー: JoniS@<TenantPrefix>.OnMicrosoft.com
+パスワード:(ジョニ・シャーマンのパスワード)
+Microsoft EntraおよびIntuneでSEA-DEV2の登録に成功しました。
 
-1. Select **Next**.
+タスク4:両方のデバイスが登録されていることを確認する
+SEA-DEV1に切り替えてください。SEA-DEV1のMicrosoft Intune管理センターで、「すべてのデバイス」→「デバイス」へ移動します。
 
-1. On the **Platform settings** tab, you'll see a table with two rows — **Android Enterprise (work profile)** and **Android device administrator** — each with its own **Platform** (Allow/Block) and **Personally owned** (Allow/Block) toggle, plus optional version range and device manufacturer filters. There's no separate row or toggle for "corporate-owned"; ownership is set per-row via **Personally owned**. Leaving **Platform** set to **Allow** while **Personally owned** is set to **Block** means that the row still allows the type when it's corporate-owned.
+デバイスリストにSEA-DEV1とSEA-DEV2の両方が表示されているか確認してください。
 
-   Configure:
-   - **Android Enterprise (work profile) → Platform:** Allow
-   - **Android Enterprise (work profile) → Personally owned:** Block
-   - **Android device administrator → Platform:** Block (legacy DA enrollment is end-of-life — you'll also see a banner noting Intune ended support for Android device administrator management on GMS devices as of December 31, 2024)
-   - **Android device administrator → Personally owned:** Block (greyed out since the row is already blocked)
+dyn-Windows-Devicesの動的グループに両方のデバイスが含まれていることを確認します:
 
-   Leave version range and device manufacturer blank on both rows.
+Microsoft Intune管理センターで「すべてのグループ」→「グループ」へ移動します。
+dyn-Windows-Devicesを選択します。
+「メンバー」タブを選択してください。
+SEA-DEV1およびSEA-DEV2がリストされているか確認してください(動的グループメンバーシップの更新に5〜10分かかることがあります)。
+両方のデバイスが登録され、自動的に動的デバイスグループに追加されていることを確認できました。
 
-   > [!NOTE]
-   > Net effect: personally owned Android Enterprise work-profile (BYOD) devices are blocked; corporate-owned Android Enterprise work-profile devices are allowed (Platform = Allow covers them since only the personal subset is blocked); Android device administrator is blocked outright regardless of ownership.
+演習6:Windowsオートパイロットの設定
+シナリオ
+Windows Autopilotは、デバイスをMicrosoft Entra IDに自動で接続し、Out-of-Box体験(OOBE)中にIntuneに登録することでデバイスプロビジョニングを効率化します。Autopilot用にSEA-DEV3を登録し、デプロイプロファイルを作成し、デバイスに割り当てます。
 
-1. Select **Next**.
+注記
 
-1. On the **Scope tags** tab, leave the **default** scope tag (this restriction is tenant-wide, not Pharmacy-scoped). Select **Next**.
+ラボでの時間の制約により、完全なオートパイロットOOBE(デバイスをリセットする必要があります)は実施できません。Autopilotの導入ワークフローを理解するために、登録と設定の手順を完了します。
 
-1. On the **Assignments** tab, under **Included groups**, select **Add groups**, search and select **sg-Intune-Pilot-Users**, and then select **Next**.
+注記
 
-1. On the **Review + create** tab, select **Create**.
+これはクラシックなAutopilot(ハードウェアハッシュベース)であり、Windows Autopilotのデバイス準備ではありません。デバイス準備は、ユーザー主導の物理デバイスなど対応シナリオでは手動ハッシュ登録を完全に省略した、よりシンプルで新しい再構築です。デバイスは登録時にセキュリティグループに追加されます。しかし、事前プロビジョニング、セルフデプロイ、既存デバイス、ハイブリッドジョイン、オートパイロットリセットシナリオはまだサポートしていません。これらは依然としてクラシックなオートパイロットが必要です。手動ハードウェアハッシュ登録(ここであなたが行っていること)は、Microsoft独自のテストと評価のための文書化されたアプローチであり、まさにこのラボの文脈です。生産登録は通常、OEM/再販業者/CSPを通じて自動的に行われます。
 
-1. On the **Enrollment restrictions** page, confirm `Android - Block personal` appears in the list with priority **1** (above **Default**). Higher-priority restrictions evaluate first.
+タスク1:SEA-DEV3用のAutopilotハードウェアハッシュを生成する
+オートパイロットのハードウェアハッシュはデバイスを一意に識別し、オートパイロット登録に必要です。
 
-   > [!NOTE]
-   > In production, you'd typically do this for every platform you don't manage (block personal iOS, block Linux, etc.). The Pharmacy clinical workload at Contoso explicitly forbids personal devices on the network because Contoso can't enforce encryption, jailbreak detection, or app-protection baselines on devices it doesn't own.
+SEA-DEV3に切り替えてください。
 
-**You have successfully blocked personally owned Android device enrollment.**
+ローカル管理者アカウントでサインインしてください:
 
----
+ユーザー名: Admin
+パスワード:(ラボ環境提供)
+スタートボタンを右クリックして「ターミナル(管理者)」を選択してください。Windows 11では、パワーユーザーメニューにWindowsターミナルが表示されており、デフォルトでPowerShellタブを開きます。
 
-## Exercise 5: Enroll Windows devices
+「このアプリにデバイスの変更を許可したいですか?」ダイアログで「はい」を選択してください。
 
-### Scenario
+PowerShellセッション中に出力ファイルのフォルダを作成し、Get-WindowsAutopilotInfoスクリプトをインストールします(これはPowerShellギャラリースクリプトで、モジュールではありません):
 
-You'll now enroll two Windows 11 devices (SEA-DEV1 and SEA-DEV2) into Intune by performing a Microsoft Entra join. This simulates a user-driven enrollment scenario where an employee joins their device to the corporate tenant.
+New-Item -ItemType Directory -Path C:\Autopilot -Force
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+Install-Script -Name Get-WindowsAutopilotInfo -Force
+インストール完了後、Autopilotハードウェアハッシュを生成し、CSVファイルにエクスポートします。
 
-### Task 1: Perform a Microsoft Entra join and enrollment on SEA-DEV1
+Get-WindowsAutopilotInfo -OutputFile C:\Autopilot\SEA-DEV3-AutopilotHash.csv
+CSVファイルが実際に作成されたか確認してください:
 
-1. On **SEA-DEV1**, sign out of the current session if signed in.
+Test-Path C:\Autopilot\SEA-DEV3-AutopilotHash.csv
+出力はTrueを返すはずです。
 
-1. At the Windows sign-in screen, select **Admin** from the account list in the lower-left corner. (If **Admin** isn't listed, select **Other user** and enter the username `Admin`.)
+ハードウェアハッシュがキャプチャされたかを確認するためにCSVファイルを開きます:
 
-1. Sign in with the local administrator account:
-   - **Username:** `Admin`
-   - **Password:** (provided by your lab environment)
+notepad C:\Autopilot\SEA-DEV3-AutopilotHash.csv
+CSVの内容を確認しましょう。以下を含むべきです:
 
-1. After signing in, open **Settings** (press `Windows + I`).
+デバイスシリアル番号
+Windows製品ID
+ハードウェアハッシュ(長いbase64エンコード文字列)
+メモ帳を閉じる。
 
-1. Navigate to **Accounts** → **Access work or school**.
+SEA-DEV3のAutopilotハードウェアハッシュを正常に生成しました。
 
-1. Select **Connect**.
+タスク2:ハードウェアハッシュをIntuneにアップロードする
+SEA-DEV1に切り替えてください。
 
-1. In the **Set up a work or school account** dialog, select **Join this device to Microsoft Entra ID**.
+Microsoft Edgeでは https://intune.microsoft.com に移動し(必要に応じて管理者としてサインインしてください)。
 
-1. On the **Sign in** dialog, enter the following and select **Next**:
-   - **Email address:** `MeganB@<TenantPrefix>.OnMicrosoft.com`
+Microsoft Intune管理センターで「デバイス」を選択し、デバイスオンボーディングの「登録」を選択してください。
 
-1. On the **Enter password** dialog, enter Megan Bowen's password and select **Sign in**.
+Windows Autopilotで「デバイス」を選択してください。
 
-1. On the **Make sure this is your organization** dialog, verify the tenant is **<TenantPrefix>.onmicrosoft.com** and select **Join**.
+トップのツールバーから「インポート」を選択します。
 
-1. On the **You're all set!** page, select **Done**.
+「自動操縦デバイス追加」パネルで、CSVファイルを閲覧するためにフォルダアイコンを選択します。
 
-   > [!NOTE]
-   > The device is now Microsoft Entra joined and automatically enrolled in Intune. Megan sees the Enrollment Status Page you configured in Exercise 4 while apps and policies are applied. Because Megan isn't in the `sg-Intune-Pilot-Users` group, she gets the non-blocking **Default** profile rather than the stricter **ESP - Pilot - Blocking** profile.
+\\SEA-DEV3\C$\Autopilot\へ移動するか(または共有フォルダやUSBを使ってSEA-DEV3のCSVファイルをSEA-DEV1にコピーしてください)。
 
-**You have successfully enrolled SEA-DEV1 in Microsoft Entra and Intune.**
+[!注] SEA-DEV1からSEA-DEV3のファイルシステムにアクセスできない場合は、手動でCSVファイルをSEA-DEV1にコピーしてください(例:USBドライブに保存するか、ラボプラットフォームのファイル転送機構を利用するなど)。
 
----
+SEA-DEV3-AutopilotHash.csvを選択して「開く」を選択してください。
 
-### Task 2: Verify SEA-DEV1 enrollment in the Intune admin center
+「自動パイロットデバイスを追加」ペインで「インポート」を選択してください。
 
-1. On **SEA-DEV1**, open **Microsoft Edge** and navigate to **https://intune.microsoft.com**.
+インポートが完了するまで待ちましょう。インポートが完了すると通知が表示されます(通常1〜2分)。
 
-1. Sign in as **admin@<TenantPrefix>.onmicrosoft.com** (if not already signed in).
+インポートが完了したら、デバイスページを更新してください。AutopilotデバイスリストにSEA-DEV3が表示されるはずです。
 
-1. In the **Microsoft Intune admin center**, select **Devices**, and then select **All devices**.
+[!注] デバイスが完全に同期してリストに表示されるまでに5〜10分かかることがあります。デバイスがすぐに表示されない場合は、定期的にページを更新してください。
 
-1. Verify that **SEA-DEV1** appears in the device list with:
-   - **Managed by:** Intune
-   - **Ownership:** Corporate
-   - **Compliance:** Compliant (may show "Not evaluated" initially)
+SEA-DEV3ハードウェアハッシュをIntuneに正常にアップロードしました。
 
-1. Select **SEA-DEV1** from the list to view device details.
+タスク3:Windowsオートパイロット展開プロファイルを作成する
+オートパイロット展開プロファイルはOBE体験を定義し、設定時にユーザーが設定できる設定を決定します。
 
-1. Review the following tabs:
-   - **Overview:** Device name, operating system, compliance status, and last check-in time.
-   - **Hardware:** Serial number, TPM version, total storage space
-   - **Discovered apps:** (will populate over time as app inventory syncs)
+Microsoft Intune管理センターのデバイス|上で登録ページから、Windows Autopilotの「デプロイメントプロファイル」を選択してください。
 
-1. Tag this device as a Pharmacy clinical device so the delegated **Pharmacy Helpdesk** admin can see and act on it in later labs. On the **SEA-DEV1** device page, under **Manage**, select **Properties**.
+Windows PC→プロファイルを作成を選択します。
 
-1. Next to **Scope tags**, select **Open** to open the **Select tags** pane.
+「ベーシック」タブで、以下を入力してください:
 
-1. In the **Select tags** pane, select **Pharmacy** (the scope tag you created in **Exercise 2 Task 6**), then select **Select**.
+名前: Autopilot User Driven Profile
+説明: User driven Microsoft Entra join profile for Windows Autopilot
+対象となるすべてのデバイスをオートパイロットに変換する:いいえ
+「次」を選択します。
 
-1. Select **Save**.
+Out-of-Box体験(OOBE)タブで、以下の設定を行います:
 
-**You have successfully verified SEA-DEV1 enrollment in Intune.**
+展開モード:ユーザー主導
+Microsoft Entra IDへの参加は以下の通りです:Microsoft Entraが参加
+マイクロソフトソフトウェアライセンス条件:隠れて
+プライバシー設定:隠れて
+アカウント変更オプションを非表示:隠れて
+ユーザーアカウントタイプ:標準
+事前プロビジョニング展開を許可する:いいえ
+デバイス名テンプレートを適用:いいえ
+[!注] この構成により、不要なプロンプトを隠すことでOOBEが簡素化されます。ユーザーはMicrosoft Entraの認証情報でサインインし、デバイスは自動的に設定されます。
 
----
+Scopeタグをスキップするには「次へ」と「次へ」を再度選択してください。
 
-### Task 3: Perform a Microsoft Entra join and enrollment on SEA-DEV2
+割り当てタブの「グループを含める」の「グループを追加」を選択してください。
 
-1. Switch to **SEA-DEV2**.
+dyn-Autopilot-Devicesを検索して選択してください。
 
-1. Sign in with the local administrator account:
-   - **Username:** `Admin`
-   - **Password:** (provided by your lab environment)
+選択。
 
-1. Open **Settings** (`Windows + I`).
+[!注] プロファイルをに割り当てることで、Autopilotに登録されているか否かに関わらず、自動的にこのデプロイメントプロファイルを受け取ります。これがSEA-DEV3のプロファイルステータスがタスク4で割り当てられた状態になるのです。dyn-Autopilot-Devices
 
-1. Navigate to **Accounts** → **Access work or school**.
+「次」を選択します。
 
-1. Select **Connect**.
+レビュー+作成タブで設定を確認し、「作成」を選択してください。
 
-1. In the **Set up a work or school account** dialog, select **Join this device to Microsoft Entra ID**.
+Windows Autopilotのデプロイメントプロファイルを作成できた。
 
-1. On the **Sign in** dialog, enter:
-   - **Email address:** `JoniS@<TenantPrefix>.OnMicrosoft.com`
-   - Select **Next**
+タスク4:SEA-DEV3のオートパイロットプロファイルの状態を確認する
+Microsoft Intune管理センターで、Windows Autopilotの「Devices → Enrollment → Devices」へ移動してください。
 
-1. On the **Enter password** dialog, enter Joni Sherman's password and select **Sign in**.
+AutopilotデバイスリストからSEA-DEV3を選択します。
 
-1. On the **Make sure this is your organization** dialog, select **Join**.
+デバイスの詳細を確認してください:
 
-1. On the **You're all set!** dialog, select **Done**.
+プロフィールの状況:これで「割り当て済み」と表示されるはずです(動的グループが生成され、プロファイル割り当てが同期されるまで数分かかるかもしれません)
+グループタグ:全くありません
+ユーザー:未割り当て
+[!注] 数分経っても「割り当てされていない」と表示されない場合は、デバイスリストのツールバーから同期を選択して強制的に同期してください。また、SEA-DEV3がメンバーとして実際に表示されているかを再確認してください(Groups → → Members)。もしSEA-DEV3がなければ、Task 3のルール構文を再確認してください。dyn-Autopilot-Devicesdyn-Autopilot-Devices
 
-1. Restart **SEA-DEV2**.
+デバイスのプロパティのペインを閉じます。
 
-1. After restart, sign out and sign in as:
-   - **User:** `JoniS@<TenantPrefix>.OnMicrosoft.com`
-   - **Password:** (Joni Sherman's password)
+オートパイロット展開プロファイルをSEA-DEV3に正常に割り当てました。
 
-**You have successfully enrolled SEA-DEV2 in Microsoft Entra and Intune.**
+タスク5:(任意)オートパイロットのOOBEフローを理解する
+本番環境では、次のステップはSEA-DEV3をリセットし、Autopilot OOBEを経ることです。こうなるでしょう:
 
----
+デバイスの起動:SEA-DEV3は電源が入ります(工場出荷時リセットまたは新しいデバイス)。
 
-### Task 4: Verify both devices are enrolled
+オートパイロット認識:OOBE中、WindowsはAutopilotサービスに接触し、ハードウェアハッシュによってデバイスを認識します。
 
-1. Switch to **SEA-DEV1**. On **SEA-DEV1**, in the **Microsoft Intune admin center**, navigate to **Devices** → **All devices**.
+プロフィールダウンロード:デバイスは割り当てられたAutopilotプロファイル()をダウンロードします。Autopilot User-Driven Profile
 
-1. Verify both **SEA-DEV1** and **SEA-DEV2** appear in the device list.
+簡易離体外感覚(OBBE):ユーザーはMicrosoftのブランドが入った簡略化されたOOBEを見ます:
 
-1. Verify the **dyn-Windows-Devices** dynamic group now contains both devices:
-   - In the **Microsoft Intune admin center**, navigate to **Groups** → **All groups**.
-   - Select **dyn-Windows-Devices**.
-   - Select the **Members** tab.
-   - Verify **SEA-DEV1** and **SEA-DEV2** are listed (may take 5–10 minutes for dynamic group membership to update).
+ライセンス条件やプライバシープロンプトはなし(プロフィール設定ごとに隠れています)
+ユーザーはMicrosoft Entraの認証情報(例:AlexW@<TenantPrefix>.OnMicrosoft.com)
+デバイスは自動的にMicrosoft Entra IDに参加し、Intuneに登録します
+政策適用:登録後、ユーザーがデスクトップに到達する前にIntuneのポリシー(設定プロファイル、コンプライアンスポリシー、アプリ)が適用されます。
 
-**You have successfully verified both devices are enrolled and automatically added to the dynamic device group.**
+ユーザーデスクトップ:ユーザーは完全に設定されたデバイスでデスクトップに到達します。
 
----
+注記
 
-## Exercise 6: Configure Windows Autopilot
+SEA-DEV3のリセットとライブオートパイロットOOBEの完了には20〜30分かかり、このラボの範囲外です。ただし、Autopilotの導入に必要な前提条件(ハードウェアハッシュ登録、プロファイル作成、割り当て)はすべて完了しています。
 
-### Scenario
+これでWindows Autopilotのデプロイワークフローが理解されました。
 
-Windows Autopilot streamlines device provisioning by automatically joining devices to Microsoft Entra ID and enrolling them in Intune during the out-of-box experience (OOBE). You'll register SEA-DEV3 for Autopilot, create a deployment profile, and assign it to the device.
+ラボ概要
+おめでとうございます!ラボ01:基礎 — アイデンティティ、登録、自動操縦を修了されました。
 
-> [!NOTE]
-> Due to lab time constraints, you will not perform a full Autopilot OOBE (which requires resetting the device). You'll complete the registration and configuration steps to understand the Autopilot deployment workflow.
+このラボで、あなたは以下のことを成し遂げました:
 
-> [!NOTE]
-> **This is classic Autopilot (hardware-hash based), not Windows Autopilot device preparation.** Device preparation is a newer, simpler re-architecture that skips manual hash registration entirely for its supported scenarios (user-driven, physical devices) — devices just enroll and get added to a security group at enrollment time. But it doesn't yet support pre-provisioned, self-deploying, existing-devices, hybrid join, or Autopilot Reset scenarios — those still require classic Autopilot. Manual hardware-hash registration (what you're doing here) is Microsoft's own documented approach for **testing and evaluation**, which is exactly this lab's context; production registration normally happens automatically via the OEM/reseller/CSP instead.
+演習1:ユーザーとグループの構成
 
-### Task 1: Generate the Autopilot hardware hash for SEA-DEV3
+既存のContosoユーザーを確認し、ライセンスを検証しました
+追加で2人のテストユーザーを作成しました
+パイロットユーザー向けに割り当てられたセキュリティグループを作成しました
+ポリシーターゲティングのための動的ユーザーおよびデバイスグループを作成しました
+演習2:行政委任の構成
 
-The Autopilot hardware hash uniquely identifies a device and is required for Autopilot registration.
+Intune管理者の役割に割り当てられた
+クラウドデバイス管理者の役割を割り当てました
+管理ユニットを作成し、管理アクセスの範囲を設定しました
+IntuneスコープタグとカスタムIntuneロールを作成しました(Labs 02–06にまたがって管理)PharmacyPharmacy Helpdesk
+演習3:デバイス登録と設定の設定を設定する
 
-1. Switch to **SEA-DEV3**.
+Microsoft Entra IDでデバイス結合設定を設定する
+Microsoft Entra参加デバイス用の追加のローカル管理者を追加しました
+Microsoft Entra LAPSを有効にしてローカル管理者パスワード管理を行った
+演習4:Windows登録ポリシーの設定
 
-1. Sign in with the local administrator account:
-   - **Username:** `Admin`
-   - **Password:** (provided by your lab environment)
+テナントの認証済み自動Intune登録
+初回体験をゲートするようデフォルト登録ステータスページを設定しました
+パイロットグループ用により厳格でブロック的な登録状況ページのプロフィールを作成しました
+デフォルト登録制限の見直し
+デバイス制限ポリシーを作成・割り当てました
+個人所有のAndroid登録をカスタムプラットフォーム制限でブロックしました
+演習5:Windowsデバイスの登録
 
-1. Right-click the **Start** button and select **Terminal (Admin)**. On Windows 11, the Power User menu lists Windows Terminal, which opens a PowerShell tab by default.
+Microsoft Entra Join を通じて MEGAN Bowen 名義で SEA-DEV1 登録
+Microsoft Entra Joni Sherman経由でSEA-DEV2に登録
+両方のデバイスをIntuneおよび動的グループメンバーで確認しました
+演習6:Windowsオートパイロットの設定
 
-1. In the **Do you want to allow this app to make changes to your device?** dialog, select **Yes**.
+SEA-DEV3用のAutopilotハードウェアハッシュを生成しました
+ハードウェアハッシュをIntuneにアップロードしました
+Windows Autopilotのデプロイプロファイルを作成しました
+プロファイルをSEA-DEV3に割り当てました
+主なポイント:
 
-1. In the PowerShell session, create a folder for the output file and install the **Get-WindowsAutopilotInfo** script (this is a PowerShell Gallery **script**, not a module):
+Microsoft Entra IDは現代のデバイス管理の基盤であり、Intuneに登録する前にデバイスは参加または登録しなければなりません
+動的グループはユーザーやデバイス属性に基づくポリシーターゲティングを自動化します。複合規則は規制または地域ごとのスコーピングの標準的なパターンです-and-or
+Microsoft Entra IDロール+管理ユニットはEntraレベルの権限を委任します;Intuneには、ポリシーやデバイス管理の委任用にカスタムロール+スコープタグを持つ別のRBACシステムがあります
+Scopeタグは初日(薬局)スレッドで作成し、後で作成するすべてのIntuneオブジェクトに通します。ポリシー作成時に適用して、委任された管理者モデルをそのまま保つようにしてください
+現代のクラウド専用テナントでは、デフォルトでIntuneの自動登録がオンになっています。明示的なMDMスコープ構成は主にハイブリッドアイデンティティと共同管理の課題です
+登録ステータスページはユーザーの初回実行体験を形作るもので、ターゲットを絞った優先度のあるプロフィールを活用して、パイロットユーザーにはより厳格でブロック的な体験を提供し、標準ユーザーにはより速いサインインを提供します
+デバイスプラットフォームの制限は、不正なプラットフォームや所有形態(例:個人用Androidのブロック、企業のAndroid Enterpriseの許可)に対する安全網です。
+Windows Autopilotは、OOBE中にデバイスの事前登録やデプロイプロファイルの適用を行うことで、デバイスのプロビジョニングを効率化します
+次のステップ:このラボに登録されたデバイス(SEA-DEV1およびSEA-DEV2)は、今後のラボで構成プロファイル、コンプライアンスポリシー、アプリケーション、セキュリティベースラインの展開に使用されます。Lab 02は、Intuneポリシーを用いたこれらのデバイスの管理と保守に焦点を当てています。
 
-   ```powershell
-   New-Item -ItemType Directory -Path C:\Autopilot -Force
-   Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
-   Install-Script -Name Get-WindowsAutopilotInfo -Force
-   ```
-
-1. After installation completes, generate the Autopilot hardware hash and export it to a CSV file:
-
-   ```powershell
-   Get-WindowsAutopilotInfo -OutputFile C:\Autopilot\SEA-DEV3-AutopilotHash.csv
-   ```
-
-1. Verify the CSV file was created:
-
-   ```powershell
-   Test-Path C:\Autopilot\SEA-DEV3-AutopilotHash.csv
-   ```
-
-   The output should return **True**.
-
-1. Open the CSV file to verify the hardware hash was captured:
-
-   ```powershell
-   notepad C:\Autopilot\SEA-DEV3-AutopilotHash.csv
-   ```
-
-1. Review the CSV contents. It should contain:
-   - **Device Serial Number**
-   - **Windows Product ID**
-   - **Hardware Hash** (long base64-encoded string)
-
-1. Close Notepad.
-
-**You have successfully generated the Autopilot hardware hash for SEA-DEV3.**
-
----
-
-### Task 2: Upload the hardware hash to Intune
-
-1. Switch to **SEA-DEV1**.
-
-1. In **Microsoft Edge**, navigate to **https://intune.microsoft.com** (sign in as admin if needed).
-
-1. In the **Microsoft Intune admin center**, select **Devices**, and under **Device onboarding**, select **Enrollment**.
-
-1. Under **Windows Autopilot**, select **Devices**.
-
-1. Select **Import** from the top toolbar.
-
-1. In the **Add Autopilot devices** pane, select the folder icon to browse for the CSV file.
-
-1. Navigate to **\\\SEA-DEV3\C$\Autopilot\\** (or copy the CSV file from SEA-DEV3 to SEA-DEV1 using a shared folder or USB).
-
-   > [!NOTE]
-   > If you cannot access SEA-DEV3's file system from SEA-DEV1, manually copy the CSV file to SEA-DEV1 (e.g., save to a USB drive, or use the lab platform's file transfer mechanism).
-
-1. Select **SEA-DEV3-AutopilotHash.csv** and select **Open**.
-
-1. In the **Add Autopilot devices** pane, select **Import**.
-
-1. Wait for the import to complete. A notification will appear when the import finishes (typically 1–2 minutes).
-
-1. After import completes, refresh the **Devices** page. You should see **SEA-DEV3** appear in the Autopilot devices list.
-
-   > [!NOTE]
-   > It may take 5–10 minutes for the device to fully sync and appear in the list. If the device doesn't appear immediately, refresh the page periodically.
-
-**You have successfully uploaded the SEA-DEV3 hardware hash to Intune.**
-
----
-
-### Task 3: Create a Windows Autopilot deployment profile
-
-Autopilot deployment profiles define the OOBE experience and determine which settings users can configure during setup.
-
-1. In the **Microsoft Intune admin center**, on the **Device | Enrollment** page, select **Deployment Profiles** (under Windows Autopilot).
-
-1. Select **Create profile** → **Windows PC**.
-
-1. On the **Basics** tab, enter:
-   - **Name:** `Autopilot User Driven Profile`
-   - **Description:** `User driven Microsoft Entra join profile for Windows Autopilot`
-   - **Convert all targeted devices to Autopilot:** No
-
-1. Select **Next**.
-
-1. On the **Out-of-box experience (OOBE)** tab, configure the following:
-   - **Deployment mode:** User-driven
-   - **Join to Microsoft Entra ID as:** Microsoft Entra joined
-   - **Microsoft Software License Terms:** Hide
-   - **Privacy Settings:** Hide
-   - **Hide change account options:** Hide
-   - **User account type:** Standard
-   - **Allow pre-provisioned deployment:** No
-   - **Apply device name template:** No
-
-   > [!NOTE]
-   > This configuration simplifies the OOBE by hiding unnecessary prompts. Users will sign in with their Microsoft Entra credentials, and the device will be automatically configured.
-
-1. Select **Next** and **Next** again to skip **Scope tags**.
-
-1. On the **Assignments** tab, under **Include groups**, select **Add groups**.
-
-1. Search for and select **dyn-Autopilot-Devices**.
-
-1. Select **Select**.
-
-   > [!NOTE]
-   > By assigning the profile to `dyn-Autopilot-Devices`, any device registered in Autopilot — enrolled or not — automatically receives this deployment profile, which is what actually lets SEA-DEV3's Profile status reach **Assigned** in Task 4.
-
-1. Select **Next**.
-
-1. On the **Review + create** tab, review the settings and select **Create**.
-
-**You have successfully created a Windows Autopilot deployment profile.**
-
----
-
-### Task 4: Review the Autopilot profile status for SEA-DEV3
-
-1. In the **Microsoft Intune admin center**, navigate to **Devices** → **Enrollment** → **Devices** (under Windows Autopilot).
-
-1. Select **SEA-DEV3** from the Autopilot devices list.
-
-1. Review the device details:
-   - **Profile status:** Should now show **Assigned** (it may take a few minutes for the dynamic group to populate and the profile assignment to sync)
-   - **Group tag:** None
-   - **User:** unassigned 
-
-   > [!NOTE]
-   > If it still shows "Not assigned" after several minutes, select **Sync** from the toolbar on the **Devices** list to force a sync. Also double check `dyn-Autopilot-Devices` actually shows SEA-DEV3 as a member (**Groups** → `dyn-Autopilot-Devices` → **Members**) — if SEA-DEV3 isn't there, re-check the rule syntax from Task 3.
-
-1. Close the device properties pane.
-
-**You have successfully assigned the Autopilot deployment profile to SEA-DEV3.**
-
----
-
-### Task 5: (Optional) Understand the Autopilot OOBE flow
-
-In a production environment, the next step would be to reset SEA-DEV3 and go through the Autopilot OOBE. Here's what would happen:
-
-1. **Device boots:** SEA-DEV3 is powered on (factory-reset or new device).
-
-1. **Autopilot recognition:** During OOBE, Windows contacts the Autopilot service and recognizes the device by its hardware hash.
-
-1. **Profile download:** The device downloads the assigned Autopilot profile (`Autopilot User-Driven Profile`).
-
-1. **Simplified OOBE:** The user sees a simplified OOBE with Microsoft branding:
-   - No license terms or privacy prompts (hidden per profile settings)
-   - User signs in with Microsoft Entra credentials (e.g., `AlexW@<TenantPrefix>.OnMicrosoft.com`)
-   - Device automatically joins Microsoft Entra ID and enrolls in Intune
-
-1. **Policy application:** After enrollment, Intune policies (configuration profiles, compliance policies, apps) are applied before the user reaches the desktop.
-
-1. **User desktop:** The user reaches the desktop with a fully configured device.
-
-> [!NOTE]
-> Resetting SEA-DEV3 and completing a live Autopilot OOBE takes 20–30 minutes and is beyond the scope of this lab. However, you've completed all the prerequisites (hardware hash registration, profile creation, and assignment) required for Autopilot deployment.
-
-**You now understand the Windows Autopilot deployment workflow.**
-
----
-
-## Lab Summary
-
-Congratulations! You've completed Lab 01: Foundation — Identity, enrollment, and Autopilot.
-
-In this lab, you accomplished the following:
-
-**Exercise 1: Configure users and groups**
-- Reviewed existing Contoso users and verified licensing
-- Created two additional test users
-- Created an assigned security group for pilot users
-- Created dynamic user and device groups for policy targeting
-
-**Exercise 2: Configure administrative delegation**
-- Assigned the Intune Administrator role
-- Assigned the Cloud Device Administrator role
-- Created an administrative unit and scoped administrative access
-- Created the `Pharmacy` Intune scope tag and the `Pharmacy Helpdesk` custom Intune role (threaded across Labs 02–06)
-
-**Exercise 3: Configure device registration and settings**
-- Configured device join settings in Microsoft Entra ID
-- Added additional local administrators for Microsoft Entra joined devices
-- Enabled Microsoft Entra LAPS for local administrator password management
-
-**Exercise 4: Configure Windows enrollment policies**
-- Verified automatic Intune enrollment for the tenant
-- Configured the Default Enrollment Status Page to gate the first-run experience
-- Created a stricter, blocking Enrollment Status Page profile for the pilot group
-- Reviewed default enrollment restrictions
-- Created and assigned a device limit restriction policy
-- Blocked personally owned Android enrollment with a custom platform restriction
-
-**Exercise 5: Enroll Windows devices**
-- Enrolled SEA-DEV1 (as Megan Bowen) via Microsoft Entra join
-- Enrolled SEA-DEV2 (as Joni Sherman) via Microsoft Entra join
-- Verified both devices in Intune and dynamic group membership
-
-**Exercise 6: Configure Windows Autopilot**
-- Generated the Autopilot hardware hash for SEA-DEV3
-- Uploaded the hardware hash to Intune
-- Created a Windows Autopilot deployment profile
-- Assigned the profile to SEA-DEV3
-
-**Key Takeaways:**
-- Microsoft Entra ID is the foundation for modern device management—devices must be joined or registered before enrolling in Intune
-- Dynamic groups automate policy targeting based on user or device attributes; compound rules using `-and`/`-or` are the canonical pattern for regulatory or per-region scoping
-- Microsoft Entra ID roles + administrative units delegate Entra-level permissions; Intune has a **separate** RBAC system with **custom roles + scope tags** for delegating policy and device administration
-- Scope tags created on day one (Pharmacy) thread through every Intune object you create later — apply them at policy creation time to keep the delegated admin model intact
-- In modern cloud-only tenants, automatic Intune enrollment is on by default; explicit MDM-scope configuration is primarily a hybrid identity and co-management concern
-- The Enrollment Status Page is what shapes the user's first-run experience—use targeted, prioritized profiles to give pilot users a stricter, blocking experience and standard users a faster sign-in
-- Device platform restrictions are the safety net against unauthorized platforms or ownership types (e.g., personal Android blocked, corporate Android Enterprise allowed)
-- Windows Autopilot streamlines device provisioning by pre-registering devices and applying deployment profiles during OOBE
-
-**Next Steps:**
-The devices you enrolled in this lab (SEA-DEV1 and SEA-DEV2) will be used in subsequent labs to deploy configuration profiles, compliance policies, applications, and security baselines. Lab 02 focuses on managing and maintaining these devices using Intune policies.
-
----
-
-**END OF LAB**
+実験終了
