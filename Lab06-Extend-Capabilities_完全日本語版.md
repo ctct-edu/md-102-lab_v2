@@ -93,7 +93,7 @@ Endpoint Privilege Management を使用すると、完全な管理者権限を�
 
 1. **作成**を選択します。
 
-1. **基本**ページで、次を入力します。
+1. **基本情報**ページで、次を入力します。
    - **名前:** `EPM Settings - Default Behavior`
    - **説明:** `Default EPM settings for the Contoso fleet`
 
@@ -131,7 +131,7 @@ Endpoint Privilege Management を使用すると、完全な管理者権限を�
 
 1. **プロファイルの作成**ペインで、**プラットフォーム**を **Windows** に、**プロファイル**を **昇格ルール ポリシー**に設定します。**作成**を選択します。
 
-1. **基本**ページで、次を入力します。
+1. **基本情報**ページで、次を入力します。
    - **名前:** `EPM Rules - Automatic Elevation`
    - **説明:** `Allows Registry Editor to always run elevated`
 
@@ -173,7 +173,7 @@ Endpoint Privilege Management を使用すると、完全な管理者権限を�
 
 1. **プロファイルの作成**ペインで、**プラットフォーム**を **Windows** に、**プロファイル**を **昇格ルール ポリシー**に設定します。**作成**を選択します。
 
-1. **基本**タブで、次を入力します。
+1. **基本情報**タブで、次を入力します。
    - **名前:** `EPM Rules - User Confirmed Elevation`
    - **説明:** `Prompts user to approve elevation for MSConfig`
 
@@ -212,7 +212,7 @@ Endpoint Privilege Management を使用すると、完全な管理者権限を�
 
 1. **プロファイルの作成**ペインで、**プラットフォーム**を **Windows** に、**プロファイル**を **昇格ルール ポリシー**に設定します。**作成**を選択します。
 
-1. **基本**タブで、次を入力します。
+1. **基本情報**タブで、次を入力します。
    - **名前:** `EPM Rules - Support Approved Elevation`
    - **説明:** `Requires help desk approval for CMD elevation`
 
@@ -230,7 +230,7 @@ Endpoint Privilege Management を使用すると、完全な管理者権限を�
 1. **SEA-DEV1** で、昇格された PowerShell ウィンドウを開き、次のコマンドを実行して `cmd.exe` の SHA256 ハッシュを取得し、そのハッシュ値をルールのプロパティ ペインの **ファイル ハッシュ**フィールドにコピーします。
      ```powershell
      Get-FileHash -Path "C:\Windows\System32\cmd.exe" -Algorithm SHA256
-     ```   
+     ```
 
 1. **保存** → **次へ**の順に選択します。
 

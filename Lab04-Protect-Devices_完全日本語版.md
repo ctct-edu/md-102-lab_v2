@@ -124,7 +124,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 4. **作成** を選択します。
 
-5. **基本** タブで、次を入力します。
+5. **基本情報** タブで、次を入力します。
    - **名前:** `EDR - Defender Onboarding`
    - **説明:** `Onboards Windows devices to Microsoft Defender for Endpoint`
 
@@ -145,7 +145,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 12. **次へ** を選択します。
 
-13. **確認と作成** タブで、**作成** を選択します。
+13. **レビューと作成** タブで、**作成** を選択します。
 
 **デバイスを Defender for Endpoint にオンボードする EDR ポリシーが正常に作成されました。**
 
@@ -194,7 +194,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 4. **プロファイルの作成** ペインで、**作成** を選択します。
 
-5. **基本** ページで、次を入力します。
+5. **基本情報** ページで、次を入力します。
    - **名前:** `Security Baseline - Defender for Endpoint`
    - **説明:** `Microsoft-recommended security settings for Defender for Endpoint`
 
@@ -227,7 +227,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 15. **次へ** を選択します。
 
-16. **確認と作成** タブで、**作成** を選択します。
+16. **レビューと作成** タブで、**作成** を選択します。
 
 **Microsoft Defender セキュリティ ベースラインが正常に展開されました。**
 
@@ -247,7 +247,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 4. **作成** を選択します。
 
-5. **基本** タブで、次を入力します。
+5. **基本情報** タブで、次を入力します。
    - **名前:** `Antivirus - Defender Configuration`
    - **説明:** `Configures real-time protection, cloud protection, and scan settings`
 
@@ -300,7 +300,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 4. **作成** を選択します。
 
-5. **基本** タブで、次を入力します。
+5. **基本情報** タブで、次を入力します。
    - **名前:** `Firewall - Defender Configuration`
    - **説明:** `Enables the firewall for all network profiles`
 
@@ -358,7 +358,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 4. **作成** を選択します。
 
-5. **基本** タブで、次を入力します。
+5. **基本情報** タブで、次を入力します。
    - **名前:** `ASR - Block (Pilot)`
    - **説明:** `ASR rules in Block mode for pilot cohort — real enforcement on a small group`
 
@@ -396,7 +396,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 3. **作成** を選択します。
 
-4. **基本** タブで、次を入力します。
+4. **基本情報** タブで、次を入力します。
    - **名前:** `ASR - Audit (Fleet)`
    - **説明:** `Same ASR rules in Audit mode for the broader fleet — generates Audit logs without enforcement`
 
@@ -437,7 +437,7 @@ BitLocker は OS ドライブ全体を暗号化し、保存データを保護し
 
 4. **作成** を選択します。
 
-5. **基本** タブで、次を入力します。
+5. **基本情報** タブで、次を入力します。
    - **名前:** `BitLocker - Full Disk Encryption`
    - **説明:** `Requires BitLocker encryption with TPM and PIN, recovery keys escrowed to Entra ID`
 
@@ -646,7 +646,7 @@ LIN-SRV1 に何かをインストールする前に、セットアップ スク�
 
 6. **作成** を選択して、新しい Tunnel サイトを作成します。
 
-7. **サイトの作成** ページの **基本** タブで、次を入力します。
+7. **サイトの作成** ページの **基本情報** タブで、次を入力します。
    - **名前:** `Contoso HQ Tunnel`
    - **説明:** `Microsoft Tunnel Gateway for mobile device VPN access`
 
@@ -667,7 +667,7 @@ LIN-SRV1 に何かをインストールする前に、セットアップ スク�
    >
    > SAN の不一致を避けるため、`LIN-SRV1.lab.local` を含むように証明書を再生成しない限り、サイトのエンドポイントは `192.168.1.100` のままにしてください。
 
-10. **確認と作成** タブに到達するまで **次へ** を選択し、続いて **作成** を選択します。
+10. **レビューと作成** タブに到達するまで **次へ** を選択し、続いて **作成** を選択します。
 
 **Intune で Tunnel サーバー構成とサイトが正常に作成されました。**
 
@@ -792,10 +792,11 @@ LIN-SRV1 に何かをインストールする前に、セットアップ スク�
 
 4. **作成** を選択します。
 
-5. **基本** タブで、次を入力します。
+5. **基本情報** タブで、次を入力します。
+   
    - **名前:** `VPN - Microsoft Tunnel for iOS/iPadOS`
    - **説明:** `VPN profile for secure access via Microsoft Tunnel Gateway for iOS/iPadOS devices`
-
+   
 6. **次へ** を選択します。
 
 7. **構成設定** タブでは、他のフィールドが表示される前に **接続の種類** を選択する必要があります。
@@ -844,7 +845,7 @@ Microsoft Cloud PKI（Intune Suite の一部）は、デバイスやユーザー
    > [!NOTE]
    > **+ 作成** を選択すると、**証明機関の作成** ウィザードが直接開きます。「Root CA」と「Issuing CA」を選択するドロップダウン メニューはありません。**CA の種類** は、ウィザード内の **構成設定** タブで選びます。
 
-3. **基本** タブで、次を入力します。
+3. **基本情報** タブで、次を入力します。
    - **名前:** `Contoso Root CA`
    - **説明:** `Microsoft Cloud PKI root CA for Contoso Healthcare`
 
@@ -870,7 +871,7 @@ Microsoft Cloud PKI（Intune Suite の一部）は、デバイスやユーザー
 
 10. **スコープ タグ** タブで、**Default** スコープ タグのままにします（Cloud PKI インフラストラクチャは通常テナント全体が対象です）。**次へ** を選択します。
 
-11. **確認と作成** タブで、概要を確認します。CA のプロパティは作成後に編集できません。誤りがある場合は、今すぐ **戻る** を選択します。
+11. **レビューと作成** タブで、概要を確認します。CA のプロパティは作成後に編集できません。誤りがある場合は、今すぐ **戻る** を選択します。
 
 12. **作成** を選択します。
 
@@ -886,7 +887,7 @@ Microsoft Cloud PKI（Intune Suite の一部）は、デバイスやユーザー
 
 1. **Cloud PKI** ページで、もう一度 **+ 作成** を選択します。
 
-2. **基本** タブで、次を入力します。
+2. **基本情報** タブで、次を入力します。
    - **名前:** `Contoso Issuing CA`
    - **説明:** `Microsoft Cloud PKI issuing CA anchored to Contoso Root CA`
 
@@ -907,11 +908,11 @@ Microsoft Cloud PKI（Intune Suite の一部）は、デバイスやユーザー
 
 7. **暗号化** の下では、**キーのサイズとアルゴリズム** が読み取り専用で、ルート CA から継承されている点に注意してください。**RSA-4096 and SHA-512** と表示され、発行 CA では変更できません。
 
-8. **次へ** → **スコープ タグ**（Default のまま）→ **次へ** → **確認と作成** の順に選択します。
+8. **次へ** → **スコープ タグ**（Default のまま）→ **次へ** → **レビューと作成** の順に選択します。
 
 9. **スコープ タグ** タブで、**次へ** を選択します。
 
-10. **確認と作成** タブで、**作成** を選択します。ルート CA が発行 CA の証明書に署名する間、プロビジョニングには 2 ～ 3 分かかります。
+10. **レビューと作成** タブで、**作成** を選択します。ルート CA が発行 CA の証明書に署名する間、プロビジョニングには 2 ～ 3 分かかります。
 
 **発行証明機関が正常に作成されました。**
 
@@ -948,7 +949,7 @@ Microsoft Cloud PKI（Intune Suite の一部）は、デバイスやユーザー
 
 4. **作成** を選択します。
 
-5. **基本** タブで、次を入力します。
+5. **基本情報** タブで、次を入力します。
    - **名前:** `Trusted Cert - Contoso Root CA`
    - **説明:** `Deploys the Contoso Root CA certificate to the Trusted Root store`
 
@@ -968,7 +969,7 @@ Microsoft Cloud PKI（Intune Suite の一部）は、デバイスやユーザー
 
 12. **適用性ルール** タブで、**次へ** を選択します。
 
-13. **確認と作成** タブで、**作成** を選択します。
+13. **レビューと作成** タブで、**作成** を選択します。
 
 14. 手順 1 ～ 13 を繰り返して、発行 CA 用に 2 つ目の信頼された証明書プロファイルを作成します。
     - **名前:** `Trusted Cert - Contoso Issuing CA`
@@ -993,7 +994,7 @@ SCEP（Simple Certificate Enrollment Protocol）プロファイルにより、�
 
 4. **作成** を選択します。
 
-5. **基本** タブで、次を入力します。
+5. **基本情報** タブで、次を入力します。
    - **名前:** `SCEP - Device Authentication`
    - **説明:** `Issues device authentication certificates from Cloud PKI`
 
@@ -1021,7 +1022,7 @@ SCEP（Simple Certificate Enrollment Protocol）プロファイルにより、�
 
 11. **適用性ルール** タブで、**次へ** を選択します。
 
-12. **確認と作成** タブで、**作成** を選択します。
+12. **レビューと作成** タブで、**作成** を選択します。
 
 **デバイス認証用の SCEP 証明書プロファイルが正常に作成されました。**
 

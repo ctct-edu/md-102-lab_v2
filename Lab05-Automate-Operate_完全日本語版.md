@@ -425,7 +425,7 @@ Microsoft Intune 管理センターの代わりに、Graph API を使用して W
 
 7. **+ 作成** を選択します。
 
-8. **基本** タブで、次を入力します。
+8. **基本情報** タブで、次を入力します。
 
    - **名前:** **Remediation - Clear Stale Windows Update Cache**
    - **説明:** **Detects and removes Windows Update cache files older than 30 days**
@@ -569,7 +569,7 @@ Intune のロールの割り当てでは、**セキュリティ グループの�
 
 8. **+ 割り当て** を選択します。
 
-9. **基本** ページで、次を入力します。
+9. **基本情報** ページで、次を入力します。
 
    - **割り当て名:** **Pharmacy Helpdesk - Lee Gu**
    - **説明:** **Grants Lee Gu Pharmacy-scoped helpdesk access**

@@ -96,7 +96,7 @@ Microsoft Store アプリは、Microsoft Store を通じて配布されるモダ
 
 1. **次へ** を選択します。
 
-1. **確認と作成** タブで **作成** を選択します。
+1. **レビューと作成** タブで **作成** を選択します。
 
 **Microsoft Store アプリの追加と割り当てが正常に完了しました。**
 
@@ -282,7 +282,7 @@ Win32 アプリは、従来型の Windows デスクトップ アプリケーシ�
 
 1. **次へ** を選択します。
 
-1. **確認と作成** タブで **作成** を選択します。
+1. **レビューと作成** タブで **作成** を選択します。
 
 **カスタム検出規則を使用して Win32 アプリを正常に追加しました。**
 
@@ -375,7 +375,7 @@ Microsoft 365 Apps (旧称 Office 365 ProPlus) は、Word、Excel、PowerPoint�
 
 1. **次へ** を選択します。
 
-1. **確認と作成** タブで **作成** を選択します。
+1. **レビューと作成** タブで **作成** を選択します。
 
 **Microsoft 365 Apps を正常に構成して割り当てました。**
 
@@ -519,7 +519,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
 
 1. **次へ** を選択します。
 
-1. **確認と作成** タブで **アプリの追加** を選択します。
+1. **レビューと作成** タブで **アプリの追加** を選択します。
 
 **Enterprise App Catalog からアプリを正常に追加して割り当てました。**
 
@@ -575,7 +575,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
    - **スコープ タグ:** **Pharmacy** を追加します (元のアプリと同じ)。両方のバージョンで Pharmacy の委任を一貫させます。
    - **割り当て:** **必須** を **sg-Intune-Pilot-Users** に割り当てます (元のアプリと同じ)。
 
-1. **確認と作成** タブで **作成** を選択します。
+1. **レビューと作成** タブで **作成** を選択します。
 
 **v1 から v2 へ自動的にアップグレードするアプリの置き換えを正常に構成しました。**
 
@@ -611,7 +611,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
 
 1. **作成** → **iOS/iPadOS** を選択して、新しいポリシーを作成します。
 
-1. **基本** タブで、次を構成します。
+1. **基本情報** タブで、次を構成します。
    - **名前:** `APP - iOS Data Protection`
    - **説明:** `Protects corporate data in Microsoft apps on iOS devices`
 
@@ -682,7 +682,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
 
 1. **次へ** を選択します。
 
-1. **確認と作成** タブで **作成** を選択します。
+1. **レビューと作成** タブで **作成** を選択します。
 
 **iOS アプリ保護ポリシーを正常に作成しました。**
 
@@ -692,7 +692,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
 
 1. **アプリ | 保護** ページで、**作成** → **Android** を選択して、新しいポリシーを作成します。
 
-1. **基本** ページで、次を構成します。
+1. **基本情報** ページで、次を構成します。
    - **名前:** `APP - Android Data Protection`
    - **説明:** `Protects corporate data in Microsoft apps on Android devices`
 
