@@ -933,7 +933,7 @@ Contoso Healthcare は、個人所有の Android スマートフォンが Intune
 
 5. 一覧から **SEA-DEV1** を選択して、デバイスの詳細を表示します。
 
-6. 次のタブを確認します:
+6. 次のメニューを確認します:
    - **概要:** デバイス名、オペレーティング システム、準拠状況、最終チェックイン時刻。
    - **ハードウェア:** シリアル番号、TPM バージョン、合計ストレージ容量
    - **検出されたアプリ:** (アプリ インベントリが同期されるにつれて、時間の経過とともに設定されます)
@@ -958,7 +958,7 @@ Contoso Healthcare は、個人所有の Android スマートフォンが Intune
    - **Username:** `Admin`
    - **Password:** (ラボ環境で提供されます)
 
-3. **Settings** を開きます (Windows + I)。
+3. スタートメニューから **Settings** を開きます。
 
 4. **Accounts** → **Access work or school** に移動します。
 
@@ -979,7 +979,7 @@ Contoso Healthcare は、個人所有の Android スマートフォンが Intune
 
 11. **SEA-DEV2** を再起動します。
 
-12. 再起動後、サインアウトして次のアカウントでサインインします:
+12. 再起動後、(Windowsサインイン画面で左下の Other user を選択して)次のアカウントでサインインします:
     - **User:** `JoniS@<TenantPrefix>.OnMicrosoft.com`
     - **Password:** (Joni Sherman のパスワード)
 
@@ -1023,7 +1023,7 @@ Autopilot ハードウェア ハッシュはデバイスを一意に識別する
    - **Username:** `Admin`
    - **Password:** (ラボ環境で提供されます)
 
-3. **Start** ボタンを右クリックして **Terminal (Admin)** を選択します。Windows 11 では、パワー ユーザー メニューに Windows Terminal が一覧表示され、既定で PowerShell タブが開きます。
+3. **Start** ボタンを右クリックして **Terminal (Admin)** を選択します。
 
 4. **Do you want to allow this app to make changes to your device?** ダイアログで、**Yes** を選択します。
 
@@ -1034,6 +1034,8 @@ Autopilot ハードウェア ハッシュはデバイスを一意に識別する
    Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
    Install-Script -Name Get-WindowsAutopilotInfo -Force
    ```
+
+   途中で応答が要求されたら **Y** 等を入力して受け入れてください。
 
 6. インストールが完了したら、Autopilot ハードウェア ハッシュを生成して CSV ファイルにエクスポートします:
 
@@ -1062,6 +1064,9 @@ Autopilot ハードウェア ハッシュはデバイスを一意に識別する
 
 10. Notepad を閉じます。
 
+
+    次のタスクに向けてファイルを転送するには、SEA-DEV3上でスタートメニューからOneDriveを起動し、ユーザー名 `admin@<TenantPrefix>.OnMicrosoft.com`でサインインします。OneDriveの初期設定が完了すると、.csvファイル(C:\Autopilot\SEA-DEV3-AutopilotHash.csv) をOneDriveフォルダーに保存できるようになります。
+
 **SEA-DEV3 の Autopilot ハードウェア ハッシュの生成が正常に完了しました。**
 
 ---
@@ -1070,9 +1075,13 @@ Autopilot ハードウェア ハッシュはデバイスを一意に識別する
 
 1. **SEA-DEV1** に切り替えます。
 
+   SEA-DEV1上でスタートメニューからOneDriveを起動し、ユーザー名 `admin@<TenantPrefix>.OnMicrosoft.com`でサインインします。OneDriveの初期設定が完了すると、.csvファイルにアクセスできるようになります。.csvファイルをいったんOneDriveからSEA-DEV1のデスクトップにコピーしてください。
+
 2. **Microsoft Edge** で **https://intune.microsoft.com** に移動します (必要に応じて管理者としてサインインします)。
 
-3. **Microsoft Intune 管理センター** で、**デバイス** を選択し、**デバイスのオンボード** の下で **登録** を選択します。
+   英語表記となりますので、日本語表記に変更した方が進めやすくなります。画面右上の歯車のマーク「Settings」をクリックした後、左の「Language + region」をクリックし、Language と Regional format でいずれも日本語を選択し、[Apply] - [OK] をクリックします。その後、画面左上の「Microsoft Intune 管理センター」のロゴをクリックして、Home 画面に戻ってください。
+
+3. **Microsoft Intune 管理センター** で、**デバイス** を選択し、**デバイスのオンボーディング** の下で **登録** を選択します。
 
 4. **Windows Autopilot** の下で、**デバイス** を選択します。
 
@@ -1083,7 +1092,7 @@ Autopilot ハードウェア ハッシュはデバイスを一意に識別する
 7. `\\SEA-DEV3\C$\Autopilot\` に移動します (または、共有フォルダーや USB を使用して SEA-DEV3 から SEA-DEV1 に CSV ファイルをコピーします)。
 
    > [!NOTE]
-   > SEA-DEV1 から SEA-DEV3 のファイル システムにアクセスできない場合は、CSV ファイルを SEA-DEV1 に手動でコピーします (例: USB ドライブに保存する、またはラボ プラットフォームのファイル転送機構を使用する)。
+   > その.csvファイルにアクセスするには、SEA-DEV1上でスタートメニューからOneDriveを起動し、ユーザー名 `admin@<TenantPrefix>.OnMicrosoft.com`でサインインします。OneDriveの初期設定が完了すると、.csvファイルにアクセスできるようになります。
 
 8. **SEA-DEV3-AutopilotHash.csv** を選択して **Open** を選択します。
 
