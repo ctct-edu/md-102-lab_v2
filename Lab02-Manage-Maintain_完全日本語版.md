@@ -548,7 +548,7 @@ Contoso には、オンプレミスの Active Directory 環境からの既存の
 
 ### タスク 1: グループ ポリシーのバックアップのインポート
 
-1. **SEA-DEV1** で、コースの GitHub ラボ リポジトリから GPO バックアップ ファイルを `C:\LabAssets\GPO-Backups\` にダウンロードします。
+1. **SEA-DEV1**  に切り替えます。コースの GitHub ラボ リポジトリから GPO バックアップ ファイルを `C:\LabAssets\GPO-Backups\` にダウンロードします。
 
    管理者特権の **Terminal (Admin)** ウィンドウを開き (Start を右クリックし、Terminal (Admin) を選択します。Windows Terminal は既定で PowerShell タブを開きます)、次を実行します。
 
@@ -662,7 +662,7 @@ Windows Update for Business ポリシー (更新プログラム リング) を�
 
 ### タスク 1: パイロット更新プログラム リングの作成
 
-1. **Microsoft Intune 管理センター** で **デバイス** を選択し、**プラットフォーム別** の下で **Windows** を選択して、Windows ブレードで **Windows 更新プログラム** を選択します。
+1. 手元 PC の **Microsoft Edge** で **Microsoft Intune 管理センター** にアクセスします。 **デバイス** を選択し、**プラットフォーム別** の下で **Windows** を選択して、Windows ブレードで **Windows 更新プログラム** を選択します。
 
    > [!NOTE]
    > ページ ヘッダーには **デバイス | Windows 更新プログラム** と表示されます。タブは **リリース**、**更新プログラム リング**、**機能更新プログラム**、**品質更新プログラム**、**ドライバー更新プログラム**、**監視** です。ページは **リリース** で開きます。次の手順でタブを切り替えます。
