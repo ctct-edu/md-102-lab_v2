@@ -225,6 +225,8 @@ Intune のポリシー ターゲット設定用に、割り当て済み (静的�
 
 1. ブラウザーで **https://entra.microsoft.com** に移動します。
 
+   英語表記となりますので、日本語表記に変更した方が進めやすくなります。画面右上の歯車のマーク「Settings」をクリックした後、左の「Language + region」をクリックし、Language と Regional format でいずれも日本語を選択し、[Apply] - [OK] をクリックします。その後、画面左上の「Microsoft Entra 管理センター」のロゴをクリックして、Home 画面に戻ってください。
+
 2. **Microsoft Entra 管理センター** の左側のナビゲーションで **グループ** を選択し、続いて **すべてのグループ** を選択します。
 
 3. 上部のツールバーから **新しいグループ** を選択します。
@@ -481,6 +483,8 @@ Microsoft Entra ID ロール (タスク 1～5) は、Entra レベルのアクセ
 **パート A — 薬局スコープ タグの作成**
 
 1. ブラウザーで **https://intune.microsoft.com** (Microsoft Intune 管理センター) に移動します。
+
+   英語表記となりますので、日本語表記に変更した方が進めやすくなります。画面右上の歯車のマーク「Settings」をクリックした後、左の「Language + region」をクリックし、Language と Regional format でいずれも日本語を選択し、[Apply] - [OK] をクリックします。その後、画面左上の「Microsoft Intune 管理センター」のロゴをクリックして、Home 画面に戻ってください。
 
 2. 左側のナビゲーションで、**テナント管理** を選択し、続いて **ロール** を選択します。
 
@@ -1075,8 +1079,6 @@ Autopilot ハードウェア ハッシュはデバイスを一意に識別する
    SEA-DEV1上でスタートメニューからOneDriveを起動し、ユーザー名 `admin@<TenantPrefix>.OnMicrosoft.com`でサインインします。OneDriveの初期設定が完了すると、.csvファイルにアクセスできるようになります。.csvファイルをいったんOneDriveからSEA-DEV1のデスクトップにコピーしてください。
 
 2. **Microsoft Edge** で **https://intune.microsoft.com** に移動します (必要に応じて管理者としてサインインします)。
-
-   英語表記となりますので、日本語表記に変更した方が進めやすくなります。画面右上の歯車のマーク「Settings」をクリックした後、左の「Language + region」をクリックし、Language と Regional format でいずれも日本語を選択し、[Apply] - [OK] をクリックします。その後、画面左上の「Microsoft Intune 管理センター」のロゴをクリックして、Home 画面に戻ってください。
 
 3. **Microsoft Intune 管理センター** で、**デバイス** を選択し、**デバイスのオンボーディング** の下で **登録** を選択します。
 
