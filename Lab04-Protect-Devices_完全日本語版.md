@@ -69,7 +69,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 #### パート A — Microsoft Defender ポータルから接続を確立する
 
-1. 手元 PC の日本語版 **Microsoft Edge** で新しいタブを開き、**https://security.microsoft.com** にアクセスします。
+1. SEA-DEV1の **Microsoft Edge** で新しいタブを開き、**https://security.microsoft.com** にアクセスします。
 
 2. **admin@<TenantPrefix>.onmicrosoft.com** でサインインします。
 
@@ -88,7 +88,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 #### パート B — Intune 管理センターからコネクタを構成する
 
-1. 手元 PC の日本語版 **Microsoft Edge** で **Microsoft Intune 管理センター** のタブに戻ります（または **https://intune.microsoft.com** を開きます）。
+1.  **Microsoft Edge** で **Microsoft Intune 管理センター** のタブに戻ります（または **https://intune.microsoft.com** を開きます）。
 
 2. **Microsoft Intune 管理センター** で **エンドポイント セキュリティ** を選択し、**セットアップ** セクションの下で **Microsoft Defender for Endpoint** を選択します。
 
@@ -153,7 +153,7 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 ### タスク 3: Microsoft Defender ポータルでデバイスのオンボードを確認する
 
-1. 手元 PC の日本語版 **Microsoft Edge** で新しいタブを開き、**https://security.microsoft.com** にアクセスします。
+1.  **Microsoft Edge** で新しいタブを開き、**https://security.microsoft.com** にアクセスします。
 
 2. まだサインインしていない場合は、**admin@<TenantPrefix>.onmicrosoft.com** でサインインします。
 
@@ -1065,7 +1065,7 @@ Microsoft Defender ポータルと Intune 管理センターを使用して、�
 
 ### タスク 1: Microsoft Defender セキュア スコアを確認する
 
-1. 手元 PC の日本語版 **Microsoft Edge** で、**https://security.microsoft.com** にアクセスします。
+1.  **Microsoft Edge** で、**https://security.microsoft.com** にアクセスします。
 
 2. **admin@<TenantPrefix>.onmicrosoft.com** でサインインします。
 
@@ -1112,7 +1112,7 @@ Microsoft Defender ポータルと Intune 管理センターを使用して、�
 > [!WARNING]
 > ポリシーを有効化する前に、**ブレークグラス用の除外がまだ設定されていることを確認してください**。グローバル管理者アカウントが **除外** の一覧に含まれていない場合は、先にそれを修正しないと、テナントから締め出されるおそれがあります。
 
-1. 手元 PC の日本語版 **Microsoft Edge** で新しいタブを開いて **https://entra.microsoft.com** にアクセスし、**admin@<TenantPrefix>.onmicrosoft.com** でサインインします。
+1. **Microsoft Edge** で新しいタブを開いて **https://entra.microsoft.com** にアクセスし、**admin@<TenantPrefix>.onmicrosoft.com** でサインインします。
 
 2. **ID セキュア スコア** → **条件付きアクセス** → **ポリシー** に移動します。
 

@@ -52,10 +52,7 @@ Microsoft Store アプリは、Microsoft Store を通じて配布されるモダ
 
 ### タスク 1: Microsoft Store アプリの追加
 
-1. 手元 PC で日本語版の **Microsoft Edge** を開き、**Microsoft Intune 管理センター** (**https://intune.microsoft.com**) を開きます。
-
-   > [!NOTE]
-   > このラボでは、Web 管理画面のみを操作する手順は、原則として受講者の手元 PC にある日本語版 Microsoft Edge で実施します。ラボ環境内で作成したファイルのアップロードや、SEA-DEV1 での動作確認が必要な操作では、明記されたラボ環境内のコンピューターを使用します。
+1. SEA-DEV1 で **Microsoft Edge** を開き、**Microsoft Intune 管理センター** (**https://intune.microsoft.com**) を開きます。
 
 1. **admin@`<TenantPrefix>`.onmicrosoft.com** としてサインインします。
 
@@ -70,7 +67,7 @@ Microsoft Store アプリは、Microsoft Store を通じて配布されるモダ
    > [!NOTE]
    > このポータルのフローは 2 段階の選択方式です。最初に **プラットフォーム** (Windows / iOS/iPadOS / macOS / Android) を選ぶと、**アプリの種類** の一覧がそのプラットフォーム向けに絞り込まれます。「新規」の Microsoft Store アプリの種類は Microsoft Store for Business のバックエンドを使用し、従来のコネクタよりも信頼性に優れています。
 
-1. **アプリ情報** タブで、**Microsoft Store アプリ (新規) を検索** を選択します。
+1. **アプリ情報** タブで、**Microsoft Store アプリ (新規) を検索する** を選択します。
 
 1. **Microsoft Store アプリ (新規) を検索** ペインで、`Microsoft To Do` を検索します。
 
@@ -79,10 +76,11 @@ Microsoft Store アプリは、Microsoft Store を通じて配布されるモダ
 1. **選択** を選択します。
 
 1. **アプリ情報** ページで、アプリの詳細を確認します。
-   - **名前:** Microsoft To Do
-   - **発行元:** Microsoft Corporation
+   
+   - **名前:** Microsoft To Do (違っていたら修正してください)
+   - **発行元:** Microsoft Corporation (違っていたら修正してください)
    - **説明:** (Store から自動入力)
-
+   
 1. **次へ** を選択し、続いてもう一度 **次へ** を選択して **スコープ タグ** タブをスキップします。
 
 1. **割り当て** ページの **必須** で、**グループの追加** を選択します。
@@ -104,12 +102,12 @@ Microsoft Store アプリは、Microsoft Store を通じて配布されるモダ
 
 ### タスク 2: SEA-DEV1 でのアプリ インストールの確認
 
-1. **SEA-DEV1** で、アプリが自動的にインストールされるまで 5～10 分待ちます。
+1. **SEA-DEV1** に切り替えます、アプリが自動的にインストールされるまで 5～10 分待ちます。
 
    > [!NOTE]
    > Intune は既定で 8 時間ごと、またはデバイスの同期時に新しいアプリの割り当てを確認します。同期を強制的に実行することで、インストールを早めることができます。
 
-1. デバイスの同期を強制するには、**Settings** を開きます (Windows + I キーを押します)。
+1. デバイスの同期を強制するために、スタートメニューから **Settings** を開きます (Windows + I キーを押します)。
 
 1. **Accounts** → **Access work or school** の順に移動します。
 
@@ -141,11 +139,13 @@ Win32 アプリは、従来型の Windows デスクトップ アプリケーシ�
 1. **SEA-DEV1** で、Win32 Content Prep Tool が `C:\Program Files\IntuneWinAppUtil\IntuneWinAppUtil.exe` に存在することを確認します。
 
    > [!NOTE]
-   > ツールが存在しない場合は、https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/releases からダウンロードし、指定されたパスへ展開します。
+   > ツールが存在しない場合は、**SEA-DEV1** のEdgeブラウザーで、https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/releases にアクセスして(「Source code(zip) 」のリンクから)ダウンロードし、指定されたパスへ展開します。
 
 1. **Microsoft Edge** を開き、公式の 7-Zip ダウンロード ページである **https://www.7-zip.org/download.html** (実際の作者である Igor Pavlov が公開) を開きます。
 
 1. 現在の **64-bit Windows x64 .msi** パッケージをダウンロードします (`.exe` インストーラーや、サード パーティ ミラーの「ポータブル」版ではありません)。
+
+   ダウンロード後、MSIを実行しないでください(次の移動コマンドが、ファイル使用中で失敗します)。
 
 1. ソース フォルダーを作成し、ダウンロードした MSI をその中へ移動します。
 
@@ -182,15 +182,17 @@ Win32 アプリは、従来型の Windows デスクトップ アプリケーシ�
    > [!NOTE]
    > セットアップ ファイルが MSI であるため、コンテンツ準備ツールは MSI の製品コード、バージョン、その他のメタデータを自動的に読み取り、`.intunewin` パッケージへ埋め込みます。これにより、タスク 2 で手動のファイル パス チェックではなく、MSI ベースの自動検出が可能になります。
 
+   確認があった場合は **Y** で受け入れてください。
+
 1. パッケージ化が完了するまで待ちます (通常 10～30 秒)。
 
 1. `.intunewin` ファイルが作成されたことを確認します (`<filename>` は同じファイル名に置き換えます)。
 
-   ```powershell
-   Test-Path "C:\LabAssets\Win32-App\Output\<filename>.intunewin"
-   ```
+    ```powershell
+    Test-Path "C:\LabAssets\Win32-App\Output\<filename>.intunewin"
+    ```
 
-   出力は **True** を返すはずです。
+    出力は **True** を返すはずです。
 
 **Intune Win32 Content Prep Tool を使用して Win32 アプリを正常にパッケージ化しました。**
 

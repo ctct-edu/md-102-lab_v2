@@ -47,9 +47,6 @@ lab:
 
 **重要:** これは MD-102 ラボ シリーズの基盤となるラボです。後続のすべてのラボは、このラボで完了した構成 (登録済みデバイス、ユーザー、グループ、ポリシー) を前提とします。
 
-> [!IMPORTANT]
-> **演習 2 を開始する前に、多要素認証 (MFA) の登録を完了してください。** 一部の Contoso ラボ テナントには、Azure 管理 API に対して `p1` (MFA) 認証コンテキストを適用する条件付きアクセス ポリシーがあります。これにより、管理者アカウントが MFA に登録されるまで、**entra.microsoft.com** と **intune.microsoft.com** へのアクセスがブロックされます。Microsoft 365 管理センター (**admin.cloud.microsoft**) は対象外であり、MFA なしで動作します。初回サインイン時に追加のセキュリティ確認の設定を求められた場合は、続行する前に Microsoft Authenticator のセットアップを完了してください。
-
 ---
 
 > [!IMPORTANT]
@@ -59,16 +56,16 @@ lab:
 >
 > 1. **Microsoft Intune 管理センター** (`intune.microsoft.com`) で、**テナント管理**を選択し、続いて **Intune アドオン**を選択します。
 > 2. **すべてのアドオン**タブを選択します。
-> 3. **Microsoft Intune Suite** の行で、**試用または購入**列の下にある **詳細の表示**を選択します。
-> 4. 詳細ペインで、**試用または購入するには、Microsoft 365 管理センターに移動します**を選択します。新しいタブが開き、Microsoft 365 管理センターの製品ページが表示されます。
-> 5. **Microsoft Intune Suite** のオファー ページで、**無料試用版を開始する**を選択します。
+> 3. **Microsoft Intune Suite** の行で、**試用または購入**列の下にある **詳細を表示します**を選択します。
+> 4. 詳細ペインで、**試用または購入するには、Microsoft 365 管理センターに移動してください**を選択します。新しいタブが開き、Microsoft 365 管理センターの製品ページが表示されます。
+> 5. **Microsoft Intune Suite** のオファー ページで、**無料試用の開始**を選択します。
 > 6. **チェックアウト**ページで、次の内容を確認します: **Microsoft Intune Suite Trial**、90 日間の期間、250 ライセンス、**USD 0.00**、支払い方法は不要。
 > 7. **編集**を選択し、組織プロファイル フォームに次の情報を入力してから、**保存**を選択します:
 > - **名**: `MOD`
 > - **姓**: `Administrator1`
-> - **住所 1**: `1 Microsoft Way`
+> - **町名、番地**: `1 Microsoft Way`
 > - **市区町村**: `Redmond`
-> - **都道府県**: `Washington`
+> - **都道府県**: `ワシントン`
 > - **郵便番号**: `98052`
 > - **電話**: `425-555-1234`
 > - **メール アドレス**: `admin@<TenantPrefix>.onmicrosoft.com`
@@ -89,7 +86,7 @@ Contoso には、複数の部署 (マーケティング、法務、IT、営業�
 
 ### タスク 1: 既存のユーザーとライセンスの確認
 
-1. 手元 PC の日本語版 **Microsoft Edge** で **https://admin.cloud.microsoft.com** を開きます。
+1. **SEA-DEV1** の日本語版 **Microsoft Edge** で **https://admin.cloud.microsoft.com** を開きます。
 
 2. **グローバル管理者**アカウントでサインインします:
    - **ユーザー名:** `admin@<TenantPrefix>.onmicrosoft.com`
@@ -226,7 +223,7 @@ Intune のポリシー ターゲット設定用に、割り当て済み (静的�
 
 動的グループは、ユーザー属性に基づいてメンバーシップを自動的に更新します。薬局の臨床ワークロード向けに、2 つの条件を -and で組み合わせた **複合ルール** を使用する動的グループを作成し、米国に所在する薬局部署のユーザーをターゲットにします。複合ルールは、規制対応やリージョン単位でのスコープ設定 (たとえば、Contoso Healthcare は米国の臨床ワークロードに対してより厳格なコンプライアンスを適用する) の標準的なパターンです。
 
-1. 手元 PC のブラウザーで **https://entra.microsoft.com** に移動します。
+1. ブラウザーで **https://entra.microsoft.com** に移動します。
 
 2. **Microsoft Entra 管理センター** の左側のナビゲーションで **グループ** を選択し、続いて **すべてのグループ** を選択します。
 
@@ -920,7 +917,7 @@ Contoso Healthcare は、個人所有の Android スマートフォンが Intune
 
 ### タスク 2: Intune 管理センターでの SEA-DEV1 登録の確認
 
-1. 手元 PC の日本語版 **Microsoft Edge** で **https://intune.microsoft.com** に移動します。
+1. **Microsoft Edge** で **https://intune.microsoft.com** に移動します。
 
 2. **admin@\<TenantPrefix\>.onmicrosoft.com** としてサインインします (まだサインインしていない場合)。
 
@@ -989,7 +986,7 @@ Contoso Healthcare は、個人所有の Android スマートフォンが Intune
 
 ### タスク 4: 両方のデバイスが登録されていることの確認
 
-1. 手元 PC の **Microsoft Intune 管理センター** で、**デバイス** → **すべてのデバイス** に移動します。
+1. **Microsoft Intune 管理センター** で、**デバイス** → **すべてのデバイス** に移動します。
 
 2. **SEA-DEV1** と **SEA-DEV2** の両方がデバイスの一覧に表示されていることを確認します。
 
@@ -1113,7 +1110,7 @@ Autopilot ハードウェア ハッシュはデバイスを一意に識別する
 
 Autopilot 展開プロファイルは、OOBE エクスペリエンスを定義し、ユーザーがセットアップ中に構成できる設定を決定します。
 
-1. 手元 PC の **Microsoft Intune 管理センター** で、**デバイス**   → **登録** に移動します。
+1. **Microsoft Intune 管理センター** で、**デバイス**   → **登録** に移動します。
 
 2. **Microsoft Intune 管理センター** の **デバイス | 登録** ページで、(Windows Autopilot の下の) **デプロイプロファイル** を選択します。
 
