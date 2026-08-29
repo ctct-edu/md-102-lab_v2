@@ -67,7 +67,7 @@ lab:
 
 設定カタログでは、Windows、macOS、iOS、Android にわたる数千もの個別の設定にアクセスできます。
 
-1. **SEA-DEV1** で **Microsoft Edge** を開き、**https://intune.microsoft.com** にアクセスします。
+1. 手元PCで **Microsoft Edge** を開き、**https://intune.microsoft.com** にアクセスします。
 
 2. **admin@<TenantPrefix>.onmicrosoft.com** としてサインインします。
 
@@ -662,7 +662,7 @@ Windows Update for Business ポリシー (更新プログラム リング) を�
 
 ### タスク 1: パイロット更新プログラム リングの作成
 
-1. 手元 PC の **Microsoft Edge** で **Microsoft Intune 管理センター** にアクセスします。 **デバイス** を選択し、**プラットフォーム別** の下で **Windows** を選択して、Windows ブレードで **Windows 更新プログラム** を選択します。
+1. 手元PCで **Microsoft Edge** を開き、**https://intune.microsoft.com** にアクセスします。 **デバイス** を選択し、**プラットフォーム別** の下で **Windows** を選択して、Windows ブレードで **Windows 更新プログラム** を選択します。
 
    > [!NOTE]
    > ページ ヘッダーには **デバイス | Windows 更新プログラム** と表示されます。タブは **リリース**、**更新プログラム リング**、**機能更新プログラム**、**品質更新プログラム**、**ドライバー更新プログラム**、**監視** です。ページは **リリース** で開きます。次の手順でタブを切り替えます。
