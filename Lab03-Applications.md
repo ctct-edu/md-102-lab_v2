@@ -117,7 +117,7 @@ Microsoft Store アプリは、Microsoft Store を通じて配布されるモダ
 
 1. 同期が完了するまで待ちます (通常 1～2 分)。
 
-1. 同期後、**Start** メニューを開き、`Microsoft To Do` を検索します。
+1. 同期後、**Start** メニューから、`Microsoft To Do` を検索します。
 
 1. アプリが検索結果に表示され、起動できることを確認します。
 
@@ -136,18 +136,23 @@ Win32 アプリは、従来型の Windows デスクトップ アプリケーシ�
 > [!IMPORTANT]
 > **実際のインストーラーを自分でダウンロードします。事前にパッケージ化されたアプリ アセットは使用しません。** コンパイル済みの `.exe`/`.msi` を研修コンテンツに埋め込むことはサプライ チェーン上のリスクです。その出所を検証できず、セキュリティ レビューで (当然ながら) 指摘されるような成果物だからです。このタスクでは、サード パーティ製サイトの再パッケージ化された「ポータブル」ビルドではなく、ベンダーから直接、**公式** の 7-Zip インストーラーをダウンロードします。
 
-1. **SEA-DEV1** で、Win32 Content Prep Tool が `C:\Program Files\IntuneWinAppUtil\IntuneWinAppUtil.exe` に存在することを確認します。
+1. **SEA-DEV1** のEdgeブラウザーで、Win32 Content Prep Tool ( https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/releases ) にアクセスして、「Source code(zip) 」のリンクから)ダウンロードします。
 
-   > [!NOTE]
-   > ツールが存在しない場合は、**SEA-DEV1** のEdgeブラウザーで、https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/releases にアクセスして(「Source code(zip) 」のリンクから)ダウンロードし、指定されたパスへ展開します。
+1. **SEA-DEV1** に以下のフォルダーを作成します。C:\Program Files\IntuneWinAppUtil\
 
-1. **Microsoft Edge** を開き、公式の 7-Zip ダウンロード ページである **https://www.7-zip.org/download.html** (実際の作者である Igor Pavlov が公開) を開きます。
+1. ダウンロードしたzipにあるすべてのファイル(IntuneWinAppUtil.exe を含む)を  C:\Program Files\IntuneWinAppUtil に配置します。
+
+1. **SEA-DEV1** のEdgeブラウザーで、公式の 7-Zip ダウンロード ページである **https://www.7-zip.org/download.html** (実際の作者である Igor Pavlov が公開) を開きます。
 
 1. 現在の **64-bit Windows x64 .msi** パッケージをダウンロードします (`.exe` インストーラーや、サード パーティ ミラーの「ポータブル」版ではありません)。
 
    ダウンロード後、MSIを実行しないでください(次の移動コマンドが、ファイル使用中で失敗します)。
 
-1. ソース フォルダーを作成し、ダウンロードした MSI をその中へ移動します。
+1. **Terminal (Admin)** を開きます (Start を右クリック → Terminal (Admin))。Windows 11 では、PowerShell タブが開いた Windows Terminal が起動します。
+
+1. **Do you want to allow this app to make changes to your device?** というプロンプトで **Yes** を選択します。
+
+1. 以下のPowerShellコマンドを実行します(フォルダーを作成し、ダウンロードした MSI をその中へ移動する処理をしています。)
 
    ```powershell
    New-Item -ItemType Directory -Path "C:\LabAssets\Win32-App\Source" -Force
@@ -159,40 +164,36 @@ Win32 アプリは、従来型の Windows デスクトップ アプリケーシ�
    > [!NOTE]
    > このラボでは、例となるペイロードとして `7z-portable.exe` を使用します。別のインストーラー (例: Notepad++ の `npp.8.9.7.Installer.x64.exe`) を使用する場合は、演習 2、5、7 を通して **ファイル名**、**アプリ名/発行元**、**インストール/アンインストール コマンド**、**検出パス** を一貫して置き換えてください。
 
-1. **Terminal (Admin)** を開きます (Start を右クリック → Terminal (Admin))。Windows 11 では、PowerShell タブが開いた Windows Terminal が起動します。
-
-1. **Do you want to allow this app to make changes to your device?** というプロンプトで **Yes** を選択します。
-
 1. Win32 Content Prep Tool のディレクトリへ移動します。
 
-   ```powershell
-   cd "C:\Program Files\IntuneWinAppUtil"
-   ```
+    ```powershell
+    cd "C:\Program Files\IntuneWinAppUtil"
+    ```
 
 1. コンテンツ準備ツールを実行してアプリをパッケージ化します (`<filename>` は前の手順で確認した実際の `.msi` ファイル名に置き換えます)。
 
-   ```powershell
-   .\IntuneWinAppUtil.exe -c "C:\LabAssets\Win32-App\Source" -s "<filename>.msi" -o "C:\LabAssets\Win32-App\Output"
-   ```
+    ```powershell
+    .\IntuneWinAppUtil.exe -c "C:\LabAssets\Win32-App\Source" -s "<filename>.msi" -o "C:\LabAssets\Win32-App\Output"
+    ```
 
-   - `-c`: アプリ ファイルを格納するソース フォルダー
-   - `-s`: セットアップ ファイル (MSI インストーラー)
-   - `-o`: `.intunewin` パッケージの出力フォルダー
+    - `-c`: アプリ ファイルを格納するソース フォルダー
+    - `-s`: セットアップ ファイル (MSI インストーラー)
+    - `-o`: `.intunewin` パッケージの出力フォルダー
 
-   > [!NOTE]
-   > セットアップ ファイルが MSI であるため、コンテンツ準備ツールは MSI の製品コード、バージョン、その他のメタデータを自動的に読み取り、`.intunewin` パッケージへ埋め込みます。これにより、タスク 2 で手動のファイル パス チェックではなく、MSI ベースの自動検出が可能になります。
+    > [!NOTE]
+    > セットアップ ファイルが MSI であるため、コンテンツ準備ツールは MSI の製品コード、バージョン、その他のメタデータを自動的に読み取り、`.intunewin` パッケージへ埋め込みます。これにより、タスク 2 で手動のファイル パス チェックではなく、MSI ベースの自動検出が可能になります。
 
-   確認があった場合は **Y** で受け入れてください。
+    確認があった場合は **Y** で受け入れてください。
 
 1. パッケージ化が完了するまで待ちます (通常 10～30 秒)。
 
 1. `.intunewin` ファイルが作成されたことを確認します (`<filename>` は同じファイル名に置き換えます)。
 
-    ```powershell
-    Test-Path "C:\LabAssets\Win32-App\Output\<filename>.intunewin"
-    ```
+     ```powershell
+     Test-Path "C:\LabAssets\Win32-App\Output\<filename>.intunewin"
+     ```
 
-    出力は **True** を返すはずです。
+     出力は **True** を返すはずです。
 
 **Intune Win32 Content Prep Tool を使用して Win32 アプリを正常にパッケージ化しました。**
 
@@ -235,21 +236,22 @@ Win32 アプリは、従来型の Windows デスクトップ アプリケーシ�
    
 1. **インストールの動作** が **システム** に設定されていることを確認します (このパッケージでは既定でそうなっています)。
 
-1. **デバイスの再起動の動作** を、あらかじめ選択されている既定値 (**アプリのインストールでデバイスの再起動が強制される場合があります**) から **リターン コードを基に動作を決定する** に変更します。
+1. **デバイスの再起動** を、あらかじめ選択されている既定値 (**アプリのインストールでデバイスの再起動が強制される場合があります**) から **リターン コードを基に動作を決定する** に変更します。
 
    > [!NOTE]
    > **インストーラーの種類** / **アンインストーラーの種類** (どちらも **コマンド ライン**)、**必要なインストール時間 (分)**、**使用可能なアンインストールを許可** の各設定と、**リターン コード** の表 (0 と 1707 = 成功、3010 = ソフト再起動、1641 = ハード再起動) は、あらかじめ入力された既定値のままにします。これらは Intune の組み込みの MSI 処理によるもので、構成する必要はありません。
 
 1. **次へ** を選択します。
 
-1. **要件** ページで、次を構成します。
+1. **必要条件** ページで、次を構成します。
+   
    - **オペレーティング システムのアーキテクチャの確認:** **はい。アプリをインストールできるシステムを指定してください。**
    - アーキテクチャのチェック ボックスで、**x64 システムにインストールする** のみをオンにします (**x86** と **ARM64** はオフのままにします)。
    - **最小オペレーティング システム:** Windows 10 1607
-
+   
    > [!NOTE]
    > **必要なディスク領域**、**必要な物理メモリ**、**必要な論理プロセッサの最小数**、**必要な最小 CPU 速度** は空欄のままにします。このアプリにはいずれも該当しません。**追加の要件規則の構成** も空のままにします。
-
+   
 1. **次へ** を選択します。
 
 1. **検出規則** タブで、次を構成します。
@@ -272,7 +274,7 @@ Win32 アプリは、従来型の Windows デスクトップ アプリケーシ�
 
 1. **置き換え (Supersedence)** タブで **次へ** を選択します (置き換えは後のタスクで構成します)。
 
-1. **スコープ タグ** タブで **スコープ タグの選択** を選択し、**Pharmacy** (**ラボ 01 演習 2 タスク 6** で作成) を追加して **選択** を選択し、続いて **次へ** を選択します。
+1. **スコープ タグ** タブで **スコープ タグの選択** を選択し、**Pharmacy** (ラボ 01 で作成) を追加して **選択** を選択し、続いて **次へ** を選択します。
 
    > [!NOTE]
    > 7-Zip は、Contoso の臨床ドキュメント ワークフロー (研究データのエクスポート、匿名化された DICOM バンドル) における標準的なアーカイブ ツールです。デプロイに `Pharmacy` タグを付けておくことで、Pharmacy Helpdesk ロール (**ラボ 05 演習 3** で割り当て) から引き続き参照できるようになります。
@@ -294,9 +296,10 @@ Win32 アプリは、従来型の Windows デスクトップ アプリケーシ�
 ### タスク 3: Win32 アプリのインストールの監視
 
 1. **SEA-DEV1** で、デバイスの同期を強制します。
+   
    - スタートメニューから **Settings** → **Accounts** → **Access work or school** → **Connected to Contoso** → **Info** → **Sync**
-
-1. アプリがインストールされるまで 10～15 分待ちます。
+   
+1. アプリがインストールされるまで 10～15 分待ちます。時間がかかるため、先の演習を進めた後に戻って確認しても構いません。
 
    > [!NOTE]
    > Win32 アプリのインストールは、Intune がパッケージをダウンロードし、インストーラーを実行し、検出規則を検証する必要があるため、Store アプリよりも時間がかかることがあります。
@@ -332,6 +335,7 @@ Microsoft 365 Apps (旧称 Office 365 ProPlus) は、Word、Excel、PowerPoint�
 1. **アプリの種類の選択** ペインで、**プラットフォーム** を **Windows** に、**アプリの種類** を **Microsoft 365 Apps for Windows 10 and later** に設定します。**選択** を選択します。
 
 1. **アプリ スイート情報** タブで、次を構成します。
+
    - **スイート名:** `Microsoft 365 Apps (Current Channel)`
    - **スイートの説明:** `Microsoft 365 Apps with Current Channel updates`
 
@@ -352,16 +356,17 @@ Microsoft 365 Apps (旧称 Office 365 ProPlus) は、Word、Excel、PowerPoint�
 1. **アプリ スイート情報** で、次を構成します。
    - **アーキテクチャ:** **64-bit** (トグル、既定で選択済み)
    - **既定のファイル形式:** **Office Open XML 形式** — このフィールドは必須です。選択するまでページに検証エラーが表示されます。
-   - **更新チャネル:** **Current Channel (Preview)** — これも必須です。
-   - **他のバージョンを削除:** はい (既定)
+   - **更新チャネル:** **Current Channel (プレビュー版)** — これも必須です。
+   - **その他のバージョンの削除:** はい (既定)
    - **インストールするバージョン:** 最新 (既定。**特定のバージョン** は無効のままにします)
 
 1. **プロパティ** で、次を構成します。
+
    - **共有コンピューターのライセンス認証を使用:** いいえ (既定)
    - **ユーザーの代理で Microsoft ソフトウェア ライセンス条項に同意する:** はい
    - **Microsoft Search in Bing のバックグラウンド サービスをインストールする:** いいえ
 
-1. 下へスクロールし、**言語** で **English (United States)** を選択します。
+1. 下へスクロールし、**言語** で **言語が選択されていない** リンクをクリックして **英語 (en-us)** を選択します。
 
    > [!NOTE]
    > Current Channel は、新機能がリリースされ次第すぐに提供されます。Monthly Enterprise Channel は、テスト用のリード タイムを長く取った月次更新を提供します。
@@ -388,7 +393,9 @@ Microsoft 365 Apps (旧称 Office 365 ProPlus) は、Word、Excel、PowerPoint�
 
 1. **SEA-DEV1** で、デバイスの同期を強制します。
 
-1. Microsoft 365 Apps がダウンロードされてインストールされるまで 15～30 分待ちます。
+   - スタートメニューから **Settings** → **Accounts** → **Access work or school** → **Connected to Contoso** → **Info** → **Sync**
+
+1. Microsoft 365 Apps がダウンロードされてインストールされるまで 15～30 分待ちます。時間がかかるため、先の演習を進めた後に戻って確認しても構いません。
 
    > [!NOTE]
    > Microsoft 365 Apps はダウンロード サイズが大きく (約 3 GB)、ネットワーク速度とデバイス性能によってはインストールに 20～40 分かかることがあります。ラボでは、次の演習に進み、後でインストール状態を確認してもかまいません。
@@ -527,7 +534,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
 1. **Company Portal** アプリを起動します。
 
    > [!NOTE]
-   > デバイスに **Company Portal** アプリがない場合は、**Microsoft Edge** を開いて **https://apps.microsoft.com/detail/9wzdncrfj3pz?hl=en-GB&gl=PT** を開き、Microsoft Store から Company Portal アプリをインストールします。
+   > デバイスに **Company Portal** アプリがない場合は、**Microsoft Edge** を開いて **https://apps.microsoft.com/detail/9wzdncrfj3pz?hl=en-GB&gl=PT** を開き、Microsoft Store から Company Portal アプリをインストールしてから、起動ます。
 
 1. **MeganB@`<TenantPrefix>`.OnMicrosoft.com** としてサインインします (まだサインインしていない場合)。
 
@@ -535,13 +542,9 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
 
 1. 利用可能なアプリの一覧に **Google Chrome** が表示されることを確認し、クリックします。
 
-1. **Install** を選択してアプリをインストールします。
+1. **Install** を選択してアプリをインストールできますが、時間がかかるため今回は次の演習に進みます。
 
-1. インストールが完了するまで待ちます。
-
-1. **Start** メニューを開き、**Google Chrome** が存在することを確認します。
-
-**Company Portal からアプリを正常にインストールしました。**
+**Company Portal からのアプリインストールを確認しました。**
 
 ---
 
@@ -640,7 +643,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
    - **機能:**
      
      - **ポリシー マネージド アプリ データとネイティブ アプリまたはアドインの同期:** ブロック
-     - **組織データの出力:** ブロック
+     - **組織データを出力する:** ブロック
      - **その他のアプリでの Web コンテンツの転送を制限する:** Microsoft Edge
    
 1. **次へ** を選択します。
@@ -651,7 +654,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
    - **最小 PIN 長を選択:** 6
    - **タイムアウト後は PIN で生体認証をオーバーライドする:** 必要
    - **アクセスに職場または学校アカウントの資格情報:** 必要
-   - **アクセス要件を再確認する間隔 (非アクティブな分数):** 30
+   - **アクセス要件を再確認する間隔 (非アクティブ分数):** 30
 
 1. **次へ** を選択します。
 
@@ -697,7 +700,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
 
 1. **アプリ** タブで **パブリック アプリの選択** を選択します。
 
-1. iOS ポリシーと同じ Microsoft アプリ (Outlook、Teams、Word、Excel、PowerPoint、OneDrive) を検索して選択します。
+1. iOS ポリシーと同じ Microsoft アプリ (Outlook、Teams、Word、Excel、PowerPoint、OneDrive、Copilot) を検索して選択します。
 
 1. **選択** を選択し、続いて **次へ** を選択します。
 
@@ -708,7 +711,6 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
    - **電話通信データの転送先:** 任意の電話アプリ (既定)
    - **メッセージング データの転送先:** 任意のメッセージング アプリ (既定)
    - **他のアプリとの間で切り取り、コピー、貼り付けを制限する:** 貼り付けを使用する、ポリシーマネージドアプリ
-   
    - **組織データを暗号化:** 必要 (既定)
    - **登録済みデバイスで組織データを暗号化:** 必須 (既定)
    - **ポリシー マネージド アプリ データとネイティブ アプリまたはアドインと同期:** 既定の **許可** から **ブロック** に変更します
@@ -766,7 +768,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
    - ユーザーは Outlook から個人用アプリ (例: Gmail) へデータをコピーできません
    - ユーザーは OneDrive または SharePoint 以外に添付ファイルを保存できません
    - アプリ データは保存時に暗号化されます
-   - デバイスがジェイルブレイク/ルート化されている場合、アプリは消去されます
+   - デバイスが脱獄/ルート化されている場合、アプリは消去されます
 
 1. **条件付きアクセスの統合** (省略可能): 条件付きアクセス ポリシーと組み合わせた場合、準拠していないユーザーはサインインをブロックされます。
 
