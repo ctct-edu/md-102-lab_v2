@@ -628,12 +628,6 @@ Microsoft Entra ID ロール (タスク 1～5) は、Entra レベルのアクセ
 
 ### タスク 3: （オプション）Microsoft Entra Local Administrator Password Solution (LAPS) の有効化
 
-
-
-**※　本演習を実施すると、コース中に演習仮想マシンのローカル管理者パスワード変更を要求されることがあるため、今は実施せずに興味があればコースの最後に実施することをおすすめします。**
-
-
-
 Microsoft Entra LAPS は、Microsoft Entra 参加済みデバイスのローカル管理者パスワードを自動的に管理およびローテーションします。
 
 詳細な LAPS ポリシー構成 (パスワードの複雑さ、長さ、有効期間、管理対象アカウント名) は、Entra 管理センターから Microsoft Intune のエンドポイント セキュリティ ポリシーに移動しました。Entra の設定は、テナントに対して LAPS 機能を有効にする単一のオン/オフ トグルになり、パスワード ポリシー自体は Intune で構成します。
