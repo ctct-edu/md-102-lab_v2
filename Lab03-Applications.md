@@ -921,6 +921,6 @@ Intune 管理センターを使用して、すべてのデバイスにわたる�
 - アプリ保護ポリシーは、完全な登録なしでモバイル/BYOD デバイス上の企業データを保護します
 - Intune は、アプリのデプロイに対する包括的な監視とトラブルシューティングを提供します
 
-**次のステップ:** ラボ 04 では、Microsoft Defender for Endpoint の統合、エンドポイント セキュリティ ポリシー、BitLocker 暗号化、Microsoft Tunnel Gateway、Microsoft Cloud PKI を使用してデバイスを保護します。
+**次のステップ:** ラボ 04 では、Microsoft Defender for Endpoint の統合、エンドポイント セキュリティ ポリシー、BitLocker 暗号化、Microsoft Cloud PKI を使用してデバイスを保護します。
 
 **ラボ終了**

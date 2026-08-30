@@ -17,7 +17,7 @@ lab:
 
 ## ラボのシナリオ
 
-あなたは Contoso Healthcare のモダン エンドポイント管理者である **Jordan Chen** です。デバイスの登録とアプリケーションの展開が完了したので、次は包括的なセキュリティ制御を実装する必要があります。EDR 機能のために Microsoft Defender for Endpoint を統合し、エンドポイント セキュリティ ポリシー（ウイルス対策、ファイアウォール、攻撃面の縮小）を展開し、Microsoft Entra キー エスクローを使用した BitLocker 暗号化を構成し、セキュアな VPN アクセスのために Microsoft Tunnel Gateway を展開し、証明書ベースの認証のために Microsoft Cloud PKI を実装します。
+あなたは Contoso Healthcare のモダン エンドポイント管理者である **Jordan Chen** です。デバイスの登録とアプリケーションの展開が完了したので、次は包括的なセキュリティ制御を実装する必要があります。EDR 機能のために Microsoft Defender for Endpoint を統合し、エンドポイント セキュリティ ポリシー（ウイルス対策、ファイアウォール、攻撃面の縮小）を展開し、Microsoft Entra キー エスクローを使用した BitLocker 暗号化を構成し、証明書ベースの認証のために Microsoft Cloud PKI を実装します。
 
 このラボの終了時には、次のことが完了しています。
 - Intune と Microsoft Defender for Endpoint の統合を有効化する
@@ -33,7 +33,7 @@ lab:
 
 ## ラボの所要時間
 
-**推定所要時間:** 110 分
+**推定所要時間:** 90 分
 
 ---
 
@@ -567,7 +567,7 @@ Microsoft Cloud PKI（Intune Suite の一部）は、デバイスやユーザー
 
 ルート CA は、Cloud PKI 階層の信頼のアンカーです。発行 CA を作成する前に、少なくとも 1 つのルート CA を作成する必要があります。
 
-1. **Microsoft Intune 管理センター** で、**テナント管理** → **クラウド PKI** に移動します。
+1. **SEA-DEV1** の **Microsoft Edge** で **Microsoft Intune 管理センター** を開き、**テナント管理** → **クラウド PKI** に移動します。
 
 2. 上部のツールバーから **+ 作成** を選択します。
 
