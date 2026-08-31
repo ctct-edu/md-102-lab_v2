@@ -735,6 +735,8 @@ Microsoft Entra LAPS は、Microsoft Entra 参加済みデバイスのローカ�
 
 [Windows Autopilot 登録状態ページ | Microsoft Learn](https://learn.microsoft.com/ja-jp/autopilot/enrollment-status)
 
+[管理センターで登録状態ページを設定します - Microsoft Intune | Microsoft Learn](https://learn.microsoft.com/ja-jp/intune/device-enrollment/windows/setup-status-page)
+
 構成されたアプリとポリシーが適用されるまでデバイスの使用をブロックするため、ユーザーが半分しかプロビジョニングされていないデバイスにサインインすることを防ぎます。**既定** の ESP プロファイルはすべてのユーザーとすべてのデバイスを対象とし、無効の状態で提供されます。Contoso のベースラインを設定するために、これを有効にします。
 
 1. **Microsoft Intune 管理センター** の **登録** ページで、**Windows** タブにいることを確認します。画面を下の方にスクロールし、 **Windows Autopilot** の下で、**登録状態ページ** を選択します。
