@@ -865,6 +865,9 @@ Windows Update for Business ポリシー (更新プログラム リング) を�
    - **検出スクリプト ファイル:** **ファイルの選択** を選択し、参照して `C:\AllFiles\Detect-TempFiles.ps1` (ラボ アセットで提供) に移動します。
 
      検出スクリプトの例:
+     
+     **「ユーザーのTEMPフォルダーに、30日より古いファイルが存在するか？」をチェックするスクリプト**
+     
      ```powershell
      # Create the folder if it doesn't exist
      New-Item -Path "C:\LabAssets\Remediations" -ItemType Directory -Force
@@ -884,8 +887,11 @@ Windows Update for Business ポリシー (更新プログラム リング) を�
      ```
      
    - **修復スクリプト ファイル:** **ファイルの選択** を選択し、参照して `C:\AllFIles\Remediate-TempFiles.ps1` に移動します。
-
+   
      修復スクリプトの例:
+   
+     **Windows の一時フォルダー（TEMP）にある、30日より古いファイルを削除する PowerShell スクリプト**
+   
      ```powershell
      # Remediation script
      @'
@@ -900,11 +906,11 @@ Windows Update for Business ポリシー (更新プログラム リング) を�
      }
      '@ | Set-Content -Path "C:\LabAssets\Remediations\Remediate-TempFiles.ps1" -Encoding UTF8
      ```
-
+   
    - **この スクリプトをログオンしている資格情報を使用して実行する:** いいえ (SYSTEM として実行)
    - **スクリプトの署名チェックを強制する:** いいえ
    - **64 ビット PowerShell でスクリプトを実行する:** はい
-
+   
 7. **次へ** を選択し、**Pharmacy** スコープ タグを追加して **次へ** を選択します。
 
 8. **割り当て** タブで、**包含されたグループ** の下にある **+ 含めるグループの選択** を選択します。
