@@ -1,14 +1,13 @@
 ---
 lab:
    title: 'Lab 04: デバイスの保護'
-   description: 'このラボでは、Microsoft Defender for Endpoint を統合し、エンドポイント セキュリティ ポリシーを展開し、BitLocker 暗号化を構成し、Microsoft Tunnel Gateway を展開し、Microsoft Cloud PKI を実装します。'
+   description: 'このラボでは、Microsoft Defender for Endpoint を統合し、エンドポイント セキュリティ ポリシーを展開し、BitLocker 暗号化を構成し、Microsoft Cloud PKI を実装します。'
    duration: 110 minutes
    level: 200
    islab: true
    primarytopics:
       - Microsoft Intune
       - Microsoft Defender for Endpoint
-      - Microsoft Tunnel
       - Microsoft Cloud PKI
       - Windows
 ---
@@ -45,7 +44,7 @@ lab:
 - **Lab 01** の完了（デバイスが登録済みであること）
 - Contoso の Microsoft 365 テナント（`<TenantPrefix>.onmicrosoft.com`）へのアクセス
 - **Microsoft 365 E5** ライセンス（Defender for Endpoint P2 を含む）
-- **Microsoft Intune Suite トライアルが有効であること**（**Lab 01** の前提条件で有効化済み）— Cloud PKI（演習 5）に必要です。Microsoft Tunnel（演習 4）は Intune Plan 1 に含まれており Suite は不要ですが、**LIN-SRV1** Ubuntu サーバーが必要です
+- **Microsoft Intune Suite トライアルが有効であること**（**Lab 01** の前提条件で有効化済み）— Cloud PKI（演習 5）に必要です。
 - グローバル管理者または Intune 管理者の資格情報
 - **SEA-DEV1** と **SEA-DEV2**（登録済みの Windows 11 デバイス）
 - **LIN-SRV1**（Microsoft Tunnel Gateway 用の Ubuntu 22.04 サーバー）

@@ -1,7 +1,7 @@
 ---
 lab:
    title: 'Lab 06: 機能の拡張'
-   description: 'このラボでは、Endpoint Privilege Management を構成し、Remote Help を展開し、Advanced Analytics を確認し、Windows 365 Cloud PC と Azure Virtual Desktop のシナリオを確認します。'
+   description: 'このラボでは、Endpoint Privilege Management を構成し、Remote Help を展開します。'
    duration: 90 minutes
    level: 200
    islab: true
@@ -9,8 +9,6 @@ lab:
       - Microsoft Intune
       - Endpoint Privilege Management
       - Remote Help
-      - Windows 365
-      - Azure Virtual Desktop
 ---
 
 # Lab 05: 機能の拡張
