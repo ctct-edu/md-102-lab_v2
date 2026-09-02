@@ -1,8 +1,8 @@
 ---
 lab:
    title: 'Lab 06: 機能の拡張'
-   description: 'このラボでは、Endpoint Privilege Management を構成し、Remote Help を展開します。'
-   duration: 90 minutes
+   description: 'このラボでは、Remote Help を展開し、Advanced Analytics ダッシュボードを確認します。'
+   duration: 25 minutes
    level: 200
    islab: true
    primarytopics:
@@ -37,7 +37,7 @@ lab:
 
 このラボには次が必要です。
 - **ラボ 01** の完了 (デバイスが登録済みであること)
-- **Microsoft Intune Suite の試用版が有効** (**ラボ 01** の前提条件で有効化済み) — Endpoint Privilege Management、Remote Help、および Advanced Analytics に必要です
+- **Microsoft Intune Suite の試用版が有効** (**ラボ 01** の前提条件で有効化済み) — Remote Help、および Advanced Analytics に必要です
 - Contoso の Microsoft 365 テナント (`<TenantPrefix>.onmicrosoft.com`) へのアクセス
 - グローバル管理者または Intune 管理者の資格情報
 - **SEA-DEV1**、**SEA-DEV2**、および **SEA-DEV3** (登録済みの Windows 11 デバイス)
