@@ -197,7 +197,6 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
    > このベースラインには、次の項目の設定が含まれています。
    > - BitLocker 暗号化
    > - Credential Guard
-   > - Application Guard
    > - 攻撃面の縮小ルール
    > - Exploit protection
    > - ネットワーク保護
