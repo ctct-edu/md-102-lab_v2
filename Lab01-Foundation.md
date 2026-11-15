@@ -601,7 +601,7 @@ Microsoft Entra ID ロール (タスク 1～5) は、Entra レベルのアクセ
 
 ---
 
-### タスク 3: （オプション）Microsoft Entra Local Administrator Password Solution (LAPS) の有効化
+### タスク 3: Microsoft Entra Local Administrator Password Solution (LAPS) の有効化
 
 Microsoft Entra LAPS は、Microsoft Entra 参加済みデバイスのローカル管理者パスワードを自動的に管理およびローテーションします。
 
