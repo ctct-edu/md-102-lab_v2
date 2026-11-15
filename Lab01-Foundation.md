@@ -72,7 +72,7 @@ lab:
 > 8. **今すぐ試す**を選択して試用版を有効化します。
 > 9. Intune 管理センターに戻ります。**テナント管理 → Intune アドオン**を更新します。**アドオン**タブを選択すると、数分以内に **Microsoft Intune Suite Trial** が **購入済み数量** **250** で一覧に表示されます。Suite には次が含まれます: **Intune Plan 2**、**Remote Help**、**Endpoint Privilege Management**、**Enterprise App Management**、**Advanced Analytics**、**Cloud PKI**。
 >
-> **すべてのアドオン タブに惑わされないでください。** **Microsoft Intune Suite** の行では、サブスクリプションの状態列に **「試用版は残り約 90 日」** と表示されますが、個々の機能の行 (Intune Plan 2、Endpoint Privilege Management、Remote Help、Enterprise App Management、Advanced Analytics、Cloud PKI) は引き続き **「試用または購入が可能」** と表示されます。これは想定どおりの動作です。これらは *スタンドアロン* のアドオン SKU であり、Suite 試用版はそれらすべてを Suite レベルでバンドルしています。サブスクリプションの状態列に試用版の残りが約 89～90 日と表示されていることを確認して、Microsoft Intune Suite 試用版が有効であることを確認してください。
+> **すべてのアドオン タブに惑わされないでください。** **Microsoft Intune Suite** の行では、サブスクリプションの状態列に **「試用版は残り約 XX 日」** と表示されますが、個々の機能の行 (Intune Plan 2、Endpoint Privilege Management、Remote Help、Enterprise App Management、Advanced Analytics、Cloud PKI) は引き続き **「試用または購入が可能」** と表示されます。これは想定どおりの動作です。これらは *スタンドアロン* のアドオン SKU であり、Suite 試用版はそれらすべてを Suite レベルでバンドルしています。サブスクリプションの状態列に試用版の残りが約 89～90 日と表示されていることを確認して、Microsoft Intune Suite 試用版が有効であることを確認してください。
 >
 > 試用版の期間は 90 日間で、その後 30 日間の猶予期間が続きます。**試用版はテナントごとに 1 回のみ開始できます**。試用版がすでに有効になっている場合は、サブスクリプションの状態列に **有効** と表示され、上記の手順をスキップできます。
 
