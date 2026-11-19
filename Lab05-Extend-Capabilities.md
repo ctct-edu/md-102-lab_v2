@@ -223,7 +223,7 @@ lab:
 
 ---
 
-## 演習 2: （オプション）Advanced Analytics と Device Query の使用
+## 演習 2: Advanced Analytics と Device Query の使用
 
 ### シナリオ
 
