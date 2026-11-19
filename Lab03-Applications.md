@@ -624,7 +624,7 @@ Enterprise App Catalog (Microsoft Intune Suite の一部) は、事前構成さ�
    - **Microsoft Excel**
    - **Microsoft PowerPoint**
    - **Microsoft OneDrive**
-   - **Microsoft 365 Copilot**
+   - **Microsoft Copilot**
 
 1. **選択** を選択します。
 
