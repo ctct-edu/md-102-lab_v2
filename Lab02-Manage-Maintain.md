@@ -856,7 +856,7 @@ Windows Update for Business ポリシー (更新プログラム リング) を�
 
 ---
 
-### タスク 4: 修復の実行を監視する
+### タスク 4: （オプション）修復の実行を監視する
 
 1. **Microsoft Intune 管理センター** の **修復** タブで、一覧から **Remediation - Clear Temp Files** を選択します。
 
