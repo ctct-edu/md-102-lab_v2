@@ -175,6 +175,12 @@ Intune と Defender for Endpoint のコネクタは **2 つのポータル** に
 
 **Microsoft Defender for Endpoint へのデバイスのオンボードが正常に確認されました。**
 
+**完了チェック**
+
+- **設定完了：** Intune で EDR ポリシーを作成し、`dyn-Windows-Devices` に割り当てた。
+- **結果確認：** Microsoft Defender ポータルの **資産 > デバイス** に SEA-DEV1 と SEA-DEV2 の両方が表示された。
+- **まだ反映されていない場合：** 演習 2 に進み、後でデバイス一覧に戻って再確認します。
+
 ---
 
 ## 演習 2: エンドポイント セキュリティ ポリシーを展開する
