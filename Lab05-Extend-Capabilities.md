@@ -150,6 +150,27 @@ lab:
 
 ---
 
+<!-- lab-figure:05-1:begin -->
+**図 05-1：どちらの端末で何をするか：リモート ヘルプ**
+
+```mermaid
+sequenceDiagram
+  participant H as SEA-DEV1（ヘルパー）
+  participant S as SEA-DEV2（共有者）
+  Note over H,S: 両側にアプリとライセンスを準備
+  H->>S: 発行した支援コードを伝える
+  S->>S: コードを入力して送信
+  H->>S: 画面表示を要求
+  S->>H: 表示を許可
+  opt 制御もテストする場合
+    H->>S: フル コントロールを要求
+    S->>H: 制御を許可
+  end
+```
+
+SEA-DEV1は支援する側、SEA-DEV2は支援を受ける側です。画面の表示とフル コントロールは別の操作で、制御に切り替えるときは共有者の承認が必要です。
+<!-- lab-figure:05-1:end -->
+
 ### タスク 4: リモート ヘルプ セッションを開始する
 
 > [!NOTE]
@@ -236,6 +257,20 @@ lab:
 
 > [!NOTE]
 > **テレメトリの待ち時間。** Advanced Analytics ダッシュボード (異常検出、リソース パフォーマンス、バッテリーの正常性) には、有意義にデータが表示されるまでに約 **24 時間のデバイス テレメトリ**が必要です。一方、Device Query はデバイスの**ライブ状態**に対して実行され、数秒以内に結果を返します。
+
+<!-- lab-figure:05-2:begin -->
+**図 05-2：蓄積データと端末の現在情報の使い分け**
+
+```mermaid
+flowchart LR
+  A{"何を調べたいか"} --> B["傾向・異常：Advanced Analytics"]
+  B --> C["蓄積された診断データを参照"]
+  A --> D["端末の現在情報：Device Query"]
+  D --> E["SEA-DEV1 にクエリし、結果を確認"]
+```
+
+Advanced Analytics は蓄積した診断データを確認するために使用します。ラボの Device Query は SEA-DEV1 1台の現在の CPU 情報や OS バージョンを確認するために使用します。
+<!-- lab-figure:05-2:end -->
 
 ### タスク 1: Advanced Analytics ダッシュボードを確認する
 
