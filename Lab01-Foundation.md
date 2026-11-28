@@ -863,32 +863,35 @@ Contoso Healthcare は、個人所有の Android スマートフォンが Intune
 
 ここでは、Microsoft Entra 参加を実行して、2 台の Windows 11 デバイス (SEA-DEV1 と SEA-DEV2) を Intune に登録します。これは、従業員が自分のデバイスを社用テナントに参加させる、ユーザー主導の登録シナリオをシミュレートします。
 
-### タスク 1: SEA-DEV1 での Microsoft Entra 参加と登録の実行
+### タスク 1: SEA-DEV1 での Microsoft Entra 参加の実行
 
 1. **SEA-DEV1** で、ローカル管理者アカウントでサインインします:
 
    - **Username:** `Admin`
    - **Password:** (ラボ環境で提供されます)
 
-4. サインインした後、(WindowsのStart から) **Settings** を開きます。
+2. サインインした後、(WindowsのStart から) **Settings** を開きます。
 
-5. **Accounts** → **Access work or school** に移動します。
+3. **Accounts** → **Access work or school** に移動します。
 
-6. **Connect** を選択します。
+4. **Connect** を選択します。
 
-7. **Set up a work or school account** ダイアログで、**Join this device to Microsoft Entra ID** を選択します。
+5. **Set up a work or school account** ダイアログで、**Join this device to Microsoft Entra ID** を選択します。
 
-8. **Sign in** ダイアログで、次を入力して **Next** を選択します:
+   **※ ここで誤って、画面上部の Email address 欄にメールアドレスを入力して進めてしまう方がいらっしゃいます。そうするとEntra へのデバイスの「登録」となってしまい、今回実施したい「参加」ではなくなります。後の手順でEntraのユーザーでWindowsにサインインできず判明します。ご注意ください。**
+
+6. **Sign in** ダイアログで、次を入力して **Next** を選択します:
+
    - **Email address:** `MeganB@<TenantPrefix>.OnMicrosoft.com`
 
-9. **Enter password** ダイアログで、Megan Bowen のパスワードを入力して **Sign in** を選択します。
+7. **Enter password** ダイアログで、Megan Bowen のパスワードを入力して **Sign in** を選択します。
 
-10. **Make sure this is your organization** ダイアログで、テナントが `<TenantPrefix>.onmicrosoft.com` であることを確認して **Join** を選択します。
+8. **Make sure this is your organization** ダイアログで、テナントが `<TenantPrefix>.onmicrosoft.com` であることを確認して **Join** を選択します。
 
-11. **You're all set!** ページで、**Done** を選択します。
+9. **You're all set!** ページで、**Done** を選択します。
 
-    > [!NOTE]
-    > これでデバイスは Microsoft Entra に参加し、自動的に Intune に登録されました。Megan には、アプリとポリシーが適用される間、演習 4 で構成した登録状態ページが表示されます。Megan は sg-Intune-Pilot-Users グループに属していないため、より厳格な **ESP - Pilot - Blocking** プロファイルではなく、ブロックしない **既定** プロファイルが適用されます。
+   > [!NOTE]
+   > これでデバイスは Microsoft Entra に参加し、自動的に Intune に登録されました。Megan には、アプリとポリシーが適用される間、演習 4 で構成した登録状態ページが表示されます。Megan は sg-Intune-Pilot-Users グループに属していないため、より厳格な **ESP - Pilot - Blocking** プロファイルではなく、ブロックしない **既定** プロファイルが適用されます。
 
 **SEA-DEV1 の Microsoft Entra と Intune への登録が正常に完了しました。**
 
